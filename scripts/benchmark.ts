@@ -1,4 +1,4 @@
-import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { copyFile, mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { DESIGNS } from '../src/lib/designs';
@@ -249,6 +249,18 @@ await mkdir(outputDir, { recursive: true });
 await writeFile(path.join(outputDir, 'benchmark.json'), `${JSON.stringify(reportData, null, 2)}\n`);
 await writeFile(path.join(outputDir, 'benchmark.csv'), `${csvRows.join('\n')}\n`);
 await writeFile(path.join(outputDir, 'benchmark.md'), markdown);
+// Refresh the app's default snapshot only for the default reproducible run.
+// Keep source imports separate from the public downloadable reports.
+if (seed === DEFAULT_SETTINGS.seed && !option('--output-dir')) {
+  const reportsDir = path.join(projectRoot, 'public', 'reports');
+  const dataDir = path.join(projectRoot, 'src', 'data');
+  await mkdir(reportsDir, { recursive: true });
+  await mkdir(dataDir, { recursive: true });
+  for (const name of ['benchmark.json', 'benchmark.csv', 'benchmark.md']) {
+    await copyFile(path.join(outputDir, name), path.join(reportsDir, name));
+  }
+  await writeFile(path.join(dataDir, 'tested-results.json'), `${JSON.stringify({ optimization: reportData.optimization }, null, 2)}\n`);
+}
 console.log(winner
   ? `Longest completed flight: ${winner.design.name}, ${rounded(winner.flight.duration)} s.`
   : 'No completed flight; no winner selected.');

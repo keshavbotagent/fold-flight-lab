@@ -6,7 +6,7 @@ import { compareDesigns, optimizeDesigns } from './lib/experiments';
 import { FlightScene } from './lib/scene';
 import { useFlightTools } from './lib/webmcp';
 import type { FlightResult, LaunchSettings, RankedFlight } from './lib/types';
-import benchmark from '../public/reports/benchmark.json';
+import benchmark from './data/tested-results.json';
 
 type CameraMode = 'orbit' | 'follow' | 'top';
 type ModalMode = 'model' | 'folds' | null;

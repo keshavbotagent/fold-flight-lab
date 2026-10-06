@@ -121,4 +121,5 @@ export interface FlightResult {
   mass?: number;
 }
 export interface RankedFlight { design: PlaneDesign; flight: FlightResult; rank: number; }
-export interface OptimizationResult { ranking: RankedFlight[]; trials: number; ranges: { angles: number[]; speeds: number[]; trims: number[] }; }
+export type OptimizationObjective = 'airtime' | 'distance';
+export interface OptimizationResult { objective: OptimizationObjective; ranking: RankedFlight[]; trials: number; ranges: { angles: number[]; speeds: number[]; trims: number[] }; }

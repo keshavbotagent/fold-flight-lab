@@ -5,7 +5,7 @@ import { DESIGNS } from '../src/lib/designs';
 import { AIR_GAS_CONSTANT, EARTH_RADIUS, STANDARD_GRAVITY } from '../src/lib/atmosphere';
 import { compareDesigns, optimizeDesigns } from '../src/lib/experiments';
 import { DEFAULT_SETTINGS, getAtmosphere, PHYSICS_VERSION, simulateFlight } from '../src/lib/physics';
-import { NEW_DELHI_ENVIRONMENT } from '../src/lib/environment';
+import { INDOOR_ENVIRONMENT, NEW_DELHI_ENVIRONMENT } from '../src/lib/environment';
 import type { FlightResult, FlightSample, LaunchSettings, RankedFlight } from '../src/lib/types';
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -203,6 +203,13 @@ if (baseline.some((entry) => entry.flight.modelVersion !== PHYSICS_VERSION)) {
 }
 const primarySearch = await profiledSearch(settings, true);
 const optimized = primarySearch.result;
+const distanceSearch = await optimizeDesigns(settings, undefined, undefined, 'distance');
+const distanceRefined = distanceSearch.ranking.map(row => ({ ...row, flight: simulateFlight(row.design, { ...row.flight.settings, dt: settings.dt / 4 }) }));
+const distanceNumericalCheck = distanceRefined.every(row => {
+  const original = distanceSearch.ranking.find(item => item.design.id === row.design.id)!.flight;
+  return row.flight.landed === original.landed && Math.abs(row.flight.distance - original.distance) <= Math.max(0.001, original.distance * 0.01);
+});
+if (!distanceNumericalCheck) throw new Error('Distance launch replays exceed 1% numerical tolerance.');
 console.log(`Primary search: ${rounded(primarySearch.performance.elapsedMs / 1000)} s wall; ${rounded(primarySearch.performance.cpuMs / 1000)} s CPU; max progress interval ${rounded(primarySearch.performance.maxProgressIntervalMs)} ms.`);
 
 // Compare the same selected launch settings at smaller integration steps.
@@ -299,7 +306,7 @@ const reportData = {
   schemaVersion: 3,
   generatedAt: new Date().toISOString(),
   modelVersion: PHYSICS_VERSION,
-  environmentPreset: NEW_DELHI_ENVIRONMENT,
+  environmentPreset: INDOOR_ENVIRONMENT,
   interpretation: 'Model predictions from a six-degree-of-freedom rigid-body paper-plane simulator with estimated coefficients; not measured physical flight results.',
   objective: 'Longest airtime among completed landings; distance breaks airtime ties. Time-capped trajectories cannot win optimization.',
   software: { name: packageMetadata.name, version: packageMetadata.version, three: packageMetadata.dependencies.three },
@@ -330,7 +337,9 @@ const reportData = {
   modelChangeComparison,
   designs: DESIGNS,
   baseline: summarizeRanking(baseline),
+  distanceOptimization: { objective: distanceSearch.objective, trials: distanceSearch.trials, ranges: distanceSearch.ranges, ranking: summarizeRanking(distanceSearch.ranking), numericalCheck: { passed: distanceNumericalCheck, distanceTolerancePercent: 1, refinedReplayStep: settings.dt / 4, ranking: summarizeRanking(distanceRefined) } },
   optimization: {
+    objective: optimized.objective,
     ranges: optimized.ranges,
     trials: optimized.trials,
     trialsPerDesign,
@@ -365,6 +374,7 @@ const csvRows = [columns.join(',')];
 const csvExperiments: [string, RankedFlight[]][] = [
   ['baseline', baseline],
   ['optimized', optimized.ranking],
+  ['optimized_distance', distanceSearch.ranking],
   ...gridConvergence.slice(1).map(({ dt, ranking }): [string, RankedFlight[]] => [`optimized_dt_${dt}`, ranking]),
 ];
 for (const [experiment, ranking] of csvExperiments) {
@@ -448,7 +458,7 @@ const markdown = [
   '',
   '## Fair comparison settings',
   '',
-  `Default environment: **${NEW_DELHI_ENVIRONMENT.name}**, Safdarjung reference at ${NEW_DELHI_ENVIRONMENT.latitude}° N, ${NEW_DELHI_ENVIRONMENT.longitude}° E. Temperature, humidity and wind speed are rounded ${NEW_DELHI_ENVIRONMENT.climatePeriod} NASA POWER annual gridded means. NOAA metadata supplies the rounded 215 m elevation. Sea-level pressure is an ISA estimate from the climate grid surface pressure; headwind direction is a simulation choice. This is a reproducible representative preset, not current weather.`,
+  `Default environment: **${INDOOR_ENVIRONMENT.name}**: wind and gusts are exactly zero. Temperature and humidity retain representative ${NEW_DELHI_ENVIRONMENT.climatePeriod} Delhi climate values; the 215 m ground elevation comes from Safdarjung metadata. Sea-level pressure is estimated. These are editable defaults, not indoor observations. Walls, ceilings, ventilation and thermals are not modeled.`,
   '',
   `Relative humidity is ${baselineSettings.relativeHumidity}%; sea-level-reduced pressure is ${baselineSettings.seaLevelPressure} hPa. These remain identical for every trial. Local pressure and moist-air density are recomputed at the plane's altitude.`,
   '',
@@ -468,6 +478,16 @@ const markdown = [
   'Completed landings are eligible to win. Time-capped trajectories are censored observations: their duration is a lower bound and they are excluded from winner selection. If every trial of an airframe is capped, its marked fallback appears after completed flights.',
   '',
   table(optimized.ranking, true),
+  '',
+  '## Distance objective',
+  '',
+  'The same grid is independently searched for greatest horizontal displacement among completed landings; airtime breaks distance ties. This is the appropriate metric for Suzanne and Krstić’s documented distance events. Launch speeds are candidate inputs, not measurements of record throws. Fourfold finer-step replays satisfy a 1% distance tolerance; that checks numerical sensitivity, not physical accuracy.',
+  '',
+  table(distanceSearch.ranking, true),
+  '',
+  '## Why champion predictions differ from records',
+  '',
+  'The former domain stopped at 10 m/s and 30° and scored only airtime. A still-air audit found that extending angles alone did not improve Suzanne or Sky King’s best airtime under the old speed cap; faster releases were responsible for their modeled gains. The new grid includes vertical releases and higher speeds equally for all designs. Standardized paper stock, upright zero-spin releases and estimated aerodynamic coefficients differ from the historical flights. See [the primary-source audit](competition-context.md).',
   '',
   '## Integration-step sensitivity',
   '',
@@ -532,6 +552,7 @@ if (seed === DEFAULT_SETTINGS.seed && !option('--output-dir')) {
     atmosphere: reportData.atmosphere,
     numericalCheck: reportData.convergence.numericalCheck,
     optimization: reportData.optimization,
+    distanceOptimization: reportData.distanceOptimization,
   }, null, 2)}\n`);
 }
 console.log(winner

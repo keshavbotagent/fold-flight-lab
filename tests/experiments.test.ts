@@ -124,3 +124,23 @@ test('optimizer preserves censored outcomes when no candidate reaches the ground
     assert.ok(entry.flight.samples.at(-1)!.y > 0);
   }
 });
+
+
+test('distance objective uses the same full grid and independently maximizes completed range', async () => {
+  const settings = { ...DEFAULT_SETTINGS, maxTime: 60 };
+  const matched = compareDesigns(settings, 'distance');
+  assert.equal(matched.length, DESIGNS.length);
+  assert.ok(matched.every((row, index) => !index || matched[index - 1].flight.distance >= row.flight.distance));
+  const result = await optimizeDesigns(settings, undefined, undefined, 'distance');
+  assert.equal(result.objective, 'distance');
+  assert.equal(result.trials, DESIGNS.length * result.ranges.angles.length * result.ranges.speeds.length * result.ranges.trims.length);
+  assert.ok(result.ranking.every((row, index) => !index || result.ranking[index - 1].flight.distance >= row.flight.distance));
+  const design = DESIGNS.find(row => row.id === 'krstic-dart')!;
+  const candidates = result.ranges.angles.flatMap(angle => result.ranges.speeds.flatMap(speed => result.ranges.trims.map(trim =>
+    simulateFlight(design, { ...settings, angle, speed, trim }),
+  ))).filter(flight => flight.landed && !flight.truncated);
+  candidates.sort((a, b) => b.distance - a.distance || b.duration - a.duration);
+  assert.deepEqual(result.ranking.find(row => row.design.id === design.id)!.flight, candidates[0]);
+  const censored = compareDesigns({ maxTime: 0.2, height: 20 }, 'distance');
+  assert.ok(censored.every(row => row.flight.truncated && !row.flight.landed));
+});

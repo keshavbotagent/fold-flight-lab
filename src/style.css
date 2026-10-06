@@ -684,3 +684,12 @@ input[type='range']::-moz-range-progress { background: var(--orange); height: 4p
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
 }
+
+.environment-preset { max-width: 100%; padding: 1px 4px; font-size: 12px; height: 20px; color: var(--muted); background: var(--panel); border: 1px solid var(--border); border-radius: 4px; }
+.objective-control { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); }
+.objective-control select { padding: 7px; background: var(--panel); color: var(--ink); border: 1px solid var(--border); border-radius: 5px; }
+.competition-explanation { margin-top: 24px; padding: 20px; border: 1px solid var(--border); border-radius: 8px; color: var(--muted); font-size: 13px; line-height: 1.6; }
+.competition-explanation h3 { margin: 0 0 8px; color: var(--ink); font-size: 15px; }
+.competition-explanation p { margin: 8px 0; }
+.competition-explanation a { color: var(--orange); }
+@media (max-width: 680px) { .results-actions { flex-wrap: wrap; } .objective-control { flex-basis: 100%; } }

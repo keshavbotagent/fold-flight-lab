@@ -1,8 +1,8 @@
 import { useEffect, useRef } from 'react';
 import { flushSync } from 'react-dom';
 import { DESIGNS } from './designs';
-import { NEW_DELHI_ENVIRONMENT, isNewDelhiEnvironment } from './environment';
-import type { LaunchSettings, RankedFlight } from './types';
+import { environmentName } from './environment';
+import type { LaunchSettings, OptimizationObjective, RankedFlight } from './types';
 
 interface ToolDefinition {
   name: string;
@@ -20,6 +20,7 @@ interface LabState {
   settings: LaunchSettings;
   ranking: RankedFlight[];
   comparisonMethod: string;
+  objective: OptimizationObjective;
   playing: boolean;
 }
 
@@ -68,7 +69,7 @@ export function useFlightTools(state: LabState, compare: () => RankedFlight[]) {
       execute(input) {
         emptyInput(input);
         const current = latest.current.state;
-        return { selectedId: current.selectedId, environment: isNewDelhiEnvironment(current.settings) ? NEW_DELHI_ENVIRONMENT.name : 'Custom environment', conditions: { ...current.settings }, physicsModel: current.ranking[0]?.flight.modelVersion ?? null, comparisonMethod: current.comparisonMethod, playing: current.playing, designs: DESIGNS.map(d => ({ id: d.id, name: d.name, category: d.category, documentedAchievement: d.achievement ?? null, modelNotes: d.modelNotes ?? null })), results: scores(current.ranking) };
+        return { selectedId: current.selectedId, environment: environmentName(current.settings), conditions: { ...current.settings }, physicsModel: current.ranking[0]?.flight.modelVersion ?? null, comparisonMethod: current.comparisonMethod, objective: current.objective, playing: current.playing, designs: DESIGNS.map(d => ({ id: d.id, name: d.name, category: d.category, documentedAchievement: d.achievement ?? null, modelNotes: d.modelNotes ?? null })), results: scores(current.ranking) };
       },
     }, {
       name: 'compare_current_airframes',
@@ -80,7 +81,7 @@ export function useFlightTools(state: LabState, compare: () => RankedFlight[]) {
         emptyInput(input);
         let results: RankedFlight[] = [];
         flushSync(() => { results = latest.current.compare(); });
-        return { comparisonMethod: 'matched', results: scores(results) };
+        return { comparisonMethod: 'matched', objective: latest.current.state.objective, results: scores(results) };
       },
     }];
     for (const tool of definitions) {

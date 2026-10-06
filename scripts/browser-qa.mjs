@@ -82,7 +82,9 @@ async function verifyCSV(page, filename) {
     const value = name => Number(rows[i][header.indexOf(name)]);
     assert.equal(value('release_altitude_msl_m'), value('field_elevation_m') + value('height_m'));
     assert.equal(value('peak_altitude_msl_m'), value('field_elevation_m') + value('max_height_m'));
-    if (i > 0) assert.ok(Number(rows[i - 1][2]) >= Number(rows[i][2]), 'exported airtime ranking is descending');
+    assert.ok(header.includes('objective'));
+    const metric = rows[i][header.indexOf('objective')] === 'distance' ? 3 : 2;
+    if (i > 0) assert.ok(Number(rows[i - 1][metric]) >= Number(rows[i][metric]), 'exported objective ranking is descending');
   }
   return lines.length - 1;
 }
@@ -303,8 +305,11 @@ try {
   assert.equal(await page.getByRole('slider', { name: 'Ground elevation', exact: true }).inputValue(), '215');
   assert.equal(await page.getByRole('slider', { name: 'Relative humidity', exact: true }).inputValue(), '46');
   assert.equal(await page.getByRole('slider', { name: 'Sea-level pressure', exact: true }).inputValue(), '1008.3');
-  assert.equal(await page.getByRole('slider', { name: 'Wind speed', exact: true }).inputValue(), '2');
-  assert.equal(await page.getByLabel('Wind direction', { exact: true }).inputValue(), '180');
+  assert.equal(await page.getByRole('slider', { name: 'Wind speed', exact: true }).inputValue(), '0');
+  assert.equal(await page.getByRole('slider', { name: 'Gust intensity', exact: true }).inputValue(), '0');
+  assert.equal(await page.getByLabel('Wind direction', { exact: true }).inputValue(), '0');
+  assert.equal(await page.getByLabel('Environment preset', { exact: true }).inputValue(), 'indoor');
+  assert.equal(await diagnosticValue(page, 'Airspeed'), 7);
   assert.match(await page.getByLabel('Altitude above sea level', { exact: true }).innerText(), /^216\.8 m above sea level$/);
   assert.match(await page.getByLabel('Environment details', { exact: true }).innerText(), /New Delhi, India/);
   await page.getByRole('button', { name: 'Paper, wind & altitude', exact: true }).click();
@@ -341,14 +346,30 @@ try {
   assert.equal(await verifyCSV(page, 'matched-ui.csv'), DESIGN_COUNT);
   record('matched comparison and complete CSV download work');
 
+  const searchTrials = await page.evaluate(async () => { const { OPTIMIZATION_RANGES: r } = await import('/src/lib/experiments.ts'); return 11 * r.angles.length * r.speeds.length * r.trims.length; });
   await page.getByRole('button', { name: 'Find best launches', exact: true }).click();
-  await page.waitForFunction(() => document.querySelector('.results-description')?.textContent?.replaceAll(',', '').includes('1155 launches') && !document.querySelector('.progress-status'), null, { timeout: 60_000 });
+  await page.waitForFunction(count => document.querySelector('.results-description')?.textContent?.replaceAll(',', '').includes(`${count} launches`) && document.querySelector('.results-description')?.textContent?.includes('by airtime') && !document.querySelector('.progress-status'), searchTrials, { timeout: 120_000 });
   assert.equal(await page.getByRole('tab', { name: /Best launch search/ }).getAttribute('aria-selected'), 'true');
   assert.equal(await page.locator('.leaderboard tbody tr').count(), DESIGN_COUNT);
   if (await page.getByRole('button', { name: 'Pause flight', exact: true }).count()) await page.getByRole('button', { name: 'Pause flight', exact: true }).click();
   await screenshot(page, 'desktop-optimized.png');
   await verifyCSV(page, 'optimized-ui.csv');
-  record('equal-budget 1155-launch search completes and exports eleven results');
+  record(`equal-budget ${searchTrials}-launch search completes and exports eleven results`);
+
+  await page.getByLabel('Ranking objective', { exact: true }).selectOption('distance');
+  assert.match(await page.locator('.results-heading h2').innerText(), /distance/);
+  await verifyCSV(page, 'matched-distance-ui.csv');
+  await page.getByRole('button', { name: 'Find best launches', exact: true }).click();
+  await page.waitForFunction(count => document.querySelector('.results-description')?.textContent?.replaceAll(',', '').includes(`${count} launches`) && document.querySelector('.results-description')?.textContent?.includes('by distance') && !document.querySelector('.progress-status'), searchTrials, { timeout: 120_000 });
+  await verifyCSV(page, 'optimized-distance-ui.csv');
+  assert.match(await page.locator('.comparison-summary').innerText(), /greatest predicted distance/);
+  record('distance objective searches the same grid, updates winner wording and exports sorted distances');
+  await page.getByLabel('Environment preset', { exact: true }).selectOption('outdoor');
+  assert.match(await page.getByLabel('Environment details', { exact: true }).innerText(), /2.0 m\/s wind/);
+  await page.getByLabel('Environment preset', { exact: true }).selectOption('indoor');
+  assert.match(await page.getByLabel('Environment details', { exact: true }).innerText(), /Still air/);
+  assert.equal(await page.getByRole('tab', { name: /Matched launch/ }).getAttribute('aria-selected'), 'true');
+  record('environment presets clear stale searches and restore still air');
 
   await page.getByRole('button', { name: 'Replay Wide Glider', exact: true }).click();
   assert.equal(await page.locator('.design-option.selected .design-option-name').innerText(), 'Wide Glider');

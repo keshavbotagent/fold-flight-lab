@@ -1,4 +1,4 @@
-# Flight model: 2.1.0-moist-air
+# Flight model: 2.2.0-indoor-guide
 
 Earth gravity and air resistance are included. This version upgrades the original
 flight-path pitch relaxation to a six-degree-of-freedom rigid-body model: three
@@ -30,7 +30,7 @@ and paper weight is grams per square meter.
 
 Defaults are a 7 m/s launch, 12° elevation, 1.8 m release height, 80 gsm A4 paper,
 the New Delhi representative environment (26°C, 46% relative humidity, 215 m
-field elevation, 1008.3 hPa sea-level pressure, 2 m/s headwind), zero turbulence
+field elevation, 1008.3 hPa sea-level pressure, zero wind), zero turbulence
 and extra trim, and seed 42. Ground velocity is exactly the requested launch velocity. Initial attitude
 is launch angle plus the airframe's trim angle and the chosen trim adjustment;
 initial angular velocity is zero. There is no propulsion or extra launch energy.
@@ -78,7 +78,9 @@ retains standard-atmosphere assumptions.
 
 ### New Delhi defaults and humidity
 
-The preset uses a Safdarjung reference at 28.585° N, 77.206° E and 215 m elevation,
+The indoor default sets wind and turbulence to zero. Delhi thermodynamic values remain editable representative defaults, not measured indoor observations. There are no ceiling or wall collisions, ventilation currents or thermals. The outdoor preset retains a chosen 2 m/s headwind.
+
+The location uses a Safdarjung reference at 28.585° N, 77.206° E and 215 m elevation,
 rounded from NOAA's 214.9 m station datum. Temperature 26°C, relative humidity 46%,
 and wind speed 2 m/s round nearby NASA POWER 2001–2020 annual gridded means
 (25.6°C, 45.56%, 1.92 m/s). These are representative climate conditions, not live
@@ -231,7 +233,7 @@ angular velocity. These isolation controls are not part of ordinary user flight.
 checks, and `getMassProperties` exposes the actual mass, chord, and inertia.
 
 Nonfinite settings fall back to defaults. Finite inputs are bounded to speed
-0–30 m/s, angle −45–80°, height 0–100 m, wind 0–20 m/s, turbulence 0–2, paper
+0–30 m/s, angle −45–90°, height 0–100 m, wind 0–20 m/s, turbulence 0–2, paper
 40–240 gsm, trim −12–12°, temperature −60–60°C, field elevation −500–10,000 m,
 relative humidity 0–100%, sea-level pressure 850–1100 hPa,
 maximum time 0.01–180 s, and maximum timestep 1/3840–1/30 s. Returned settings
@@ -249,3 +251,17 @@ the catalog coefficients or folding instructions.
 - NASA: [Viscosity, Sutherland's relation, and Reynolds number](https://www.grc.nasa.gov/www/k-12/airplane/viscosity.html).
 - NASA: [Standard atmosphere](https://www.grc.nasa.gov/www/k-12/airplane/atmosmet.html).
 - MIT 16.333: [Aircraft stability and control lecture notes](https://ocw.mit.edu/courses/16-333-aircraft-stability-and-control-fall-2004/pages/lecture-notes/).
+
+
+## Indoor comparison and competition records
+
+The shared search includes angles `[0,5,10,15,20,25,30,45,60,75,90]°`, speeds `[4,5.5,7,8.5,10,15,17.5,20,25]` m/s and trim offsets `[-2,0,2]°`: 297 candidates per design. Both airtime and distance objectives use this identical domain. Speeds are test inputs, not known record throw speeds. Zero wind plus zero turbulence removes all modeled airflow; drag still acts on the plane's velocity through stationary air.
+
+Suzanne and Krstić won distance events. Sky King uses an upward ascent-to-glide release in its creator's guide. Historical stock, tape and inverted releases differ from the standardized A4 comparison, and neither record distances nor durations establish the estimated polar or inertia coefficients. A source audit and conditional lift/drag diagnostics are in [competition-context.md](../public/reports/competition-context.md).
+
+
+### Generic glider geometry correction
+
+Wide Glider and Condor formerly used spans/areas inconsistent with their supplied landscape-A4 guides. Their nominal flat reference geometry is now reconstructed from those guides; dimensionless lift/drag/stability derivatives remain unchanged, uncalibrated estimates. Reference span/area describe the nominal flat wing, excluding Condor's upright fin strips. The mesh is a visual approximation, not a measured specimen.
+
+With sheet width W=0.297 m, depth D=0.210 m and keel h=0.010 m, Wide Glider has b=W−2h=0.277 m. For nose fold f=0.030 m, the exposed area is `2[(f−h)(D−f)+D(W/2−f)−((W/2)²−f²)/2]=0.03581775 m²`. Nominal length is D−f=0.180 m. Condor has two 15 mm front rolls, 10 mm upright fin strips t and 20 mm corner folds a: b=W−2h−2t=0.257 m and `S=b(D−0.030)−(a−t)²=0.04616 m²`, length 0.180 m. These are idealized construction dimensions, not surveyed geometry or measured aerodynamic reference data. Fold tolerances and flexibility still matter.

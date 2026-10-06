@@ -165,7 +165,7 @@ are omitted.
 ## Low-Reynolds-number limits and references
 
 For the catalog's reference chords and the default search speeds, Reynolds
-numbers are roughly 20,000–60,000 at sea-level room conditions. Boundary-layer
+numbers depend on chord and speed; the wider 4–25 m/s search extends beyond the former roughly 20,000–60,000 range at sea-level room conditions. Boundary-layer
 transition, sharp-edge separation, and fold roughness can materially affect lift
 and drag in this range. An analytic Reynolds correction and induced-drag formula
 provide a transparent approximation; they cannot identify a particular folded

@@ -32,3 +32,21 @@ export function isNewDelhiEnvironment(settings: LaunchSettings): boolean {
   return (Object.keys(NEW_DELHI_ENVIRONMENT.settings) as (keyof EnvironmentSettings)[])
     .every(key => Math.abs(settings[key] - NEW_DELHI_ENVIRONMENT.settings[key]) < 1e-9);
 }
+
+/** An idealized indoor hall: Delhi thermodynamics, no mean wind or gusts. */
+export const INDOOR_ENVIRONMENT = Object.freeze({
+  ...NEW_DELHI_ENVIRONMENT,
+  name: 'New Delhi, India · indoors',
+  settings: Object.freeze({ ...NEW_DELHI_ENVIRONMENT.settings, windSpeed: 0, windDirection: 0, turbulence: 0 }),
+  notes: 'Idealized indoor still air. Temperature, humidity, elevation and pressure retain the representative Delhi values; they are editable, not measured indoor conditions. Wind and gusts are exactly zero. Walls, ceilings, ventilation and thermals are not modeled.',
+});
+
+export function isIndoorEnvironment(settings: LaunchSettings): boolean {
+  return (Object.keys(INDOOR_ENVIRONMENT.settings) as (keyof EnvironmentSettings)[])
+    .every(key => key === 'windDirection' || Math.abs(settings[key] - INDOOR_ENVIRONMENT.settings[key]) < 1e-9);
+}
+
+export function environmentName(settings: LaunchSettings): string {
+  return isIndoorEnvironment(settings) ? INDOOR_ENVIRONMENT.name
+    : isNewDelhiEnvironment(settings) ? NEW_DELHI_ENVIRONMENT.name : 'Custom environment';
+}

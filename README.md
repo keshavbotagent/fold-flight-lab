@@ -2,7 +2,7 @@
 
 An interactive, browser-based paper-plane simulator built with **Three.js 0.186.1
 (r186), React 19.3.0, and Vite 8.3.3**. Choose a folded airframe, adjust its release
-and environment, replay its 3D trajectory, and compare predicted flight duration.
+and environment, replay its 3D trajectory, and compare predicted airtime or horizontal distance.
 
 The eleven configurations include Classic Dart, Nakamura Lock, Wide Glider,
 Delta Wing, Condor, Needle, Canard, Swallow, **Suzanne**, **Sky King**, and
@@ -60,8 +60,8 @@ production build.
 - Select an airframe and adjust launch speed, angle, and release height. Expand
   **Paper, wind & altitude** to change paper stock, wind, gust intensity, elevator
   trim, air temperature, relative humidity, sea-level pressure, and ground elevation.
-  Launch angles up to 80° allow steep airtime throws; the shared search retains
-  the documented 0–30° grid below.
+  Choose **Indoor · still air** (the default) for exactly zero wind and gusts,
+  or restore the outdoor New Delhi preset. Launch angles extend to 90° and speeds to 25 m/s.
 - Open **Fold guide** for illustrated instructions for the selected plane. Each
   step shows the fold line and motion arrows beside the resulting paper shape.
   Use **Next step**, **Previous step**, or the numbered steps to follow along;
@@ -72,18 +72,18 @@ production build.
   ground speed.
 - Use **Compare all designs** for eleven flights with the same launch settings and
   environment.
-- Use **Find best launches** to give every design the same search: seven angles
-  `[0, 5, 10, 15, 20, 25, 30]°`, five speeds `[4, 5.5, 7, 8.5, 10] m/s`, and three
-  trim offsets `[-2, 0, 2]°`. This is **105 trials per design, 1,155 trials total**.
+- Use **Find best launches** to give every design the same search: eleven angles
+  `[0, 5, 10, 15, 20, 25, 30, 45, 60, 75, 90]°`, nine speeds
+  `[4, 5.5, 7, 8.5, 10, 15, 17.5, 20, 25] m/s`, and three trim offsets
+  `[-2, 0, 2]°`. This is **297 trials per design, 3,267 trials total** for each objective.
   Paper, release height, weather, temperature, field elevation, gust seed, and
   numerical settings remain shared.
 - Replay a leaderboard entry or export the current ranking as CSV.
 
-The objective is duration from release to first ground contact. Horizontal
-displacement from the release point breaks duration ties; distance is not the
-trajectory's total path length. The optimization retains each design's longest
-completed landing. Time-capped flights are marked as incomplete observations and
+Choose **Airtime** or **Distance** to rank matched launches and search each design's best completed flight. Airtime measures release to first ground contact; distance is horizontal displacement from the release point, not total path length. The other metric breaks ties. Changing conditions or the objective clears stale search results. Time-capped flights are marked as incomplete observations and
 cannot win that search.
+
+Distance champions are not airtime champions. The old 4–10 m/s search also disadvantaged fast darts. Record materials, release attitude and estimated coefficients differ from this standardized comparison; see [the source audit](public/reports/competition-context.md).
 
 ## Reproduce an experiment
 
@@ -94,8 +94,8 @@ The default shared configuration is:
 | Launch speed / elevation | 7 m/s / 12° |
 | Release height | 1.8 m above the launch ground |
 | Paper stock | A4, 80 g/m²; 4.9896 g per plane |
-| Environment | New Delhi, India; representative annual conditions |
-| Wind / gust intensity | 2 m/s headwind / 0 |
+| Environment | New Delhi indoors; idealized still air |
+| Wind / gust intensity | 0 m/s / 0 |
 | Air temperature / field elevation | 26°C / 215 m above sea level |
 | Relative humidity | 46% |
 | Sea-level pressure | 1008.3 hPa (estimated); local ground pressure about 982.9 hPa |
@@ -106,8 +106,8 @@ The default shared configuration is:
 
 The New Delhi preset uses Safdarjung station elevation and rounded NASA POWER
 2001–2020 annual climate means. Its sea-level pressure is estimated from the
-climate grid's surface pressure; headwind direction is chosen for the experiment.
-All weather values are editable, and **Reset conditions** restores the preset.
+climate grid's surface pressure. Indoor wind and gusts are zero; temperature and humidity remain editable representative values, not measured venue conditions. The outdoor option uses a chosen 2 m/s headwind. Walls, ceilings, ventilation and thermals are not modeled.
+All weather values are editable, and **Reset conditions** restores indoor defaults.
 See [the model and source links](docs/model.md#new-delhi-defaults-and-humidity)
 for the reference location and assumptions. The preset does not fetch live weather.
 

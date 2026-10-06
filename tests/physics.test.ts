@@ -106,5 +106,16 @@ test('wind directions use tailwind +X and crosswind +Z convention', () => {
   assert.ok(tail.vx > calm.vx && calm.vx > head.vx, 'headwind produces stronger initial deceleration than tailwind');
   assert.ok(positiveCrosswind.z > 0 && negativeCrosswind.z < 0, 'crosswind displacement follows signed wind');
   almost(positiveCrosswind.z, -negativeCrosswind.z, 1e-6, 'symmetric crosswind drift');
-  assert.equal(DEFAULT_SETTINGS.windSpeed, 2, 'default New Delhi representative wind is 2 m/s');
+  assert.equal(DEFAULT_SETTINGS.windSpeed, 0, 'default indoor wind is zero');
+});
+
+
+test('a vertical indoor release retains its direction and lands with finite dynamics', () => {
+  const design = DESIGNS.find(row => row.id === 'sky-king')!;
+  const flight = simulateFlight(design, { angle: 90, speed: 20 });
+  assert.equal(flight.settings.angle, 90);
+  assert.ok(Math.abs(flight.samples[0].vx) < 1e-12);
+  assert.equal(flight.samples[0].vy, 20);
+  assert.ok(flight.landed && !flight.truncated);
+  assert.ok(flight.samples.every(row => [row.x, row.y, row.z, row.vx, row.vy, row.vz, row.qx, row.qy, row.qz, row.qw].every(value => Number.isFinite(value))));
 });

@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { getAtmosphere, AIR_GAS_CONSTANT, saturationVaporPressure } from '../src/lib/atmosphere.ts';
 import { DEFAULT_SETTINGS, simulateFlight } from '../src/lib/physics.ts';
-import { NEW_DELHI_ENVIRONMENT, isNewDelhiEnvironment } from '../src/lib/environment.ts';
+import { INDOOR_ENVIRONMENT, NEW_DELHI_ENVIRONMENT, isIndoorEnvironment, isNewDelhiEnvironment } from '../src/lib/environment.ts';
 import { DESIGNS } from '../src/lib/designs.ts';
 
 test('moist air matches independent vapor-pressure and density references', () => {
@@ -43,7 +43,10 @@ test('moist-air bounds keep vapor partial pressure and density physical', () => 
 });
 
 test('New Delhi defaults are reproducible and humidity changes aerodynamic flight', () => {
-  assert.ok(isNewDelhiEnvironment(DEFAULT_SETTINGS));
+  assert.ok(isIndoorEnvironment(DEFAULT_SETTINGS));
+  assert.ok(isNewDelhiEnvironment({ ...DEFAULT_SETTINGS, ...NEW_DELHI_ENVIRONMENT.settings }));
+  assert.equal(INDOOR_ENVIRONMENT.settings.windSpeed, 0);
+  assert.equal(DEFAULT_SETTINGS.turbulence, 0);
   assert.equal(NEW_DELHI_ENVIRONMENT.settings.fieldElevation, 215);
   assert.equal(DEFAULT_SETTINGS.airTemperature, 26);
   assert.equal(DEFAULT_SETTINGS.relativeHumidity, 46);

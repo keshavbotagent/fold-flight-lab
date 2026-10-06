@@ -1,13 +1,13 @@
 import type { AirframeDynamics, Atmosphere, FlightResult, FlightSample, LaunchSettings, PlaneDesign } from './types';
 import { getAtmosphere } from './atmosphere';
-import { NEW_DELHI_ENVIRONMENT } from './environment';
+import { INDOOR_ENVIRONMENT } from './environment';
 export { getAtmosphere } from './atmosphere';
 
-export const PHYSICS_VERSION = '2.1.0-moist-air';
+export const PHYSICS_VERSION = '2.2.0-indoor-guide';
 export const DEFAULT_SETTINGS: LaunchSettings = Object.freeze({
   speed: 7, angle: 12, height: 1.8,
   paperWeight: 80, trim: 0, seed: 42, maxTime: 60, dt: 1 / 120,
-  ...NEW_DELHI_ENVIRONMENT.settings,
+  ...INDOOR_ENVIRONMENT.settings,
 });
 
 export interface Vector3 { x: number; y: number; z: number; }
@@ -52,7 +52,7 @@ function sanitizeSettings(overrides: Partial<LaunchSettings>): LaunchSettings {
   const value = (key: keyof LaunchSettings) => Number.isFinite(overrides[key])
     ? overrides[key] as number : DEFAULT_SETTINGS[key];
   return {
-    speed: clamp(value('speed'), 0, 30), angle: clamp(value('angle'), -45, 80),
+    speed: clamp(value('speed'), 0, 30), angle: clamp(value('angle'), -45, 90),
     height: clamp(value('height'), 0, 100), windSpeed: clamp(value('windSpeed'), 0, 20),
     windDirection: ((value('windDirection') % 360) + 360) % 360,
     turbulence: clamp(value('turbulence'), 0, 2), paperWeight: clamp(value('paperWeight'), 40, 240),

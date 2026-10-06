@@ -1,12 +1,13 @@
 import type { AirframeDynamics, Atmosphere, FlightResult, FlightSample, LaunchSettings, PlaneDesign } from './types';
 import { getAtmosphere } from './atmosphere';
+import { NEW_DELHI_ENVIRONMENT } from './environment';
 export { getAtmosphere } from './atmosphere';
 
-export const PHYSICS_VERSION = '2.0.0-rigid-body';
+export const PHYSICS_VERSION = '2.1.0-moist-air';
 export const DEFAULT_SETTINGS: LaunchSettings = Object.freeze({
-  speed: 7, angle: 12, height: 1.8, windSpeed: 0, windDirection: 0,
-  turbulence: 0, paperWeight: 80, trim: 0, seed: 42, maxTime: 60, dt: 1 / 120,
-  airTemperature: 15, fieldElevation: 0,
+  speed: 7, angle: 12, height: 1.8,
+  paperWeight: 80, trim: 0, seed: 42, maxTime: 60, dt: 1 / 120,
+  ...NEW_DELHI_ENVIRONMENT.settings,
 });
 
 export interface Vector3 { x: number; y: number; z: number; }
@@ -59,6 +60,8 @@ function sanitizeSettings(overrides: Partial<LaunchSettings>): LaunchSettings {
     maxTime: clamp(value('maxTime'), 0.01, 180), dt: clamp(value('dt'), 1 / 3840, 1 / 30),
     airTemperature: clamp(value('airTemperature'), -60, 60),
     fieldElevation: clamp(value('fieldElevation'), -500, 10_000),
+    relativeHumidity: clamp(value('relativeHumidity'), 0, 100),
+    seaLevelPressure: clamp(value('seaLevelPressure'), 850, 1100),
   };
 }
 

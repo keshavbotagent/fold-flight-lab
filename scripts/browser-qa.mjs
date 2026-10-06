@@ -25,7 +25,17 @@ async function setSlider(page, label, target) {
   const slider = page.getByRole('slider', { name: label, exact: true });
   const range = await slider.evaluate(input => ({ min: Number(input.min), step: Number(input.step || 1) }));
   await slider.press('Home');
-  for (let i = 0; i < Math.round((target - range.min) / range.step); i++) await slider.press('ArrowRight');
+  const increments = Math.round((target - range.min) / range.step);
+  if (increments > 20) {
+    await slider.evaluate((input, value) => {
+      Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value').set.call(input, String(value));
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+      input.dispatchEvent(new Event('change', { bubbles: true }));
+    }, target - range.step);
+    await slider.press('ArrowRight');
+  } else {
+    for (let i = 0; i < increments; i++) await slider.press('ArrowRight');
+  }
   assert.equal(Number(await slider.inputValue()), target, `${label} responds to keyboard input`);
   return slider;
 }
@@ -60,6 +70,7 @@ async function verifyCSV(page, filename) {
   assert.ok(header.includes('seed') && header.includes('time_capped') && header.includes('trim_deg'));
   assert.ok(header.includes('air_temperature_c') && header.includes('field_elevation_m') && header.includes('model_version'), 'exports identify the atmosphere and physics model');
   assert.ok(header.includes('release_altitude_msl_m') && header.includes('peak_altitude_msl_m'), 'exports distinguish absolute altitude from height above ground');
+  assert.ok(header.includes('relative_humidity_percent') && header.includes('sea_level_pressure_hpa'), 'exports preserve moist-air conditions');
   const rows = lines.slice(1).map(line => line.split(','));
   for (let i = 0; i < rows.length; i++) {
     assert.equal(Number(rows[i][0]), i + 1);
@@ -135,6 +146,8 @@ try {
   assert.equal(await page.locator('h1').count(), 1);
   assert.equal(await page.locator('.design-option').count(), 8);
   assert.equal(await page.locator('.leaderboard tbody tr').count(), 8);
+  assert.match(await page.getByLabel('Environment details', { exact: true }).innerText(), /New Delhi, India/);
+  assert.match(await page.getByLabel('Environment details', { exact: true }).innerText(), /26°C.*46% humidity.*215 m above sea level/);
   const renderer = await verifyRenderer(page);
   await screenshot(page, 'desktop-initial.png');
   const layoutBoxes = await page.evaluate(() => Object.fromEntries(
@@ -160,6 +173,18 @@ try {
   await page.getByLabel('Wind direction', { exact: true }).selectOption('0');
   await setSlider(page, 'Gust intensity', 0);
   await setSlider(page, 'Air temperature', 25);
+  await setSlider(page, 'Relative humidity', 0);
+  const dryDensity = await diagnosticValue(page, 'Air density');
+  await setSlider(page, 'Relative humidity', 100);
+  assert.ok(await diagnosticValue(page, 'Air density') < dryDensity, 'humidity lowers the live air density');
+  assert.equal(await diagnosticValue(page, 'Humidity'), 100);
+  await setSlider(page, 'Sea-level pressure', 1000);
+  const lowerPressureDensity = await diagnosticValue(page, 'Air density');
+  await setSlider(page, 'Sea-level pressure', 1020);
+  assert.ok(await diagnosticValue(page, 'Air density') > lowerPressureDensity, 'pressure increases live air density');
+  await setSlider(page, 'Sea-level pressure', 1008.3);
+  await setSlider(page, 'Relative humidity', 46);
+  assert.match(await page.getByLabel('Environment details', { exact: true }).innerText(), /Custom environment/);
   await setSlider(page, 'Ground elevation', 1500);
   assert.match(await page.getByLabel('Altitude above sea level', { exact: true }).innerText(), /^1502\.0 m above sea level$/);
   await setSlider(page, 'Ground elevation', -400);
@@ -186,9 +211,14 @@ try {
   await page.getByRole('button', { name: 'Paper, wind & altitude', exact: true }).click();
   await page.getByRole('button', { name: 'Reset conditions', exact: true }).click();
   assert.equal(await page.getByRole('slider', { name: 'Launch speed', exact: true }).inputValue(), '7');
-  assert.equal(await page.getByRole('slider', { name: 'Air temperature', exact: true }).inputValue(), '15');
-  assert.equal(await page.getByRole('slider', { name: 'Ground elevation', exact: true }).inputValue(), '0');
-  assert.match(await page.getByLabel('Altitude above sea level', { exact: true }).innerText(), /^1\.8 m above sea level$/);
+  assert.equal(await page.getByRole('slider', { name: 'Air temperature', exact: true }).inputValue(), '26');
+  assert.equal(await page.getByRole('slider', { name: 'Ground elevation', exact: true }).inputValue(), '215');
+  assert.equal(await page.getByRole('slider', { name: 'Relative humidity', exact: true }).inputValue(), '46');
+  assert.equal(await page.getByRole('slider', { name: 'Sea-level pressure', exact: true }).inputValue(), '1008.3');
+  assert.equal(await page.getByRole('slider', { name: 'Wind speed', exact: true }).inputValue(), '2');
+  assert.equal(await page.getByLabel('Wind direction', { exact: true }).inputValue(), '180');
+  assert.match(await page.getByLabel('Altitude above sea level', { exact: true }).innerText(), /^216\.8 m above sea level$/);
+  assert.match(await page.getByLabel('Environment details', { exact: true }).innerText(), /New Delhi, India/);
   await page.getByRole('button', { name: 'Paper, wind & altitude', exact: true }).click();
   record('airframe selection, sliders and weather reset respond');
 

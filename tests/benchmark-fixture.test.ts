@@ -15,6 +15,7 @@ test('the shipped leaderboard fixture is current, reproducible and sorted by com
   assert.equal(optimization.ranking.length, DESIGNS.length);
   assert.equal(new Set(optimization.ranking.map(row => row.designId)).size, DESIGNS.length);
   assert.ok(optimization.sharedVariables.includes('airTemperature') && optimization.sharedVariables.includes('fieldElevation'), 'benchmark records the held atmosphere conditions');
+  assert.ok(optimization.sharedVariables.includes('relativeHumidity') && optimization.sharedVariables.includes('seaLevelPressure'), 'benchmark holds humidity and sea-level pressure fixed');
   assert.equal(optimization.trials, DESIGNS.length * optimization.ranges.angles.length * optimization.ranges.speeds.length * optimization.ranges.trims.length);
   let previous: FlightResult | undefined;
   for (let i = 0; i < optimization.ranking.length; i++) {

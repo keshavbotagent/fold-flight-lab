@@ -57,7 +57,7 @@ test('optimizer gives every design the same exhaustive budget and is reproducibl
     assert.ok(first.ranges.angles.includes(launch.angle));
     assert.ok(first.ranges.speeds.includes(launch.speed));
     assert.ok(first.ranges.trims.includes(launch.trim));
-    for (const key of ['height', 'windSpeed', 'windDirection', 'turbulence', 'seed', 'paperWeight', 'maxTime', 'dt', 'airTemperature', 'fieldElevation'] as const) {
+    for (const key of ['height', 'windSpeed', 'windDirection', 'turbulence', 'seed', 'paperWeight', 'maxTime', 'dt', 'airTemperature', 'fieldElevation', 'relativeHumidity', 'seaLevelPressure'] as const) {
       assert.equal(launch[key], { ...DEFAULT_SETTINGS, ...settings }[key], `${key} is held constant across optimizer candidates`);
     }
     const sameDesignBaseline = baseline.find(b => b.design.id === entry.design.id)!;

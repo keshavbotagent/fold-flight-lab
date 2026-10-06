@@ -21,6 +21,8 @@ export interface Atmosphere {
   dynamicViscosity: number;
   pressure: number;
   temperatureKelvin: number;
+  relativeHumidity: number;
+  vaporPressure: number;
 }
 export interface PlaneDesign {
   id: string;
@@ -57,6 +59,9 @@ export interface LaunchSettings {
   dt: number;
   airTemperature: number;
   fieldElevation: number;
+  relativeHumidity: number;
+  /** Sea-level-reduced pressure in hPa, not local station pressure. */
+  seaLevelPressure: number;
 }
 export interface FlightSample {
   t: number;

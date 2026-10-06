@@ -1,4 +1,4 @@
-# Flight model: 2.0.0-rigid-body
+# Flight model: 2.1.0-moist-air
 
 Earth gravity and air resistance are included. This version upgrades the original
 flight-path pitch relaxation to a six-degree-of-freedom rigid-body model: three
@@ -29,8 +29,9 @@ Speed is m/s, temperature is °C, field elevation is meters above mean sea level
 and paper weight is grams per square meter.
 
 Defaults are a 7 m/s launch, 12° elevation, 1.8 m release height, 80 gsm A4 paper,
-zero wind/turbulence and extra trim, 15°C field air, 0 m field elevation, and seed
-42. Ground velocity is exactly the requested launch velocity. Initial attitude
+the New Delhi representative environment (26°C, 46% relative humidity, 215 m
+field elevation, 1008.3 hPa sea-level pressure, 2 m/s headwind), zero turbulence
+and extra trim, and seed 42. Ground velocity is exactly the requested launch velocity. Initial attitude
 is launch angle plus the airframe's trim angle and the chosen trim adjustment;
 initial angular velocity is zero. There is no propulsion or extra launch energy.
 
@@ -57,21 +58,54 @@ Earth rotation, and terrain anomalies; those effects are far smaller than the
 uncertainty of the paper-plane coefficients in ordinary throws.
 
 Pressure follows the International Standard Atmosphere troposphere formula with
-sea-level pressure 101,325 Pa, temperature 288.15 K, lapse rate 0.0065 K/m, and
+editable sea-level pressure (standard reference 101,325 Pa), temperature 288.15 K, lapse rate 0.0065 K/m, and
 specific gas constant 287.05287 J/(kg·K). Above 11 km, an isothermal pressure
 continuation is used. The chosen field temperature is the local ground air
-condition, decreasing with height at the lapse rate. Density follows the ideal-gas
-law; dynamic viscosity follows Sutherland's relation:
+condition, decreasing with height at the lapse rate. The dry-air density limit
+follows the ideal-gas law; dynamic viscosity follows Sutherland's relation:
 
 ```
-ρ = pressure / (287.05287 × temperatureKelvin)
+ρdry = pressure / (287.05287 × temperatureKelvin)
 μ = 1.716e−5 × (T / 273.15)^(3/2) × (273.15 + 110.4) / (T + 110.4)
 ```
 
-At sea level and 15°C: gravity is 9.80665 m/s², density is approximately 1.225
+At sea level and 15°C in dry air at 1013.25 hPa: gravity is 9.80665 m/s², density is approximately 1.225
 kg/m³, and viscosity is approximately 1.7893 × 10⁻⁵ Pa·s. Height, warmer air, and
 field elevation change the air density used by every force evaluation. This is
-dry air at standard pressure; humidity and weather-dependent pressure are omitted.
+an ISA altitude-pressure reduction with editable sea-level pressure. Actual
+humidity and temperature enter the local density; the vertical pressure column
+retains standard-atmosphere assumptions.
+
+### New Delhi defaults and humidity
+
+The preset uses a Safdarjung reference at 28.585° N, 77.206° E and 215 m elevation,
+rounded from NOAA's 214.9 m station datum. Temperature 26°C, relative humidity 46%,
+and wind speed 2 m/s round nearby NASA POWER 2001–2020 annual gridded means
+(25.6°C, 45.56%, 1.92 m/s). These are representative climate conditions, not live
+weather or annual station observations. The 1008.3 hPa sea-level pressure is an
+ISA estimate reducing the grid's 98.39 kPa surface pressure at 206.37 m; it gives
+about 982.9 hPa at the 215 m simulation field. Headwind is chosen relative to the
+launch direction and is not a claimed prevailing compass bearing.
+
+Humidity enters density through Buck's 1996 saturation-vapor-pressure equation
+over liquid water. With temperature t in °C and T in K, pressures are in Pa:
+
+```
+es = 611.21 × exp((18.678 − t/234.5) × t/(257.14 + t))
+e = min(0.99 × pressure, relativeHumidity/100 × es)
+ρ = (pressure − e)/(287.05287 × T) + e/(461.5 × T)
+```
+
+Zero humidity reproduces the dry-air limit exactly. At the same temperature and
+pressure, humid air is less dense. Relative humidity is held constant over these
+short flights; vapor conservation, condensation and latent heat are omitted.
+Sutherland viscosity remains a dry-air approximation. Below freezing, humidity
+remains relative to liquid-water saturation. Humidity effects on paper mass,
+stiffness, creases and deformation are not modeled.
+
+- [NOAA Safdarjung station metadata](https://www.ncei.noaa.gov/pub/data/noaa/isd-history.csv)
+- [NASA POWER New Delhi climatology](https://power.larc.nasa.gov/api/temporal/climatology/point?parameters=T2M,RH2M,WS2M,PS&community=AG&longitude=77.202&latitude=28.583&format=JSON)
+- [CIRES vapor-pressure formulations, including Buck 1996](https://cires1.colorado.edu/~voemel/vp.html)
 
 ## Air-relative lift, drag, and stalls
 
@@ -199,6 +233,7 @@ checks, and `getMassProperties` exposes the actual mass, chord, and inertia.
 Nonfinite settings fall back to defaults. Finite inputs are bounded to speed
 0–30 m/s, angle −45–80°, height 0–100 m, wind 0–20 m/s, turbulence 0–2, paper
 40–240 gsm, trim −12–12°, temperature −60–60°C, field elevation −500–10,000 m,
+relative humidity 0–100%, sea-level pressure 850–1100 hPa,
 maximum time 0.01–180 s, and maximum timestep 1/3840–1/30 s. Returned settings
 contain the values actually used. Invalid or nonpositive geometry/aerodynamic
 constants and invalid damping/inertia values raise a RangeError. Extreme inputs

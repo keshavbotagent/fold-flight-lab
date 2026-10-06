@@ -1,53 +1,66 @@
 {
-  "modelVersion": "2.0.0-rigid-body",
-  "generatedAt": "2026-10-06T08:08:07.236Z",
+  "modelVersion": "2.1.0-moist-air",
+  "generatedAt": "2026-10-06T08:38:36.179Z",
   "baselineSettings": {
     "speed": 7,
     "angle": 12,
     "height": 1.8,
-    "windSpeed": 0,
-    "windDirection": 0,
+    "windSpeed": 2,
+    "windDirection": 180,
     "turbulence": 0,
     "paperWeight": 80,
     "trim": 0,
     "seed": 42,
     "maxTime": 60,
     "dt": 0.008333333333333333,
-    "airTemperature": 15,
-    "fieldElevation": 0
+    "airTemperature": 26,
+    "fieldElevation": 215,
+    "relativeHumidity": 46,
+    "seaLevelPressure": 1008.3
   },
   "atmosphere": {
     "conditions": {
-      "airTemperatureCelsius": 15,
-      "fieldElevationMeters": 0
+      "airTemperatureCelsius": 26,
+      "fieldElevationMeters": 215,
+      "relativeHumidityPercent": 46,
+      "seaLevelPressureHpa": 1008.3
     },
     "units": {
+      "altitudeMSL": "m",
       "gravity": "m/s²",
       "density": "kg/m³",
       "dynamicViscosity": "Pa·s",
       "pressure": "Pa",
-      "temperatureKelvin": "K"
+      "temperatureKelvin": "K",
+      "relativeHumidity": "%",
+      "vaporPressure": "Pa"
     },
     "ground": {
-      "gravity": 9.80665,
-      "density": 1.225000018124288,
-      "dynamicViscosity": 0.000017892976260350732,
-      "pressure": 101325,
-      "temperatureKelvin": 288.15
+      "altitudeMSL": 215,
+      "gravity": 9.805988150046744,
+      "density": 1.137759397126312,
+      "dynamicViscosity": 0.000018418915004947298,
+      "pressure": 98286.17742532484,
+      "temperatureKelvin": 299.15,
+      "relativeHumidity": 46,
+      "vaporPressure": 1546.7048426652284
     },
     "launch": {
-      "gravity": 9.806644458652482,
-      "density": 1.224788345847783,
-      "dynamicViscosity": 0.000017892411742869472,
-      "pressure": 101303.37820468753,
-      "temperatureKelvin": 288.13829999999996
+      "altitudeMSL": 216.8,
+      "gravity": 9.805982609260194,
+      "density": 1.137563169401677,
+      "dynamicViscosity": 0.000018418360622004256,
+      "pressure": 98265.10188041811,
+      "temperatureKelvin": 299.13829999999996,
+      "relativeHumidity": 46,
+      "vaporPressure": 1545.6345339911595
     },
     "constants": {
       "standardGravityMetersPerSecondSquared": 9.80665,
       "earthRadiusMeters": 6371000,
       "airGasConstantJoulesPerKgKelvin": 287.05287
     },
-    "notes": "Gravity varies with absolute altitude. ISA pressure and an ideal-gas density use the selected temperature/elevation; Sutherland viscosity enters Reynolds number and drag. Temperature uses a fixed lapse rate above the field."
+    "notes": "Gravity varies with absolute altitude. ISA altitude reduction uses the selected sea-level pressure; local temperature and water-vapor partial pressure determine moist-air density. Relative humidity is held constant over the local flight. Sutherland viscosity remains a dry-air approximation. The New Delhi preset is representative climate data, not live weather."
   },
   "numericalCheck": {
     "tolerancePercent": 1,
@@ -59,73 +72,73 @@
     "selectedLaunchWinnerStable": true,
     "fullGridWinnerStable": true,
     "completionConsistent": true,
-    "maxReplayDurationChangePercent": 0.0004152068542237454,
-    "maxGridDurationChangePercent": 0.0004152068542237454,
-    "maxDefaultToFinestReplayDurationChangePercent": 0.001119164850949172,
+    "maxReplayDurationChangePercent": 0.0007507056034865763,
+    "maxGridDurationChangePercent": 0.0007507056034865763,
+    "maxDefaultToFinestReplayDurationChangePercent": 0.0016568738072443594,
     "passed": true,
     "perDesign": [
       {
         "designId": "classic-dart",
         "name": "Classic Dart",
-        "replayDurationChangePercent": 2.4506832261205596e-7,
-        "defaultToFinestReplayDurationChangePercent": 7.02586720932675e-7,
-        "gridDurationChangePercent": 2.4506832261205596e-7,
+        "replayDurationChangePercent": 0.000007641758676024397,
+        "defaultToFinestReplayDurationChangePercent": 0.00008263695122778262,
+        "gridDurationChangePercent": 0.000007641758676024397,
         "completionConsistent": true
       },
       {
         "designId": "nakamura-lock",
         "name": "Nakamura Lock",
-        "replayDurationChangePercent": 0.000014155339150460438,
-        "defaultToFinestReplayDurationChangePercent": 0.00003745508882951893,
-        "gridDurationChangePercent": 0.000014155339150460438,
+        "replayDurationChangePercent": 0.0007507056034865763,
+        "defaultToFinestReplayDurationChangePercent": 0.0016568738072443594,
+        "gridDurationChangePercent": 0.0007507056034865763,
         "completionConsistent": true
       },
       {
         "designId": "wide-glider",
         "name": "Wide Glider",
-        "replayDurationChangePercent": 0.00023108305382843057,
-        "defaultToFinestReplayDurationChangePercent": 0.001119164850949172,
-        "gridDurationChangePercent": 0.00023108305382843057,
+        "replayDurationChangePercent": 0.000347569819241776,
+        "defaultToFinestReplayDurationChangePercent": 0.0006392053081560426,
+        "gridDurationChangePercent": 0.000347569819241776,
         "completionConsistent": true
       },
       {
         "designId": "delta-wing",
         "name": "Delta Wing",
-        "replayDurationChangePercent": 0.0000019144378879912773,
-        "defaultToFinestReplayDurationChangePercent": 0.000005817465544546163,
-        "gridDurationChangePercent": 0.0000019144378879912773,
+        "replayDurationChangePercent": 0.000235883411351316,
+        "defaultToFinestReplayDurationChangePercent": 0.0011686618770295235,
+        "gridDurationChangePercent": 0.000235883411351316,
         "completionConsistent": true
       },
       {
         "designId": "condor",
         "name": "Condor",
-        "replayDurationChangePercent": 0.0004152068542237454,
-        "defaultToFinestReplayDurationChangePercent": 0.0004033972527092365,
-        "gridDurationChangePercent": 0.0004152068542237454,
+        "replayDurationChangePercent": 0.0005397475797858293,
+        "defaultToFinestReplayDurationChangePercent": 0.0012841565968710637,
+        "gridDurationChangePercent": 0.0005397475797858293,
         "completionConsistent": true
       },
       {
         "designId": "needle",
         "name": "Needle",
-        "replayDurationChangePercent": 1.0573884683541004e-9,
-        "defaultToFinestReplayDurationChangePercent": 4.489898878603935e-8,
-        "gridDurationChangePercent": 1.0573884683541004e-9,
+        "replayDurationChangePercent": 7.742786826004585e-9,
+        "defaultToFinestReplayDurationChangePercent": 2.075062471511476e-8,
+        "gridDurationChangePercent": 7.742786826004585e-9,
         "completionConsistent": true
       },
       {
         "designId": "canard",
         "name": "Canard",
-        "replayDurationChangePercent": 0.00010274518901550397,
-        "defaultToFinestReplayDurationChangePercent": 0.000171066095454768,
-        "gridDurationChangePercent": 0.00010274518901550397,
+        "replayDurationChangePercent": 0.00005351735428920704,
+        "defaultToFinestReplayDurationChangePercent": 0.0013248270674773737,
+        "gridDurationChangePercent": 0.00005351735428920704,
         "completionConsistent": true
       },
       {
         "designId": "swallow",
         "name": "Swallow",
-        "replayDurationChangePercent": 1.525730968090219e-7,
-        "defaultToFinestReplayDurationChangePercent": 0.0000028131184477831306,
-        "gridDurationChangePercent": 1.525730968090219e-7,
+        "replayDurationChangePercent": 0.0000017346071278490413,
+        "defaultToFinestReplayDurationChangePercent": 0.00112058642319555,
+        "gridDurationChangePercent": 0.0000017346071278490413,
         "completionConsistent": true
       }
     ],
@@ -172,7 +185,9 @@
       "maxTime",
       "dt",
       "airTemperature",
-      "fieldElevation"
+      "fieldElevation",
+      "relativeHumidity",
+      "seaLevelPressure"
     ],
     "ranking": [
       {
@@ -183,52 +198,54 @@
           "designId": "condor",
           "settings": {
             "speed": 10,
-            "angle": 30,
+            "angle": 25,
             "height": 1.8,
-            "windSpeed": 0,
-            "windDirection": 0,
+            "windSpeed": 2,
+            "windDirection": 180,
             "turbulence": 0,
             "paperWeight": 80,
             "trim": 2,
             "seed": 42,
             "maxTime": 60,
             "dt": 0.008333333333333333,
-            "airTemperature": 15,
-            "fieldElevation": 0
+            "airTemperature": 26,
+            "fieldElevation": 215,
+            "relativeHumidity": 46,
+            "seaLevelPressure": 1008.3
           },
-          "duration": 7.049109138047774,
-          "distance": 17.179032869079546,
-          "maxHeight": 4.5290330679217,
-          "finalSpeed": 2.5003180168087678,
+          "duration": 7.972249814615721,
+          "distance": 4.345527267930836,
+          "maxHeight": 5.173015892838321,
+          "finalSpeed": 0.7707937248591434,
           "landed": true,
           "truncated": false,
           "stallEvents": 1,
-          "modelVersion": "2.0.0-rigid-body",
+          "modelVersion": "2.1.0-moist-air",
           "mass": 0.0049896,
           "sampledAerodynamics": {
             "airspeedMetersPerSecond": {
-              "min": 0.3254288481868794,
-              "max": 10
+              "min": 0.2224546496711988,
+              "max": 11.842816872748896
             },
             "densityKgPerCubicMeter": {
-              "min": 1.224467546547882,
-              "max": 1.225000018124288
+              "min": 1.1371955872779445,
+              "max": 1.137759397126312
             },
             "reynoldsNumber": {
-              "min": 1845.8131252879768,
-              "max": 56731.55349943579
+              "min": 1138.3680256764064,
+              "max": 60619.462170937426
             },
             "angleOfAttackRadians": {
-              "min": 0.029054909367003515,
-              "max": 2.4830238562972693
+              "min": 0.029029415503495942,
+              "max": 2.7273734399918834
             },
             "liftNewtons": {
-              "min": -0.031979231440461,
-              "max": 0.7263080984821781
+              "min": -0.0426662301538239,
+              "max": 1.4425573784585373
             },
             "dragNewtons": {
-              "min": 0.001416396476330147,
-              "max": 0.11075800019402911
+              "min": 0.0008077572040985201,
+              "max": 0.21125261298336184
             }
           }
         }
@@ -243,50 +260,52 @@
             "speed": 10,
             "angle": 30,
             "height": 1.8,
-            "windSpeed": 0,
-            "windDirection": 0,
+            "windSpeed": 2,
+            "windDirection": 180,
             "turbulence": 0,
             "paperWeight": 80,
             "trim": 2,
             "seed": 42,
             "maxTime": 60,
             "dt": 0.008333333333333333,
-            "airTemperature": 15,
-            "fieldElevation": 0
+            "airTemperature": 26,
+            "fieldElevation": 215,
+            "relativeHumidity": 46,
+            "seaLevelPressure": 1008.3
           },
-          "duration": 6.479408568722028,
-          "distance": 16.814238152883743,
-          "maxHeight": 4.606787692650049,
-          "finalSpeed": 2.8429717347767838,
+          "duration": 7.578584154365412,
+          "distance": 5.109448424633844,
+          "maxHeight": 5.356146543713318,
+          "finalSpeed": 0.8472714592504069,
           "landed": true,
           "truncated": false,
           "stallEvents": 1,
-          "modelVersion": "2.0.0-rigid-body",
+          "modelVersion": "2.1.0-moist-air",
           "mass": 0.0049896,
           "sampledAerodynamics": {
             "airspeedMetersPerSecond": {
-              "min": 0.38825387849535387,
-              "max": 10
+              "min": 0.19871971875076844,
+              "max": 11.774591973880774
             },
             "densityKgPerCubicMeter": {
-              "min": 1.2244583398572177,
-              "max": 1.225000018124288
+              "min": 1.1371755664501133,
+              "max": 1.137759397126312
             },
             "reynoldsNumber": {
-              "min": 2189.322887260485,
-              "max": 56401.37334869993
+              "min": 1010.9760239789575,
+              "max": 59919.4660099432
             },
             "angleOfAttackRadians": {
-              "min": 0.028531856157649704,
-              "max": 2.335678639554512
+              "min": 0.028105969979074663,
+              "max": 2.7224399145246663
             },
             "liftNewtons": {
-              "min": -0.02594686633153819,
-              "max": 0.6392711775896873
+              "min": -0.04077757197384657,
+              "max": 1.380178387710448
             },
             "dragNewtons": {
-              "min": 0.0017873274231897398,
-              "max": 0.09784331577123283
+              "min": 0.0007108498750483799,
+              "max": 0.20215203272225335
             }
           }
         }
@@ -299,52 +318,54 @@
           "designId": "nakamura-lock",
           "settings": {
             "speed": 10,
-            "angle": 30,
+            "angle": 25,
             "height": 1.8,
-            "windSpeed": 0,
-            "windDirection": 0,
+            "windSpeed": 2,
+            "windDirection": 180,
             "turbulence": 0,
             "paperWeight": 80,
             "trim": 2,
             "seed": 42,
             "maxTime": 60,
             "dt": 0.008333333333333333,
-            "airTemperature": 15,
-            "fieldElevation": 0
+            "airTemperature": 26,
+            "fieldElevation": 215,
+            "relativeHumidity": 46,
+            "seaLevelPressure": 1008.3
           },
-          "duration": 5.798731302264291,
-          "distance": 15.97863108771279,
-          "maxHeight": 4.841962743278053,
-          "finalSpeed": 3.391884533579834,
+          "duration": 6.747729005947851,
+          "distance": 6.340957464020832,
+          "maxHeight": 5.615315789894708,
+          "finalSpeed": 1.3535311050577548,
           "landed": true,
           "truncated": false,
           "stallEvents": 1,
-          "modelVersion": "2.0.0-rigid-body",
+          "modelVersion": "2.1.0-moist-air",
           "mass": 0.0049896,
           "sampledAerodynamics": {
             "airspeedMetersPerSecond": {
-              "min": 0.42224970467333994,
-              "max": 10
+              "min": 0.27571620832051186,
+              "max": 11.842816872748896
             },
             "densityKgPerCubicMeter": {
-              "min": 1.2244307617855765,
-              "max": 1.225000018124288
+              "min": 1.1371473219697625,
+              "max": 1.137759397126312
             },
             "reynoldsNumber": {
-              "min": 2422.1006302780725,
-              "max": 57375.50069631906
+              "min": 1426.8886868782138,
+              "max": 61307.54015106774
             },
             "angleOfAttackRadians": {
-              "min": 0.03450434480230966,
-              "max": 2.3928067385032885
+              "min": 0.03427970048585576,
+              "max": 2.6335976515269444
             },
             "liftNewtons": {
-              "min": -0.026621356039072758,
-              "max": 0.5262649072163395
+              "min": -0.035926820037352244,
+              "max": 1.0596297459878188
             },
             "dragNewtons": {
-              "min": 0.0018063360589872512,
-              "max": 0.08275463711504394
+              "min": 0.0011112602152984002,
+              "max": 0.16471930714207986
             }
           }
         }
@@ -359,50 +380,52 @@
             "speed": 10,
             "angle": 30,
             "height": 1.8,
-            "windSpeed": 0,
-            "windDirection": 0,
+            "windSpeed": 2,
+            "windDirection": 180,
             "turbulence": 0,
             "paperWeight": 80,
             "trim": 2,
             "seed": 42,
             "maxTime": 60,
             "dt": 0.008333333333333333,
-            "airTemperature": 15,
-            "fieldElevation": 0
+            "airTemperature": 26,
+            "fieldElevation": 215,
+            "relativeHumidity": 46,
+            "seaLevelPressure": 1008.3
           },
-          "duration": 5.049949742896319,
-          "distance": 13.100856392979862,
-          "maxHeight": 4.561627655240127,
-          "finalSpeed": 2.9165251281139026,
+          "duration": 5.593675260800704,
+          "distance": 3.7792108363471706,
+          "maxHeight": 5.286454537427796,
+          "finalSpeed": 1.4803383804042323,
           "landed": true,
           "truncated": false,
           "stallEvents": 1,
-          "modelVersion": "2.0.0-rigid-body",
+          "modelVersion": "2.1.0-moist-air",
           "mass": 0.0049896,
           "sampledAerodynamics": {
             "airspeedMetersPerSecond": {
-              "min": 0.3872370529303266,
-              "max": 10
+              "min": 0.19692868703816915,
+              "max": 11.774591973880774
             },
             "densityKgPerCubicMeter": {
-              "min": 1.2244636642297597,
-              "max": 1.225000018124288
+              "min": 1.1371832001009485,
+              "max": 1.137759397126312
             },
             "reynoldsNumber": {
-              "min": 2273.1647198382193,
-              "max": 58714.87244504004
+              "min": 1042.9649818722178,
+              "max": 62377.271950414695
             },
             "angleOfAttackRadians": {
-              "min": 0.03592031729089512,
-              "max": 2.4323124381427617
+              "min": 0.03539029592433136,
+              "max": 2.8426921356751467
             },
             "liftNewtons": {
-              "min": -0.028954017262926037,
-              "max": 0.5521573009758034
+              "min": -0.0487448412253943,
+              "max": 1.1439904732535988
             },
             "dragNewtons": {
-              "min": 0.0018729480443784956,
-              "max": 0.1046446709505735
+              "min": 0.0006794546161341953,
+              "max": 0.2119728659934171
             }
           }
         }
@@ -414,59 +437,121 @@
         "flight": {
           "designId": "delta-wing",
           "settings": {
-            "speed": 8.5,
-            "angle": 0,
+            "speed": 10,
+            "angle": 30,
             "height": 1.8,
-            "windSpeed": 0,
-            "windDirection": 0,
+            "windSpeed": 2,
+            "windDirection": 180,
             "turbulence": 0,
             "paperWeight": 80,
-            "trim": 0,
+            "trim": 2,
             "seed": 42,
             "maxTime": 60,
             "dt": 0.008333333333333333,
-            "airTemperature": 15,
-            "fieldElevation": 0
+            "airTemperature": 26,
+            "fieldElevation": 215,
+            "relativeHumidity": 46,
+            "seaLevelPressure": 1008.3
           },
-          "duration": 3.6891434749859893,
-          "distance": 14.09711194305012,
-          "maxHeight": 2.9930794545885293,
-          "finalSpeed": 4.972227509029539,
+          "duration": 5.580711841501752,
+          "distance": 6.393477154158464,
+          "maxHeight": 5.8179949129809,
+          "finalSpeed": 1.2706404603607178,
           "landed": true,
           "truncated": false,
-          "stallEvents": 0,
-          "modelVersion": "2.0.0-rigid-body",
+          "stallEvents": 1,
+          "modelVersion": "2.1.0-moist-air",
           "mass": 0.0049896,
           "sampledAerodynamics": {
             "airspeedMetersPerSecond": {
-              "min": 1.9748703674195809,
-              "max": 8.5
+              "min": 0.4543566517522323,
+              "max": 11.774591973880774
             },
             "densityKgPerCubicMeter": {
-              "min": 1.2246480639931578,
-              "max": 1.225000018124288
+              "min": 1.1371252710582544,
+              "max": 1.137759397126312
             },
             "reynoldsNumber": {
-              "min": 12236.080452623004,
-              "max": 52669.84002790632
+              "min": 2539.41874326451,
+              "max": 65829.61709084453
             },
             "angleOfAttackRadians": {
-              "min": 0.03276924549965653,
-              "max": 0.3126190650153986
+              "min": 0.03166844164788487,
+              "max": 2.4142242416433595
             },
             "liftNewtons": {
-              "min": 0.03911328281658767,
-              "max": 0.208854044197124
+              "min": -0.027179388125380406,
+              "max": 0.9051328977800793
             },
             "dragNewtons": {
-              "min": 0.007524449626846509,
-              "max": 0.04178323562567985
+              "min": 0.002048237355520795,
+              "max": 0.15955528484562703
             }
           }
         }
       },
       {
         "rank": 6,
+        "designId": "needle",
+        "name": "Needle",
+        "flight": {
+          "designId": "needle",
+          "settings": {
+            "speed": 10,
+            "angle": 0,
+            "height": 1.8,
+            "windSpeed": 2,
+            "windDirection": 180,
+            "turbulence": 0,
+            "paperWeight": 80,
+            "trim": 0,
+            "seed": 42,
+            "maxTime": 60,
+            "dt": 0.008333333333333333,
+            "airTemperature": 26,
+            "fieldElevation": 215,
+            "relativeHumidity": 46,
+            "seaLevelPressure": 1008.3
+          },
+          "duration": 3.594835657847569,
+          "distance": 14.45705010176596,
+          "maxHeight": 3.807460482470292,
+          "finalSpeed": 5.707962324619093,
+          "landed": true,
+          "truncated": false,
+          "stallEvents": 0,
+          "modelVersion": "2.1.0-moist-air",
+          "mass": 0.0049896,
+          "sampledAerodynamics": {
+            "airspeedMetersPerSecond": {
+              "min": 3.9897043363421756,
+              "max": 12
+            },
+            "densityKgPerCubicMeter": {
+              "min": 1.1373443604828515,
+              "max": 1.137759397126312
+            },
+            "reynoldsNumber": {
+              "min": 21352.687018911834,
+              "max": 64232.953217581475
+            },
+            "angleOfAttackRadians": {
+              "min": 0.03806363184853763,
+              "max": 0.17129754548333334
+            },
+            "liftNewtons": {
+              "min": 0.03707243919546862,
+              "max": 0.13677494639360027
+            },
+            "dragNewtons": {
+              "min": 0.008649065521201925,
+              "max": 0.03335826695496537
+            }
+          }
+        }
+      },
+      {
+        "rank": 7,
         "designId": "classic-dart",
         "name": "Classic Dart",
         "flight": {
@@ -475,108 +560,52 @@
             "speed": 10,
             "angle": 0,
             "height": 1.8,
-            "windSpeed": 0,
-            "windDirection": 0,
+            "windSpeed": 2,
+            "windDirection": 180,
             "turbulence": 0,
             "paperWeight": 80,
             "trim": 0,
             "seed": 42,
             "maxTime": 60,
             "dt": 0.008333333333333333,
-            "airTemperature": 15,
-            "fieldElevation": 0
+            "airTemperature": 26,
+            "fieldElevation": 215,
+            "relativeHumidity": 46,
+            "seaLevelPressure": 1008.3
           },
-          "duration": 3.278145417382806,
-          "distance": 15.931896864774355,
-          "maxHeight": 3.4200738275262665,
-          "finalSpeed": 6.571878270208703,
+          "duration": 3.4727490217095522,
+          "distance": 10.519378143218233,
+          "maxHeight": 4.54266910730274,
+          "finalSpeed": 5.671998396248827,
           "landed": true,
           "truncated": false,
-          "stallEvents": 0,
-          "modelVersion": "2.0.0-rigid-body",
+          "stallEvents": 1,
+          "modelVersion": "2.1.0-moist-air",
           "mass": 0.0049896,
           "sampledAerodynamics": {
             "airspeedMetersPerSecond": {
-              "min": 2.9662786004718615,
-              "max": 10
+              "min": 2.4479553652100505,
+              "max": 12
             },
             "densityKgPerCubicMeter": {
-              "min": 1.2245978901725625,
-              "max": 1.225000018124288
+              "min": 1.1372642261195425,
+              "max": 1.137759397126312
             },
             "reynoldsNumber": {
-              "min": 16874.85275644512,
-              "max": 56895.957486178806
+              "min": 12563.898566265718,
+              "max": 61602.03305582239
             },
             "angleOfAttackRadians": {
-              "min": 0.03834335738530719,
-              "max": 0.20677797334856163
+              "min": 0.03494168181327546,
+              "max": 0.3296784644679561
             },
             "liftNewtons": {
-              "min": 0.03680224660268974,
-              "max": 0.15295377158118717
+              "min": 0.03261161815887074,
+              "max": 0.20456774591042834
             },
             "dragNewtons": {
-              "min": 0.007735514275374172,
-              "max": 0.034505645838858394
-            }
-          }
-        }
-      },
-      {
-        "rank": 7,
-        "designId": "needle",
-        "name": "Needle",
-        "flight": {
-          "designId": "needle",
-          "settings": {
-            "speed": 10,
-            "angle": 5,
-            "height": 1.8,
-            "windSpeed": 0,
-            "windDirection": 0,
-            "turbulence": 0,
-            "paperWeight": 80,
-            "trim": 0,
-            "seed": 42,
-            "maxTime": 60,
-            "dt": 0.008333333333333333,
-            "airTemperature": 15,
-            "fieldElevation": 0
-          },
-          "duration": 3.2173929575015694,
-          "distance": 17.684122345755906,
-          "maxHeight": 3.2414975638824424,
-          "finalSpeed": 6.872923465679099,
-          "landed": true,
-          "truncated": false,
-          "stallEvents": 0,
-          "modelVersion": "2.0.0-rigid-body",
-          "mass": 0.0049896,
-          "sampledAerodynamics": {
-            "airspeedMetersPerSecond": {
-              "min": 4.019173324278892,
-              "max": 10
-            },
-            "densityKgPerCubicMeter": {
-              "min": 1.2246188520973835,
-              "max": 1.225000018124288
-            },
-            "reynoldsNumber": {
-              "min": 23841.667824800432,
-              "max": 59325.88900381769
-            },
-            "angleOfAttackRadians": {
-              "min": 0.04428156170362995,
-              "max": 0.16075715794584375
-            },
-            "liftNewtons": {
-              "min": 0.0380317002953174,
-              "max": 0.1022656030920728
-            },
-            "dragNewtons": {
-              "min": 0.008782118734948345,
-              "max": 0.02521227597317866
+              "min": 0.007210398811985996,
+              "max": 0.04569475415060101
             }
           }
         }
@@ -588,62 +617,64 @@
         "flight": {
           "designId": "swallow",
           "settings": {
-            "speed": 4,
-            "angle": 0,
+            "speed": 10,
+            "angle": 15,
             "height": 1.8,
-            "windSpeed": 0,
-            "windDirection": 0,
+            "windSpeed": 2,
+            "windDirection": 180,
             "turbulence": 0,
             "paperWeight": 80,
             "trim": 2,
             "seed": 42,
             "maxTime": 60,
             "dt": 0.008333333333333333,
-            "airTemperature": 15,
-            "fieldElevation": 0
+            "airTemperature": 26,
+            "fieldElevation": 215,
+            "relativeHumidity": 46,
+            "seaLevelPressure": 1008.3
           },
-          "duration": 3.0641726495115926,
-          "distance": 9.170253751683518,
-          "maxHeight": 1.867376218713204,
-          "finalSpeed": 3.2005915175248387,
+          "duration": 2.9837739330056654,
+          "distance": 1.996272287251083,
+          "maxHeight": 5.099932532994762,
+          "finalSpeed": 3.6214475989189125,
           "landed": true,
           "truncated": false,
-          "stallEvents": 0,
-          "modelVersion": "2.0.0-rigid-body",
+          "stallEvents": 1,
+          "modelVersion": "2.1.0-moist-air",
           "mass": 0.0049896,
           "sampledAerodynamics": {
             "airspeedMetersPerSecond": {
-              "min": 2.2516443822025414,
-              "max": 4
+              "min": 0.28555605785276555,
+              "max": 11.943074690026966
             },
             "densityKgPerCubicMeter": {
-              "min": 1.224780423236894,
-              "max": 1.225000018124288
+              "min": 1.1372035501773223,
+              "max": 1.137759397126312
             },
             "reynoldsNumber": {
-              "min": 11866.780412060774,
-              "max": 21081.085132738484
+              "min": 1357.5110830557578,
+              "max": 56791.26049349621
             },
             "angleOfAttackRadians": {
-              "min": 0.10653919249906482,
-              "max": 0.24570080794506427
+              "min": 0.03639307538947083,
+              "max": 2.8222450350698773
             },
             "liftNewtons": {
-              "min": 0.042450218548078074,
-              "max": 0.07808030099894019
+              "min": -0.0486510231897933,
+              "max": 0.84234944253184
             },
             "dragNewtons": {
-              "min": 0.008979831532380335,
-              "max": 0.016692071905092455
+              "min": 0.001118748048358282,
+              "max": 0.16011783334822077
             }
           }
         }
       }
     ],
     "performance": {
-      "elapsedMs": 2043.19514,
-      "cpuMs": 1814.528,
-      "maxProgressIntervalMs": 32.67824799999994,
+      "elapsedMs": 2219.9326570000003,
+      "cpuMs": 2365.79,
+      "maxProgressIntervalMs": 46.06741699999998,
       "maxTrialsBetweenCheckpoints": 12,
       "note": "Execution-machine measurements; browser timing depends on hardware and scheduling. Progress intervals include event-loop yields."
     }

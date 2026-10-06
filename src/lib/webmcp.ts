@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { flushSync } from 'react-dom';
 import { DESIGNS } from './designs';
+import { NEW_DELHI_ENVIRONMENT, isNewDelhiEnvironment } from './environment';
 import type { LaunchSettings, RankedFlight } from './types';
 
 interface ToolDefinition {
@@ -43,6 +44,7 @@ function scores(ranking: RankedFlight[]) {
       windSpeed: row.flight.settings.windSpeed, windDirection: row.flight.settings.windDirection,
       turbulence: row.flight.settings.turbulence, seed: row.flight.settings.seed,
       airTemperature: row.flight.settings.airTemperature, fieldElevation: row.flight.settings.fieldElevation,
+      relativeHumidity: row.flight.settings.relativeHumidity, seaLevelPressure: row.flight.settings.seaLevelPressure,
       dt: row.flight.settings.dt,
     },
   }));
@@ -66,7 +68,7 @@ export function useFlightTools(state: LabState, compare: () => RankedFlight[]) {
       execute(input) {
         emptyInput(input);
         const current = latest.current.state;
-        return { selectedId: current.selectedId, conditions: { ...current.settings }, physicsModel: current.ranking[0]?.flight.modelVersion ?? null, comparisonMethod: current.comparisonMethod, playing: current.playing, designs: DESIGNS.map(d => ({ id: d.id, name: d.name, category: d.category })), results: scores(current.ranking) };
+        return { selectedId: current.selectedId, environment: isNewDelhiEnvironment(current.settings) ? NEW_DELHI_ENVIRONMENT.name : 'Custom environment', conditions: { ...current.settings }, physicsModel: current.ranking[0]?.flight.modelVersion ?? null, comparisonMethod: current.comparisonMethod, playing: current.playing, designs: DESIGNS.map(d => ({ id: d.id, name: d.name, category: d.category })), results: scores(current.ranking) };
       },
     }, {
       name: 'compare_current_airframes',

@@ -108,6 +108,13 @@ main, .app-main { max-width: 1440px; margin: 0 auto; padding: 0 44px; }
 }
 .condition-pill svg { width: 12px; height: 12px; }
 .condition-pill::before { content: ''; width: 4px; height: 4px; background: var(--green); border-radius: 50%; }
+.environment-summary { min-width: 0; display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+.environment-summary strong { color: var(--ink); font-size: 14px; font-weight: 550; line-height: 1.4; }
+.environment-summary small { color: var(--faint); font-size: 12px; line-height: 1.4; }
+.environment-summary p { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.5; }
+.environment-summary .condition-pill { display: inline-flex; margin: 1px 0 0; flex-wrap: wrap; font-size: 12px; padding: 6px 9px; }
+.environment-sources { font-size: 14px; }
+.environment-sources a { color: var(--orange); }
 
 .lab-layout { display: grid; grid-template-columns: 276px minmax(0, 1fr); gap: 20px; align-items: stretch; }
 .control-panel { overflow: hidden; border: 1px solid var(--border); border-radius: 12px; background: var(--panel); }
@@ -275,7 +282,7 @@ input[type='range']::-moz-range-progress { background: var(--orange); height: 4p
 .metric:first-child .metric-value { color: var(--orange); }
 .metric-unit { margin-left: 5px; color: var(--faint); font: 12px var(--mono); letter-spacing: 0; }
 .metric-altitude { display: block; margin-top: 5px; color: var(--muted); font: 12px/1.5 var(--mono); overflow-wrap: anywhere; }
-.forces-strip { flex: 0 0 auto; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px 16px; padding: 13px 24px; border-top: 1px solid var(--border); background: #171e26; }
+.forces-strip { flex: 0 0 auto; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px 16px; padding: 13px 24px; border-top: 1px solid var(--border); background: #171e26; }
 .force-diagnostic { min-width: 0; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 3px 7px; }
 .force-label { color: var(--faint); font-size: 12px; line-height: 1.5; white-space: nowrap; }
 .force-value { color: #b8c5d4; font: 12px var(--mono); line-height: 1.5; white-space: nowrap; }
@@ -419,7 +426,7 @@ input[type='range']::-moz-range-progress { background: var(--orange); height: 4p
   .scene-shell { height: 505px; }
 }
 @media (max-width: 1400px) {
-  .forces-strip { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .forces-strip { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
 @media (max-width: 1120px) {
   .app-header { padding-right: 30px; padding-left: 30px; }
@@ -430,7 +437,7 @@ input[type='range']::-moz-range-progress { background: var(--orange); height: 4p
   .condition-pill { margin-top: 27px; }
   .page-title { max-width: 650px; }
   .telemetry-row { padding-right: 20px; padding-left: 20px; }
-  .forces-strip { grid-template-columns: repeat(3, minmax(0, 1fr)); padding: 12px 20px; column-gap: 20px; }
+  .forces-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); padding: 12px 20px; column-gap: 20px; }
   .metric { padding-left: 14px; }
   .metric-value { font-size: 22px; }
   .metric-label { font-size: 12px; letter-spacing: .7px; }
@@ -441,6 +448,8 @@ input[type='range']::-moz-range-progress { background: var(--orange); height: 4p
   .table-hint { display: none; }
   .app-header { min-height: 76px; padding-top: 17px; padding-bottom: 17px; }
   .intro-row { padding-top: 24px; }
+  .intro-row { flex-direction: column; align-items: stretch; gap: 14px; }
+  .environment-summary { align-items: flex-start; }
   .page-title { max-width: 550px; font-size: 32px; }
   .condition-pill { display: none; }
   .scene-shell { height: 494px; }

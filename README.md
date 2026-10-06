@@ -38,7 +38,7 @@ production build.
 
 - Select an airframe and adjust launch speed, angle, and release height. Expand
   **Paper, wind & altitude** to change paper stock, wind, gust intensity, elevator
-  trim, air temperature, and ground elevation above sea level.
+  trim, air temperature, relative humidity, sea-level pressure, and ground elevation.
 - Launch and inspect the flight using playback, replay, timeline, and camera
   controls. The telemetry shows time, horizontal displacement, height above ground,
   altitude above sea level, and
@@ -67,12 +67,22 @@ The default shared configuration is:
 | Launch speed / elevation | 7 m/s / 12° |
 | Release height | 1.8 m above the launch ground |
 | Paper stock | A4, 80 g/m²; 4.9896 g per plane |
-| Wind / gust intensity | 0 m/s / 0 |
-| Air temperature / field elevation | 15°C / 0 m above sea level |
+| Environment | New Delhi, India; representative annual conditions |
+| Wind / gust intensity | 2 m/s headwind / 0 |
+| Air temperature / field elevation | 26°C / 215 m above sea level |
+| Relative humidity | 46% |
+| Sea-level pressure | 1008.3 hPa (estimated); local ground pressure about 982.9 hPa |
 | Additional elevator trim | 0° |
 | Gust seed | 42 |
 | Integration step | 1/120 s, with internal adaptive substeps |
 | Flight time cap | 60 s |
+
+The New Delhi preset uses Safdarjung station elevation and rounded NASA POWER
+2001–2020 annual climate means. Its sea-level pressure is estimated from the
+climate grid's surface pressure; headwind direction is chosen for the experiment.
+All weather values are editable, and **Reset conditions** restores the preset.
+See [the model and source links](docs/model.md#new-delhi-defaults-and-humidity)
+for the reference location and assumptions. The preset does not fetch live weather.
 
 Open **Paper, wind & altitude** to set **Ground elevation** in metres above mean
 sea level (−500 to 6,000 m). Flight altitude is ground elevation plus height above
@@ -108,9 +118,9 @@ translational forces and rotational moments using quaternion attitude. Estimated
 CG, aerodynamic-center positions, inertias, and damping derivatives determine
 the passive pitch, roll, and yaw response.
 
-Earth gravity varies with altitude. A dry-air atmosphere uses altitude-dependent
-pressure, configured temperature, and Sutherland's viscosity relation to obtain
-density and Reynolds number. Lift, profile drag, induced drag, and post-stall
+Earth gravity varies with altitude. The atmosphere uses altitude-dependent
+pressure, configured temperature and humidity, and Sutherland's viscosity relation
+to obtain moist-air density and Reynolds number. Lift, profile drag, induced drag, and post-stall
 effects use air-relative flow and repeatable gusts. The catalog's low-Reynolds-
 number force and moment coefficients remain uncalibrated; they are a substantial
 source of uncertainty even with a more detailed numerical solver. The simulation
@@ -135,6 +145,7 @@ parameter values are representative estimates.
 | `src/lib/designs.ts` | Eight airframes, estimated dynamics, and folding instructions. |
 | `src/lib/physics.ts` | Deterministic six-degree-of-freedom flight integration and defaults. |
 | `src/lib/atmosphere.ts` | Earth gravity, pressure, density, viscosity, and atmospheric settings. |
+| `src/lib/environment.ts` | New Delhi preset, reference location, and climate provenance. |
 | `src/lib/experiments.ts` | Matched comparisons and equal-budget launch search. |
 | `src/lib/scene.ts`, `src/lib/planeMesh.ts` | Three.js scene and folded plane meshes. |
 | `scripts/benchmark.ts` | Reproducible reports and integration-step replay. |

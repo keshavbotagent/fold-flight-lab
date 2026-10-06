@@ -106,5 +106,5 @@ test('wind directions use tailwind +X and crosswind +Z convention', () => {
   assert.ok(tail.vx > calm.vx && calm.vx > head.vx, 'headwind produces stronger initial deceleration than tailwind');
   assert.ok(positiveCrosswind.z > 0 && negativeCrosswind.z < 0, 'crosswind displacement follows signed wind');
   almost(positiveCrosswind.z, -negativeCrosswind.z, 1e-6, 'symmetric crosswind drift');
-  assert.equal(DEFAULT_SETTINGS.windSpeed, 0, 'default comparison uses calm air');
+  assert.equal(DEFAULT_SETTINGS.windSpeed, 2, 'default New Delhi representative wind is 2 m/s');
 });

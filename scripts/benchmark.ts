@@ -5,6 +5,7 @@ import { DESIGNS } from '../src/lib/designs';
 import { AIR_GAS_CONSTANT, EARTH_RADIUS, STANDARD_GRAVITY } from '../src/lib/atmosphere';
 import { compareDesigns, optimizeDesigns } from '../src/lib/experiments';
 import { DEFAULT_SETTINGS, getAtmosphere, PHYSICS_VERSION, simulateFlight } from '../src/lib/physics';
+import { NEW_DELHI_ENVIRONMENT } from '../src/lib/environment';
 import type { FlightResult, FlightSample, LaunchSettings, RankedFlight } from '../src/lib/types';
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -254,6 +255,9 @@ const groundAtmosphere = getAtmosphere(baselineSettings, 0);
 const launchAtmosphere = getAtmosphere(baselineSettings, baselineSettings.height);
 const modelDocumentation = await readFile(path.join(projectRoot, 'docs', 'model.md'), 'utf8');
 const sourceReferences = [...new Set([
+  NEW_DELHI_ENVIRONMENT.sources.elevation,
+  NEW_DELHI_ENVIRONMENT.sources.climate,
+  'https://cires1.colorado.edu/~voemel/vp.html',
   'https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/drag-equation/',
   'https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/induced-drag-coefficient/',
   'https://www.grc.nasa.gov/www/k-12/airplane/viscosity.html',
@@ -291,9 +295,10 @@ const modelChangeComparison = priorReport ? {
   interpretation: 'Before/after model predictions. The rigid-body equations, atmosphere, and estimated coefficients changed; differences are not evidence of improved physical accuracy.',
 } : undefined;
 const reportData = {
-  schemaVersion: 2,
+  schemaVersion: 3,
   generatedAt: new Date().toISOString(),
   modelVersion: PHYSICS_VERSION,
+  environmentPreset: NEW_DELHI_ENVIRONMENT,
   interpretation: 'Model predictions from a six-degree-of-freedom rigid-body paper-plane simulator with estimated coefficients; not measured physical flight results.',
   objective: 'Longest airtime among completed landings; distance breaks airtime ties. Time-capped trajectories cannot win optimization.',
   software: { name: packageMetadata.name, version: packageMetadata.version, three: packageMetadata.dependencies.three },
@@ -308,8 +313,9 @@ const reportData = {
     sourceReferences,
   },
   atmosphere: {
-    conditions: { airTemperatureCelsius: baselineSettings.airTemperature, fieldElevationMeters: baselineSettings.fieldElevation },
-    units: { gravity: 'm/s²', density: 'kg/m³', dynamicViscosity: 'Pa·s', pressure: 'Pa', temperatureKelvin: 'K' },
+    conditions: { airTemperatureCelsius: baselineSettings.airTemperature, fieldElevationMeters: baselineSettings.fieldElevation,
+      relativeHumidityPercent: baselineSettings.relativeHumidity, seaLevelPressureHpa: baselineSettings.seaLevelPressure },
+    units: { altitudeMSL: 'm', gravity: 'm/s²', density: 'kg/m³', dynamicViscosity: 'Pa·s', pressure: 'Pa', temperatureKelvin: 'K', relativeHumidity: '%', vaporPressure: 'Pa' },
     ground: groundAtmosphere,
     launch: launchAtmosphere,
     constants: {
@@ -317,7 +323,7 @@ const reportData = {
       earthRadiusMeters: EARTH_RADIUS,
       airGasConstantJoulesPerKgKelvin: AIR_GAS_CONSTANT,
     },
-    notes: 'Gravity varies with absolute altitude. ISA pressure and an ideal-gas density use the selected temperature/elevation; Sutherland viscosity enters Reynolds number and drag. Temperature uses a fixed lapse rate above the field.',
+    notes: 'Gravity varies with absolute altitude. ISA altitude reduction uses the selected sea-level pressure; local temperature and water-vapor partial pressure determine moist-air density. Relative humidity is held constant over the local flight. Sutherland viscosity remains a dry-air approximation. The New Delhi preset is representative climate data, not live weather.',
   },
   baselineSettings,
   modelChangeComparison,
@@ -328,7 +334,7 @@ const reportData = {
     trials: optimized.trials,
     trialsPerDesign,
     changedVariables: ['angle', 'speed', 'trim'],
-    sharedVariables: ['height', 'windSpeed', 'windDirection', 'turbulence', 'paperWeight', 'seed', 'maxTime', 'dt', 'airTemperature', 'fieldElevation'],
+    sharedVariables: ['height', 'windSpeed', 'windDirection', 'turbulence', 'paperWeight', 'seed', 'maxTime', 'dt', 'airTemperature', 'fieldElevation', 'relativeHumidity', 'seaLevelPressure'],
     ranking: summarizeRanking(optimized.ranking),
     performance: primarySearch.performance,
   },
@@ -349,7 +355,8 @@ const columns = [
   'final_speed_m_s', 'landed', 'truncated', 'stall_events', 'launch_speed_m_s',
   'launch_angle_deg', 'trim_deg', 'release_height_m', 'paper_gsm', 'wind_speed_m_s',
   'wind_direction_deg', 'turbulence', 'seed', 'dt_s', 'max_time_s',
-  'air_temperature_c', 'field_elevation_m', 'model_version', 'mass_kg',
+  'air_temperature_c', 'field_elevation_m', 'relative_humidity_percent', 'sea_level_pressure_hpa',
+  'release_altitude_msl_m', 'peak_altitude_msl_m', 'model_version', 'mass_kg',
   'launch_gravity_m_s2', 'launch_density_kg_m3', 'launch_viscosity_pa_s', 'launch_pressure_pa',
   'sampled_reynolds_min', 'sampled_reynolds_max',
 ];
@@ -369,7 +376,10 @@ for (const [experiment, ranking] of csvExperiments) {
       flight.settings.speed, flight.settings.angle, flight.settings.trim, flight.settings.height,
       flight.settings.paperWeight, flight.settings.windSpeed, flight.settings.windDirection,
       flight.settings.turbulence, flight.settings.seed, flight.settings.dt, flight.settings.maxTime,
-      flight.settings.airTemperature, flight.settings.fieldElevation, flight.modelVersion ?? PHYSICS_VERSION,
+      flight.settings.airTemperature, flight.settings.fieldElevation,
+      flight.settings.relativeHumidity, flight.settings.seaLevelPressure,
+      flight.settings.fieldElevation + flight.settings.height, flight.settings.fieldElevation + flight.maxHeight,
+      flight.modelVersion ?? PHYSICS_VERSION,
       flight.mass ?? design.mass * flight.settings.paperWeight / 80,
       atmosphere.gravity, atmosphere.density, atmosphere.dynamicViscosity, atmosphere.pressure,
       reynolds?.min ?? '', reynolds?.max ?? '',
@@ -426,6 +436,10 @@ const markdown = [
   '',
   '## Fair comparison settings',
   '',
+  `Default environment: **${NEW_DELHI_ENVIRONMENT.name}**, Safdarjung reference at ${NEW_DELHI_ENVIRONMENT.latitude}° N, ${NEW_DELHI_ENVIRONMENT.longitude}° E. Temperature, humidity and wind speed are rounded ${NEW_DELHI_ENVIRONMENT.climatePeriod} NASA POWER annual gridded means. NOAA metadata supplies the rounded 215 m elevation. Sea-level pressure is an ISA estimate from the climate grid surface pressure; headwind direction is a simulation choice. This is a reproducible representative preset, not current weather.`,
+  '',
+  `Relative humidity is ${baselineSettings.relativeHumidity}%; sea-level-reduced pressure is ${baselineSettings.seaLevelPressure} hPa. These remain identical for every trial. Local pressure and moist-air density are recomputed at the plane's altitude.`,
+  '',
   `All ${DESIGNS.length} airframes use ${baselineSettings.paperWeight} gsm paper, a ${baselineSettings.height} m release height, ${baselineSettings.windSpeed} m/s wind at ${baselineSettings.windDirection}°, turbulence ${baselineSettings.turbulence}, gust seed ${baselineSettings.seed}, maximum integration step ${baselineSettings.dt} s, and a ${baselineSettings.maxTime} s time cap. Air temperature is ${baselineSettings.airTemperature} °C at field elevation ${baselineSettings.fieldElevation} m. A4 paper area and stock determine mass consistently across all designs.`,
   '',
   `At release, gravity is ${rounded(launchAtmosphere.gravity, 8)} m/s², density ${rounded(launchAtmosphere.density, 8)} kg/m³, dynamic viscosity ${launchAtmosphere.dynamicViscosity.toExponential(8)} Pa·s, pressure ${rounded(launchAtmosphere.pressure, 3)} Pa, and temperature ${rounded(launchAtmosphere.temperatureKelvin, 3)} K. Ground reference values and SI unit definitions are recorded in JSON.`,
@@ -469,7 +483,7 @@ const markdown = [
   '',
   '## Interpretation and reproduction',
   '',
-  'This model integrates translational and rotational motion with aerodynamic forces/torques and a quaternion attitude. Gravity, density, viscosity, and Reynolds effects are calculated from atmospheric assumptions. Airframe geometry, aerodynamic coefficients, center-of-mass/aerodynamic-center positions, damping derivatives, efficiency, and inertia distribution remain estimates. Flexible-paper deformation, detailed fold CFD, and measured calibration are outside this model. Its numerical checks do not establish physical accuracy. The winner is the longest predicted completed flight within the finite launch/trim grid and these assumptions.',
+  'This model integrates translational and rotational motion with aerodynamic forces/torques and a quaternion attitude. Gravity, moist-air density, pressure, viscosity, and Reynolds effects are calculated from atmospheric assumptions. Humidity changes air density; its effects on paper mass, stiffness and deformation are not modeled. Airframe geometry, aerodynamic coefficients, center-of-mass/aerodynamic-center positions, damping derivatives, efficiency, and inertia distribution remain estimates. Flexible-paper deformation, detailed fold CFD, and measured calibration are outside this model. Its numerical checks do not establish physical accuracy. The winner is the longest predicted completed flight within the finite launch/trim grid and these assumptions.',
   '',
   'Source notes and coefficient assumptions are described in `docs/model.md` in the source bundle. Sources support the equations and atmospheric constants; they do not validate the estimated paper-plane coefficients.',
   '',

@@ -8,14 +8,16 @@ import type {
 } from './types';
 
 // Every design receives this entire grid. Weather, paper, release height,
-// integration step, and the gust seed remain identical for every trial.
-export const OPTIMIZATION_RANGES = {
-  angles: [0, 5, 10, 15, 20, 25, 30],
-  speeds: [4, 5.5, 7, 8.5, 10],
-  trims: [-2, 0, 2],
-};
+// atmospheric temperature/elevation, integration step, and gust seed remain
+// identical for every trial.
+export const OPTIMIZATION_RANGES = Object.freeze({
+  angles: Object.freeze([0, 5, 10, 15, 20, 25, 30]),
+  speeds: Object.freeze([4, 5.5, 7, 8.5, 10]),
+  trims: Object.freeze([-2, 0, 2]),
+});
 
 const TRIALS_PER_YIELD = 12;
+const YIELD_BUDGET_MS = 16;
 
 /** Positive means a has the better measured flight. */
 function flightScore(a: FlightResult, b: FlightResult): number {
@@ -56,7 +58,7 @@ export function compareDesigns(settings: Partial<LaunchSettings> = {}): RankedFl
 }
 
 /**
- * Maximize landed airtime, breaking ties by traveled distance. Each airframe
+ * Maximize landed airtime, breaking ties by horizontal displacement. Each airframe
  * receives the same finite grid: no design-specific budget or gust-seed search.
  * Only each design's best trajectory is retained. Capped flights are preserved
  * as a clearly marked fallback if an airframe never lands within the time cap.
@@ -77,6 +79,9 @@ export async function optimizeDesigns(
   const total = DESIGNS.length * ranges.angles.length * ranges.speeds.length * ranges.trims.length;
   const bestFlights: Omit<RankedFlight, 'rank'>[] = [];
   let done = 0;
+  let trialsSinceYield = 0;
+  let lastReported = 0;
+  let yieldDeadline = performance.now() + YIELD_BUDGET_MS;
   onProgress?.(0, total);
 
   for (const design of DESIGNS) {
@@ -93,13 +98,17 @@ export async function optimizeDesigns(
             bestCapped = flight;
           }
           done += 1;
+          trialsSinceYield += 1;
 
-          if (done % TRIALS_PER_YIELD === 0) {
+          if (trialsSinceYield >= TRIALS_PER_YIELD || performance.now() >= yieldDeadline) {
             onProgress?.(done, total);
+            lastReported = done;
             // A macrotask yield lets the browser paint, process cancellation,
             // and keep camera interaction live while the grid is evaluated.
             await new Promise<void>((resolve) => setTimeout(resolve, 0));
             throwIfAborted(signal);
+            trialsSinceYield = 0;
+            yieldDeadline = performance.now() + YIELD_BUDGET_MS;
           }
         }
       }
@@ -109,6 +118,6 @@ export async function optimizeDesigns(
   }
 
   throwIfAborted(signal);
-  if (done % TRIALS_PER_YIELD !== 0) onProgress?.(done, total);
+  if (lastReported !== done) onProgress?.(done, total);
   return { ranking: rank(bestFlights, true), trials: done, ranges };
 }

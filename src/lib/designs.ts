@@ -3,6 +3,9 @@ import type { PlaneDesign } from './types';
 // Representative one-sheet configurations, not measurements of named designs.
 // Geometry is projected flying geometry; aerodynamic coefficients are estimates.
 // Every aircraft uses the same uncut A4 sheet at 80 g/m²: 0.210 × 0.297 × 80 / 1000 kg.
+// Dynamics are uncalibrated representative stability derivatives, not measured data.
+// Positive AC − CG is stable; damping derivatives are negative; lateral slopes
+// are positive magnitudes whose restoring signs are applied in the force model.
 const A4_MASS = 0.0049896;
 
 export const DESIGNS: PlaneDesign[] = [
@@ -24,6 +27,19 @@ export const DESIGNS: PlaneDesign[] = [
     trimAngle: 4.3,
     stability: 0.88,
     dihedral: 5,
+    dynamics: {
+      centerOfGravity: 0.165,
+      aerodynamicCenter: 0.25,
+      pitchDamping: -2.6,
+      rollDamping: -0.28,
+      yawDamping: -0.18,
+      yawStability: 0.065,
+      sideForceSlope: 0.42,
+      spanEfficiency: 0.67,
+      rollInertiaFactor: 0.026,
+      pitchInertiaFactor: 0.065,
+      yawInertiaFactor: 0.055,
+    },
     foldSteps: [
       'Start with an A4 sheet in portrait orientation. Fold it lengthwise in half, crease, and reopen.',
       'Fold the two top corners inward so their edges meet the center crease.',
@@ -51,6 +67,19 @@ export const DESIGNS: PlaneDesign[] = [
     trimAngle: 5.5,
     stability: 0.91,
     dihedral: 7,
+    dynamics: {
+      centerOfGravity: 0.16,
+      aerodynamicCenter: 0.25,
+      pitchDamping: -3.6,
+      rollDamping: -0.41,
+      yawDamping: -0.22,
+      yawStability: 0.075,
+      sideForceSlope: 0.52,
+      spanEfficiency: 0.78,
+      rollInertiaFactor: 0.05,
+      pitchInertiaFactor: 0.058,
+      yawInertiaFactor: 0.052,
+    },
     foldSteps: [
       'With the A4 sheet in portrait orientation, make a lengthwise center crease and reopen.',
       'Fold the top corners to the center crease to make a triangular nose.',
@@ -79,6 +108,19 @@ export const DESIGNS: PlaneDesign[] = [
     trimAngle: 5.2,
     stability: 0.85,
     dihedral: 8,
+    dynamics: {
+      centerOfGravity: 0.18,
+      aerodynamicCenter: 0.25,
+      pitchDamping: -3,
+      rollDamping: -0.46,
+      yawDamping: -0.16,
+      yawStability: 0.038,
+      sideForceSlope: 0.33,
+      spanEfficiency: 0.8,
+      rollInertiaFactor: 0.065,
+      pitchInertiaFactor: 0.052,
+      yawInertiaFactor: 0.06,
+    },
     foldSteps: [
       'Turn the A4 sheet to landscape orientation. Fold it across the middle to mark the nose-to-tail centerline, then reopen.',
       'Fold the two corners of one long edge inward to the centerline, making a broad triangular nose.',
@@ -106,6 +148,19 @@ export const DESIGNS: PlaneDesign[] = [
     trimAngle: 4.8,
     stability: 0.8,
     dihedral: 4,
+    dynamics: {
+      centerOfGravity: 0.185,
+      aerodynamicCenter: 0.25,
+      pitchDamping: -2.5,
+      rollDamping: -0.32,
+      yawDamping: -0.16,
+      yawStability: 0.048,
+      sideForceSlope: 0.38,
+      spanEfficiency: 0.71,
+      rollInertiaFactor: 0.045,
+      pitchInertiaFactor: 0.065,
+      yawInertiaFactor: 0.055,
+    },
     foldSteps: [
       'Place an A4 sheet in portrait orientation, crease it lengthwise in half, and reopen.',
       'Fold both top corners to the centerline to form a pointed nose.',
@@ -134,6 +189,19 @@ export const DESIGNS: PlaneDesign[] = [
     trimAngle: 5.8,
     stability: 0.82,
     dihedral: 10,
+    dynamics: {
+      centerOfGravity: 0.175,
+      aerodynamicCenter: 0.25,
+      pitchDamping: -3.2,
+      rollDamping: -0.5,
+      yawDamping: -0.22,
+      yawStability: 0.06,
+      sideForceSlope: 0.45,
+      spanEfficiency: 0.82,
+      rollInertiaFactor: 0.075,
+      pitchInertiaFactor: 0.055,
+      yawInertiaFactor: 0.068,
+    },
     foldSteps: [
       'Lay an A4 sheet in landscape orientation. Mark the nose-to-tail centerline by folding across the middle and reopening.',
       'Fold one long edge down about 1.5 cm, then fold that strip over once more to make a weighted straight nose.',
@@ -162,6 +230,19 @@ export const DESIGNS: PlaneDesign[] = [
     trimAngle: 4,
     stability: 0.9,
     dihedral: 3,
+    dynamics: {
+      centerOfGravity: 0.17,
+      aerodynamicCenter: 0.25,
+      pitchDamping: -3,
+      rollDamping: -0.22,
+      yawDamping: -0.18,
+      yawStability: 0.06,
+      sideForceSlope: 0.48,
+      spanEfficiency: 0.62,
+      rollInertiaFactor: 0.022,
+      pitchInertiaFactor: 0.074,
+      yawInertiaFactor: 0.065,
+    },
     foldSteps: [
       'Start with an A4 sheet in portrait orientation. Make a lengthwise center crease and reopen.',
       'Fold both top corners to the centerline.',
@@ -190,6 +271,19 @@ export const DESIGNS: PlaneDesign[] = [
     trimAngle: 6,
     stability: 0.71,
     dihedral: 6,
+    dynamics: {
+      centerOfGravity: 0.155,
+      aerodynamicCenter: 0.21,
+      pitchDamping: -2,
+      rollDamping: -0.34,
+      yawDamping: -0.14,
+      yawStability: 0.04,
+      sideForceSlope: 0.36,
+      spanEfficiency: 0.73,
+      rollInertiaFactor: 0.047,
+      pitchInertiaFactor: 0.055,
+      yawInertiaFactor: 0.049,
+    },
     foldSteps: [
       'With an A4 sheet in portrait orientation, make a lengthwise center crease and reopen.',
       'Fold both top corners inward to the centerline to form a triangular nose.',
@@ -219,6 +313,19 @@ export const DESIGNS: PlaneDesign[] = [
     trimAngle: 6.2,
     stability: 0.58,
     dihedral: 3,
+    dynamics: {
+      centerOfGravity: 0.205,
+      aerodynamicCenter: 0.25,
+      pitchDamping: -1.5,
+      rollDamping: -0.25,
+      yawDamping: -0.11,
+      yawStability: 0.03,
+      sideForceSlope: 0.28,
+      spanEfficiency: 0.7,
+      rollInertiaFactor: 0.051,
+      pitchInertiaFactor: 0.067,
+      yawInertiaFactor: 0.058,
+    },
     foldSteps: [
       'Place an A4 sheet in portrait orientation, crease it lengthwise in half, and reopen.',
       'Fold the top corners to the centerline to make a triangular nose.',

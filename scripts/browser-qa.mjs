@@ -58,6 +58,7 @@ async function verifyCSV(page, filename) {
   assert.equal(lines.length, 9, 'CSV contains a header and all eight designs');
   const header = lines[0].split(',');
   assert.ok(header.includes('seed') && header.includes('time_capped') && header.includes('trim_deg'));
+  assert.ok(header.includes('air_temperature_c') && header.includes('field_elevation_m') && header.includes('model_version'), 'exports identify the atmosphere and physics model');
   const rows = lines.slice(1).map(line => line.split(','));
   for (let i = 0; i < rows.length; i++) {
     assert.equal(Number(rows[i][0]), i + 1);
@@ -65,6 +66,48 @@ async function verifyCSV(page, filename) {
     if (i > 0) assert.ok(Number(rows[i - 1][2]) >= Number(rows[i][2]), 'exported airtime ranking is descending');
   }
   return lines.length - 1;
+}
+async function diagnosticValue(page, label) {
+  const row = page.locator('.force-diagnostic').filter({ has: page.locator('.force-label').filter({ hasText: new RegExp(`^${label}$`) }) });
+  assert.equal(await row.count(), 1, `one ${label} diagnostic`);
+  const value = Number.parseFloat(await row.locator('.force-value').innerText());
+  assert.ok(Number.isFinite(value), `${label} has a finite displayed value`);
+  return value;
+}
+async function verifyQuaternionRendering(page) {
+  const result = await page.evaluate(async () => {
+    const { FlightScene } = await import('/src/lib/scene.ts');
+    const { DESIGNS } = await import('/src/lib/designs.ts');
+    const host = document.createElement('div');
+    Object.assign(host.style, { position: 'fixed', width: '300px', height: '200px', top: '0', left: '0', opacity: '0', pointerEvents: 'none' });
+    document.body.append(host);
+    const errors = [];
+    const scene = new FlightScene(host, message => errors.push(message));
+    const rootHalf = Math.sqrt(0.5);
+    const base = { x: 0, y: 2, z: 0, vx: 0, vy: 0, vz: 7, pitch: 1.2, roll: -0.8, qx: 0, qy: 0, omegaX: 0, omegaY: 0, omegaZ: 0 };
+    try {
+      scene.setFlight({
+        designId: DESIGNS[0].id,
+        settings: {}, samples: [
+          { ...base, t: 0, qz: 0, qw: 2 },
+          { ...base, t: 1, qz: -2 * rootHalf, qw: -2 * rootHalf },
+        ], duration: 1, distance: 0, maxHeight: 2, finalSpeed: 7, landed: false, truncated: true, stallEvents: 0,
+      });
+      scene.setTime(0);
+      const first = scene.primary.plane.quaternion.toArray();
+      scene.setTime(0.5);
+      const middle = scene.primary.plane.quaternion.toArray();
+      scene.setTime(1);
+      const final = scene.primary.plane.quaternion.toArray();
+      return { first, middle, final, errors };
+    } finally { scene.destroy(); host.remove(); }
+  });
+  const sameRotation = (actual, expected) => Math.abs(actual.reduce((sum, value, i) => sum + value * expected[i], 0)) > 1 - 1e-8;
+  assert.ok(sameRotation(result.first, [0, 0, 0, 1]), 'supplied quaternion overrides conflicting pitch and ground velocity');
+  assert.ok(sameRotation(result.middle, [0, 0, Math.sin(Math.PI / 8), Math.cos(Math.PI / 8)]), 'antipodal endpoint follows shortest-arc quaternion interpolation');
+  assert.ok(sameRotation(result.final, [0, 0, Math.sqrt(0.5), Math.sqrt(0.5)]), 'final attitude matches the provided quaternion rotation');
+  for (const q of [result.first, result.middle, result.final]) assert.ok(Math.abs(Math.hypot(...q) - 1) < 1e-8, 'renderer normalizes attitude');
+  assert.deepEqual(result.errors, []);
 }
 
 try {
@@ -99,6 +142,8 @@ try {
   assert.ok(layoutBoxes['.launch-button'].bottom <= 900, 'the desktop launch button fits in the initial 900px viewport');
   await writeFile(resolve(artifactPath, 'desktop-layout.json'), JSON.stringify(layoutBoxes, null, 2));
   record('desktop renders eight designs, leaderboard and WebGL2', renderer.version);
+  await verifyQuaternionRendering(page);
+  record('rendered attitude uses normalized shortest-arc quaternion interpolation');
 
   await page.locator('.design-option').filter({ hasText: 'Wide Glider' }).click();
   assert.equal(await page.locator('.design-option.selected .design-option-name').innerText(), 'Wide Glider');
@@ -107,11 +152,29 @@ try {
   await setSlider(page, 'Release height', 2);
   await page.getByRole('button', { name: 'Paper, wind & trim', exact: true }).click();
   await setSlider(page, 'Paper weight', 85);
-  await setSlider(page, 'Wind speed', 1);
-  await page.getByLabel('Wind direction', { exact: true }).selectOption('90');
-  await setSlider(page, 'Gust intensity', 0.1);
+  await setSlider(page, 'Wind speed', 2);
+  await page.getByLabel('Wind direction', { exact: true }).selectOption('0');
+  await setSlider(page, 'Gust intensity', 0);
+  await setSlider(page, 'Air temperature', 25);
+  await setSlider(page, 'Field elevation', 1500);
+  await page.getByRole('button', { name: 'Paper, wind & trim', exact: true }).click();
+  await page.getByRole('button', { name: 'Launch plane', exact: false }).click();
+  await page.getByRole('button', { name: 'Pause flight', exact: true }).click();
+  await page.getByRole('slider', { name: 'Flight timeline', exact: true }).press('Home');
+  const airspeed = await diagnosticValue(page, 'Airspeed');
+  const groundSpeed = Number.parseFloat(await page.locator('.metric').filter({ hasText: 'GROUND SPEED' }).locator('.metric-value').innerText());
+  const expectedAirspeed = Math.hypot(8 * Math.cos(10 * Math.PI / 180) - 2, 8 * Math.sin(10 * Math.PI / 180));
+  assert.ok(Math.abs(airspeed - expectedAirspeed) <= 0.12, `airspeed ${airspeed} matches air-relative launch velocity ${expectedAirspeed}`);
+  assert.ok(Math.abs(groundSpeed - 8) <= 0.12 && groundSpeed - airspeed > 1, 'wind distinguishes airspeed from ground speed');
+  assert.ok(await diagnosticValue(page, 'Air density') < 1.15, 'warm high-elevation launch reduces the displayed density');
+  assert.ok(await diagnosticValue(page, 'Gravity') < 9.807, 'local gravity reflects the launch elevation');
+  assert.ok(await diagnosticValue(page, 'Drag') > 0);
+  record('temperature, elevation and wind change diagnostics; airspeed differs from ground speed');
+  await page.getByRole('button', { name: 'Paper, wind & trim', exact: true }).click();
   await page.getByRole('button', { name: 'Reset conditions', exact: true }).click();
   assert.equal(await page.getByRole('slider', { name: 'Launch speed', exact: true }).inputValue(), '7');
+  assert.equal(await page.getByRole('slider', { name: 'Air temperature', exact: true }).inputValue(), '15');
+  assert.equal(await page.getByRole('slider', { name: 'Field elevation', exact: true }).inputValue(), '0');
   await page.getByRole('button', { name: 'Paper, wind & trim', exact: true }).click();
   record('airframe selection, sliders and weather reset respond');
 
@@ -147,7 +210,7 @@ try {
   record('matched comparison and complete CSV download work');
 
   await page.getByRole('button', { name: 'Find best launches', exact: true }).click();
-  await page.waitForFunction(() => document.querySelector('.results-description')?.textContent?.includes('840 launches'), null, { timeout: 30_000 });
+  await page.waitForFunction(() => document.querySelector('.results-description')?.textContent?.includes('840 launches') && !document.querySelector('.progress-status'), null, { timeout: 60_000 });
   assert.equal(await page.getByRole('tab', { name: /Best launch search/ }).getAttribute('aria-selected'), 'true');
   assert.equal(await page.locator('.leaderboard tbody tr').count(), 8);
   if (await page.getByRole('button', { name: 'Pause flight', exact: true }).count()) await page.getByRole('button', { name: 'Pause flight', exact: true }).click();
@@ -165,7 +228,10 @@ try {
   await page.keyboard.press('Escape');
   assert.equal(await page.getByRole('dialog').count(), 0);
   await page.getByRole('button', { name: 'Model & assumptions', exact: true }).click();
-  assert.ok((await page.getByRole('dialog').innerText()).includes('coefficients are estimates'));
+  const modelText = await page.getByRole('dialog').innerText();
+  assert.ok(/six.?degree|6.?dof/i.test(modelText), 'model describes six degrees of freedom');
+  assert.ok(/quaternion/i.test(modelText) && /RK4|Runge.?Kutta/i.test(modelText), 'model identifies attitude and integration methods');
+  assert.ok(/estimat|uncalibrat/i.test(modelText), 'model distinguishes numerical validation from calibration');
   await screenshot(page, 'desktop-model.png');
   await page.getByRole('button', { name: 'Close dialog', exact: true }).click();
   record('row replay and accessible model/fold dialogs work');

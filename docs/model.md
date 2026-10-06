@@ -1,84 +1,208 @@
-# Flight model and what the results mean
+# Flight model: 2.0.0-rigid-body
 
-This is an interactive comparison of estimated paper-plane aerodynamics. The
-designs are recognizable folding families; their drag, lift, and stability values
-are estimates, not wind-tunnel measurements. A winning simulation is a candidate
-for a real throw test, not proof of the longest-flying paper airplane. Fold quality,
-paper stiffness, humidity, launch technique, and room air currents can change the
-order. This model does not run CFD or resolve the folds' airflow.
+Earth gravity and air resistance are included. This version upgrades the original
+flight-path pitch relaxation to a six-degree-of-freedom rigid-body model: three
+position coordinates and three attitude axes. Aerodynamic forces accelerate the
+plane, aerodynamic torques turn it, and the quaternion attitude determines how
+the next forces act. No controller points the nose along the velocity.
 
-## Units and launch
+The equations have stronger physical foundations than the first model. The
+catalog's lift, drag, mass distribution, and stability coefficients remain
+estimates. These results are predictions for comparing designs, not validated
+records or proof of which real paper plane flies longest. Fold quality, stiffness,
+launch technique, and air currents can change the ranking. This is not CFD and
+cannot resolve the airflow around individual folds.
 
-Positions are meters and time is seconds. +X is downrange, +Y is up, and +Z is
-sideways. Speed is m/s, paper weight is grams per square meter, and launch angle,
-trim, wind direction, design trim angle, and dihedral are degrees. The recorded
-trajectory pitch and roll are radians for Three.js. Wind direction 0° is a tailwind
-along +X, 90° is along +Z, and 180° is a headwind.
+## Units and coordinates
 
-Defaults are a 7 m/s launch, 12° elevation, 1.8 m release height, 80 gsm paper,
-zero wind and turbulence, zero additional elevator trim, and seed 42. The initial
-ground velocity is exactly the requested launch velocity. No extra energy or
-powered flight is added. Mass scales with paper weight; all catalog designs start
-with the same A4 sheet mass. Stiffness does not scale with paper weight here.
+Positions and lengths are meters, mass is kilograms, time is seconds, forces are
+newtons, torques are newton-meters, and inertia is kg·m². World +X is downrange,
++Y is upward, and +Z is sideways. The body axes start as +X nose, +Y above the
+wing, and +Z toward the right wing. Positive pitch rotates around +Z; positive
+roll rotates around +X; positive yaw rotates around +Y, turning the nose toward
+world −Z. Quaternions map body coordinates to world coordinates.
 
-## Forces
+UI launch angle, trim, wind direction, and design dihedral are degrees. Recorded
+pitch, roll, yaw, angle of attack, and angular rates use radians/radians per second.
+Wind direction 0° is a tailwind along +X, 90° is along +Z, and 180° is a headwind.
+Speed is m/s, temperature is °C, field elevation is meters above mean sea level,
+and paper weight is grams per square meter.
 
-Gravity is 9.81 m/s² directly downward. Air density is 1.225 kg/m³. Aerodynamic
-forces use the velocity relative to the current wind:
+Defaults are a 7 m/s launch, 12° elevation, 1.8 m release height, 80 gsm A4 paper,
+zero wind/turbulence and extra trim, 15°C field air, 0 m field elevation, and seed
+42. Ground velocity is exactly the requested launch velocity. Initial attitude
+is launch angle plus the airframe's trim angle and the chosen trim adjustment;
+initial angular velocity is zero. There is no propulsion or extra launch energy.
+
+## Earth gravity and atmosphere
+
+Standard gravity is g₀ = 9.80665 m/s². The model estimates the variation with
+absolute altitude h using a spherical Earth of radius R = 6,371,000 m:
 
 ```
-q = 0.5 × airDensity × airSpeed²
+g(h) = g₀ × (R / (R + h))²
+h = fieldElevation + heightAboveGround
+```
+
+Gravity acts vertically downward. This approximation excludes local latitude,
+Earth rotation, and terrain anomalies; those effects are far smaller than the
+uncertainty of the paper-plane coefficients in ordinary throws.
+
+Pressure follows the International Standard Atmosphere troposphere formula with
+sea-level pressure 101,325 Pa, temperature 288.15 K, lapse rate 0.0065 K/m, and
+specific gas constant 287.05287 J/(kg·K). Above 11 km, an isothermal pressure
+continuation is used. The chosen field temperature is the local ground air
+condition, decreasing with height at the lapse rate. Density follows the ideal-gas
+law; dynamic viscosity follows Sutherland's relation:
+
+```
+ρ = pressure / (287.05287 × temperatureKelvin)
+μ = 1.716e−5 × (T / 273.15)^(3/2) × (273.15 + 110.4) / (T + 110.4)
+```
+
+At sea level and 15°C: gravity is 9.80665 m/s², density is approximately 1.225
+kg/m³, and viscosity is approximately 1.7893 × 10⁻⁵ Pa·s. Height, warmer air, and
+field elevation change the air density used by every force evaluation. This is
+dry air at standard pressure; humidity and weather-dependent pressure are omitted.
+
+## Air-relative lift, drag, and stalls
+
+Aerodynamics always use velocity relative to the instantaneous wind. Angle of
+attack α is `atan2(−bodyVelocityY, bodyVelocityX)`, and sideslip β is
+`atan2(bodyVelocityZ, hypot(bodyVelocityX, bodyVelocityY))`. These remain defined
+for backwards flow and steep attitudes. The reference chord is c = wingArea/span,
+an approximate mean chord rather than an exact mean aerodynamic chord for every
+folded planform.
+
+```
+dynamicPressure = 0.5 × ρ × airSpeed²
 aspectRatio = span² / wingArea
-lift = q × wingArea × CL
-drag = q × wingArea × CD
-CD = CD0 + CL² / (π × efficiency × aspectRatio) + stallDrag
+Reynolds = ρ × airSpeed × referenceChord / μ
+lift = dynamicPressure × wingArea × CL
+inducedCD = CL² / (π × spanEfficiency × aspectRatio)
 ```
 
-Lift is perpendicular to air-relative velocity; drag opposes it. The estimated
-span efficiency is 0.58 + 0.17 × stability, bounded to a plausible interval. CL
-grows with angle of attack at the design's lift slope, capped at its maximum CL.
-After the estimated stall angle, lift decreases with a cosine-squared falloff and
-drag rises with the squared sine of the excess angle. Stall events count entries,
-with hysteresis to avoid counting numerical chatter as repeated stalls.
+Near zero angle of attack, CL is the design lift slope times α. Around the
+estimated stall angle `maxCL/liftSlope`, a smooth blend changes this bounded
+attached-flow lift into a flat-plate `0.9 × maxCL × sin(2α)` approximation. The
+blend begins at 0.8 times the stall angle and completes at 1.6 times that angle.
+Separated-flow drag grows as `1.5 × sin²(α)`. The backwards-flow limit therefore
+has bounded forces rather than unbounded linear lift. The separation law is a
+model assumption, not a measured stall polar.
 
-Pitch passively relaxes toward flight-path angle plus the design's trim angle and
-the chosen trim offset. A critically damped second-order response depends on
-airspeed, plane length, and estimated stability. This approximates restoring
-aerodynamic moments; it is not an active pilot. A weathercocking heading response
-and dihedral-driven bank approximate crosswind response. There is no detailed
-six-degree-of-freedom rigid-body or flexible-paper model.
+Profile CD₀ is treated as the catalog estimate at Reynolds 50,000. A correction
+adjusts only the two-sided flat-plate skin-friction contribution:
 
-Turbulence adds bounded, smooth sinusoidal wind components. A seed selects their
-phases, so repeated runs match and changing numerical timestep does not change
-the weather sequence. This is a reproducible disturbance model, not atmospheric
-turbulence data. Wind can transfer energy to the plane, as in real flight.
+```
+profileCD = max(0.005, CD₀ + 2 × [Cf(Reynolds) − Cf(50,000)])
+CD = profileCD + inducedCD + separatedFlowDrag
+```
 
-## Integration and comparison
+Laminar skin friction is `1.328/sqrt(Re)`. A smooth transition between Reynolds
+300,000 and 800,000 blends it into `0.074/Re^0.2 − 1742/Re` for turbulent flow.
+Reynolds below 1,000 uses the 1,000 value to bound this empirical correction.
+This corrects an existing friction allowance rather than adding a second copy.
+Paper roughness, individual layers, and fold leakage are not resolved.
 
-The integrator places an air-relative aerodynamic update between two gravity
-half-steps. A predictor estimates the midpoint flight direction, and lift and
-drag coefficients are recomputed there to avoid a first-order force lag as the
-plane pitches or stalls. Quadratic drag is integrated exactly for each step;
-lift rotates the velocity without changing its airspeed. Trapezoid position integration therefore
-preserves gravity/lift mechanical energy in still air, apart from dissipative
-drag and tiny floating-point/interpolation error. No lift force is used as thrust.
-The default timestep is 1/120 s; high aerodynamic turning rates use a smaller
-step. Recorded points are interpolated at 30 Hz, with an exact final point.
-Ground contact is interpolated on the last segment to Y = 0, including the
-landing time. There are no bounces or post-landing slides.
+Lift acts along the body-up direction projected perpendicular to air-relative
+velocity, so it performs no translational work in still air. Main drag opposes
+that velocity. The additional side force is
+`−dynamicPressure × wingArea × sideForceSlope × sin(β)` along body +Z. Its
+velocity-parallel component is also dissipative. Returned drag and effective CD
+include that component, so `drag = dynamicPressure × wingArea × effectiveCD`
+and `aerodynamicForce · airVelocity = −drag × airSpeed`. The recorded signed lift
+excludes side force. A gust or wind gradient can transfer energy to the plane.
 
-Duration means time from release to first ground contact. Distance is horizontal
-displacement from release to landing, not path length. Maximum height includes
-internal integration points, so it can be slightly higher than a sampled point.
-Runs that reach the time limit are marked truncated, not completed flight records.
-Comparisons should use equal launch conditions or an equal search budget per
-design, and describe the search range. A finite parameter sweep establishes the
-best tested configuration, not a global optimum.
+## Torque, inertia, and attitude
 
-Nonfinite settings revert to their defaults. Finite values are bounded to speed
+Every design now has explicit estimated CG, aerodynamic-center location,
+stability derivatives, and inertia factors. CG and aerodynamic-center values are
+fractions of the reference chord. A positive static margin `AC − CG` produces a
+restoring pitch derivative:
+
+```
+Cm = −staticMargin × liftSlope × sin(α − trimAngle)
+     + pitchDamping × (omegaZ × chord / [2 × airSpeed])
+pitchMoment = dynamicPressure × wingArea × chord × Cm
+```
+
+The sine bounds the large-angle static moment while preserving
+`dCm/dα = −staticMargin × liftSlope` at the trim equilibrium. Pitch damping is
+negative. Roll and yaw use span-scaled negative rate damping. Dihedral gives a
+restoring roll moment from sideslip, and the estimated directional stability
+gives a restoring yaw moment. Damping calculations are written as terms
+proportional to airspeed rather than dividing by zero at zero airspeed.
+
+Principal inertias are estimated from the folded paper mass distribution:
+
+```
+Ix = mass × span² × rollInertiaFactor
+Iy = mass × (span² + length²) × yawInertiaFactor
+Iz = mass × length² × pitchInertiaFactor
+I × dω/dt + ω × (I × ω) = aerodynamicMoment
+quaternionDerivative = 0.5 × quaternion × (bodyAngularVelocity, 0)
+```
+
+The catalog's inertia tensors are positive and satisfy the principal-inertia
+triangle inequalities. Paper mass and inertia scale with paper weight; stiffness
+and folding geometry do not. All eight configurations begin with the same uncut
+A4 sheet. See [airframes.md](airframes.md) for the actual coefficient estimates.
+
+This is rigid paper with lumped aerodynamic coefficients. It omits bending,
+flutter, detailed center-of-pressure movement, canard interactions, and local
+rotational flow across the wings. Near stalls or tumbling, these omitted effects
+limit confidence even when the integration is numerically converged. It should
+not be read as a fully calibrated aircraft simulator.
+
+## Numerical integration and fair experiments
+
+The translational Newton equations, body-axis Euler rotation equations, and
+quaternion derivative are integrated together using fourth-order Runge–Kutta.
+Quaternions are normalized after every full step. Adaptive substeps resolve
+rotational damping, aerodynamic turn rates, and attitude changes; requested dt is
+a maximum step. The default maximum is 1/120 s, with refinements down to 1/3840 s.
+No arbitrary angular-rate clamp or active attitude alignment is used.
+
+Recorded points are 30 Hz and are aligned with integration endpoints. Ground
+contact uses a cubic Hermite height root inside the last step, followed by a
+partial RK4 step to that time. The final point is exactly at Y = 0. There is no
+bounce or post-landing slide. Maximum height also includes internal integration
+points, so it can be higher than a recorded point.
+
+The differential forces dissipate translational energy in still air; tests check
+passivity, gravity-only analytical trajectories, torque-free rotation, atmospheric
+values, moment signs, quaternion normalization, and timestep convergence.
+Numerical validation of equations does not validate estimated design coefficients.
+
+Duration is time to first ground contact. Distance is horizontal displacement,
+not path length. Runs reaching the time limit are truncated and excluded from
+completed winner claims. Comparisons use identical conditions or the same search
+grid for every design. A finite sweep finds the best tested configuration, not a
+global optimum. Independent sweeps at refined timesteps check whether the leader
+and recorded airtimes are numerically stable. Results from model version 1 are
+archived separately and must not be presented as current predictions.
+
+Scientific tests can call `simulateFlight(design, settings, options)` with
+`densityScale: 0`, `gravityScale: 0`, `gravityOverride`, or an explicit initial
+angular velocity. These isolation controls are not part of ordinary user flight.
+`evaluateAerodynamics` exposes force/torque and coefficients for independent
+checks, and `getMassProperties` exposes the actual mass, chord, and inertia.
+
+Nonfinite settings fall back to defaults. Finite inputs are bounded to speed
 0–30 m/s, angle −45–80°, height 0–100 m, wind 0–20 m/s, turbulence 0–2, paper
-40–240 gsm, trim −12–12°, maximum time 0.01–180 s, and timestep 1/480–1/30 s.
-Returned settings contain the actual sanitized values. Invalid or nonpositive
-design geometry/aerodynamic constants raise a RangeError. The model's useful
-range is ordinary paper-plane throws; extreme settings are numerically bounded,
-not scientifically validated.
+40–240 gsm, trim −12–12°, temperature −60–60°C, field elevation −500–10,000 m,
+maximum time 0.01–180 s, and maximum timestep 1/3840–1/30 s. Returned settings
+contain the values actually used. Invalid or nonpositive geometry/aerodynamic
+constants and invalid damping/inertia values raise a RangeError. Extreme inputs
+are numerically bounded, not experimentally validated.
+
+## Sources for the equations
+
+These references inform the equations and sign conventions; they do not validate
+the catalog coefficients or folding instructions.
+
+- NASA: [Drag equation](https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/drag-equation/).
+- NASA: [Induced drag coefficient](https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/induced-drag-coefficient/).
+- NASA: [Viscosity, Sutherland's relation, and Reynolds number](https://www.grc.nasa.gov/www/k-12/airplane/viscosity.html).
+- NASA: [Standard atmosphere](https://www.grc.nasa.gov/www/k-12/airplane/atmosmet.html).
+- MIT 16.333: [Aircraft stability and control lecture notes](https://ocw.mit.edu/courses/16-333-aircraft-stability-and-control-fall-2004/pages/lecture-notes/).

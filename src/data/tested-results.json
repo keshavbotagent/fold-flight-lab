@@ -1,4 +1,136 @@
 {
+  "modelVersion": "2.0.0-rigid-body",
+  "generatedAt": "2026-10-06T08:08:07.236Z",
+  "baselineSettings": {
+    "speed": 7,
+    "angle": 12,
+    "height": 1.8,
+    "windSpeed": 0,
+    "windDirection": 0,
+    "turbulence": 0,
+    "paperWeight": 80,
+    "trim": 0,
+    "seed": 42,
+    "maxTime": 60,
+    "dt": 0.008333333333333333,
+    "airTemperature": 15,
+    "fieldElevation": 0
+  },
+  "atmosphere": {
+    "conditions": {
+      "airTemperatureCelsius": 15,
+      "fieldElevationMeters": 0
+    },
+    "units": {
+      "gravity": "m/s²",
+      "density": "kg/m³",
+      "dynamicViscosity": "Pa·s",
+      "pressure": "Pa",
+      "temperatureKelvin": "K"
+    },
+    "ground": {
+      "gravity": 9.80665,
+      "density": 1.225000018124288,
+      "dynamicViscosity": 0.000017892976260350732,
+      "pressure": 101325,
+      "temperatureKelvin": 288.15
+    },
+    "launch": {
+      "gravity": 9.806644458652482,
+      "density": 1.224788345847783,
+      "dynamicViscosity": 0.000017892411742869472,
+      "pressure": 101303.37820468753,
+      "temperatureKelvin": 288.13829999999996
+    },
+    "constants": {
+      "standardGravityMetersPerSecondSquared": 9.80665,
+      "earthRadiusMeters": 6371000,
+      "airGasConstantJoulesPerKgKelvin": 287.05287
+    },
+    "notes": "Gravity varies with absolute altitude. ISA pressure and an ideal-gas density use the selected temperature/elevation; Sutherland viscosity enters Reynolds number and drag. Temperature uses a fixed lapse rate above the field."
+  },
+  "numericalCheck": {
+    "tolerancePercent": 1,
+    "comparedStepsSeconds": [
+      0.004166666666666667,
+      0.0020833333333333333
+    ],
+    "distinctSteps": 3,
+    "selectedLaunchWinnerStable": true,
+    "fullGridWinnerStable": true,
+    "completionConsistent": true,
+    "maxReplayDurationChangePercent": 0.0004152068542237454,
+    "maxGridDurationChangePercent": 0.0004152068542237454,
+    "maxDefaultToFinestReplayDurationChangePercent": 0.001119164850949172,
+    "passed": true,
+    "perDesign": [
+      {
+        "designId": "classic-dart",
+        "name": "Classic Dart",
+        "replayDurationChangePercent": 2.4506832261205596e-7,
+        "defaultToFinestReplayDurationChangePercent": 7.02586720932675e-7,
+        "gridDurationChangePercent": 2.4506832261205596e-7,
+        "completionConsistent": true
+      },
+      {
+        "designId": "nakamura-lock",
+        "name": "Nakamura Lock",
+        "replayDurationChangePercent": 0.000014155339150460438,
+        "defaultToFinestReplayDurationChangePercent": 0.00003745508882951893,
+        "gridDurationChangePercent": 0.000014155339150460438,
+        "completionConsistent": true
+      },
+      {
+        "designId": "wide-glider",
+        "name": "Wide Glider",
+        "replayDurationChangePercent": 0.00023108305382843057,
+        "defaultToFinestReplayDurationChangePercent": 0.001119164850949172,
+        "gridDurationChangePercent": 0.00023108305382843057,
+        "completionConsistent": true
+      },
+      {
+        "designId": "delta-wing",
+        "name": "Delta Wing",
+        "replayDurationChangePercent": 0.0000019144378879912773,
+        "defaultToFinestReplayDurationChangePercent": 0.000005817465544546163,
+        "gridDurationChangePercent": 0.0000019144378879912773,
+        "completionConsistent": true
+      },
+      {
+        "designId": "condor",
+        "name": "Condor",
+        "replayDurationChangePercent": 0.0004152068542237454,
+        "defaultToFinestReplayDurationChangePercent": 0.0004033972527092365,
+        "gridDurationChangePercent": 0.0004152068542237454,
+        "completionConsistent": true
+      },
+      {
+        "designId": "needle",
+        "name": "Needle",
+        "replayDurationChangePercent": 1.0573884683541004e-9,
+        "defaultToFinestReplayDurationChangePercent": 4.489898878603935e-8,
+        "gridDurationChangePercent": 1.0573884683541004e-9,
+        "completionConsistent": true
+      },
+      {
+        "designId": "canard",
+        "name": "Canard",
+        "replayDurationChangePercent": 0.00010274518901550397,
+        "defaultToFinestReplayDurationChangePercent": 0.000171066095454768,
+        "gridDurationChangePercent": 0.00010274518901550397,
+        "completionConsistent": true
+      },
+      {
+        "designId": "swallow",
+        "name": "Swallow",
+        "replayDurationChangePercent": 1.525730968090219e-7,
+        "defaultToFinestReplayDurationChangePercent": 0.0000028131184477831306,
+        "gridDurationChangePercent": 1.525730968090219e-7,
+        "completionConsistent": true
+      }
+    ],
+    "interpretation": "Numerical step-sensitivity check using a declared 1% duration tolerance; not validation of physical flight accuracy."
+  },
   "optimization": {
     "ranges": {
       "angles": [
@@ -38,46 +170,20 @@
       "paperWeight",
       "seed",
       "maxTime",
-      "dt"
+      "dt",
+      "airTemperature",
+      "fieldElevation"
     ],
     "ranking": [
       {
         "rank": 1,
-        "designId": "wide-glider",
-        "name": "Wide Glider",
-        "flight": {
-          "designId": "wide-glider",
-          "settings": {
-            "speed": 8.5,
-            "angle": 0,
-            "height": 1.8,
-            "windSpeed": 0,
-            "windDirection": 0,
-            "turbulence": 0,
-            "paperWeight": 80,
-            "trim": 2,
-            "seed": 42,
-            "maxTime": 60,
-            "dt": 0.008333333333333333
-          },
-          "duration": 6.856440879947995,
-          "distance": 20.143145356579236,
-          "maxHeight": 3.023839823414341,
-          "finalSpeed": 2.8152478596349724,
-          "landed": true,
-          "truncated": false,
-          "stallEvents": 1
-        }
-      },
-      {
-        "rank": 2,
         "designId": "condor",
         "name": "Condor",
         "flight": {
           "designId": "condor",
           "settings": {
-            "speed": 7,
-            "angle": 0,
+            "speed": 10,
+            "angle": 30,
             "height": 1.8,
             "windSpeed": 0,
             "windDirection": 0,
@@ -86,15 +192,103 @@
             "trim": 2,
             "seed": 42,
             "maxTime": 60,
-            "dt": 0.008333333333333333
+            "dt": 0.008333333333333333,
+            "airTemperature": 15,
+            "fieldElevation": 0
           },
-          "duration": 6.709833845665092,
-          "distance": 17.958915047065542,
-          "maxHeight": 2.67867749372578,
-          "finalSpeed": 2.6086857735041913,
+          "duration": 7.049109138047774,
+          "distance": 17.179032869079546,
+          "maxHeight": 4.5290330679217,
+          "finalSpeed": 2.5003180168087678,
           "landed": true,
           "truncated": false,
-          "stallEvents": 1
+          "stallEvents": 1,
+          "modelVersion": "2.0.0-rigid-body",
+          "mass": 0.0049896,
+          "sampledAerodynamics": {
+            "airspeedMetersPerSecond": {
+              "min": 0.3254288481868794,
+              "max": 10
+            },
+            "densityKgPerCubicMeter": {
+              "min": 1.224467546547882,
+              "max": 1.225000018124288
+            },
+            "reynoldsNumber": {
+              "min": 1845.8131252879768,
+              "max": 56731.55349943579
+            },
+            "angleOfAttackRadians": {
+              "min": 0.029054909367003515,
+              "max": 2.4830238562972693
+            },
+            "liftNewtons": {
+              "min": -0.031979231440461,
+              "max": 0.7263080984821781
+            },
+            "dragNewtons": {
+              "min": 0.001416396476330147,
+              "max": 0.11075800019402911
+            }
+          }
+        }
+      },
+      {
+        "rank": 2,
+        "designId": "wide-glider",
+        "name": "Wide Glider",
+        "flight": {
+          "designId": "wide-glider",
+          "settings": {
+            "speed": 10,
+            "angle": 30,
+            "height": 1.8,
+            "windSpeed": 0,
+            "windDirection": 0,
+            "turbulence": 0,
+            "paperWeight": 80,
+            "trim": 2,
+            "seed": 42,
+            "maxTime": 60,
+            "dt": 0.008333333333333333,
+            "airTemperature": 15,
+            "fieldElevation": 0
+          },
+          "duration": 6.479408568722028,
+          "distance": 16.814238152883743,
+          "maxHeight": 4.606787692650049,
+          "finalSpeed": 2.8429717347767838,
+          "landed": true,
+          "truncated": false,
+          "stallEvents": 1,
+          "modelVersion": "2.0.0-rigid-body",
+          "mass": 0.0049896,
+          "sampledAerodynamics": {
+            "airspeedMetersPerSecond": {
+              "min": 0.38825387849535387,
+              "max": 10
+            },
+            "densityKgPerCubicMeter": {
+              "min": 1.2244583398572177,
+              "max": 1.225000018124288
+            },
+            "reynoldsNumber": {
+              "min": 2189.322887260485,
+              "max": 56401.37334869993
+            },
+            "angleOfAttackRadians": {
+              "min": 0.028531856157649704,
+              "max": 2.335678639554512
+            },
+            "liftNewtons": {
+              "min": -0.02594686633153819,
+              "max": 0.6392711775896873
+            },
+            "dragNewtons": {
+              "min": 0.0017873274231897398,
+              "max": 0.09784331577123283
+            }
+          }
         }
       },
       {
@@ -104,8 +298,8 @@
         "flight": {
           "designId": "nakamura-lock",
           "settings": {
-            "speed": 8.5,
-            "angle": 0,
+            "speed": 10,
+            "angle": 30,
             "height": 1.8,
             "windSpeed": 0,
             "windDirection": 0,
@@ -114,54 +308,56 @@
             "trim": 2,
             "seed": 42,
             "maxTime": 60,
-            "dt": 0.008333333333333333
+            "dt": 0.008333333333333333,
+            "airTemperature": 15,
+            "fieldElevation": 0
           },
-          "duration": 6.458541042977336,
-          "distance": 20.745744949423386,
-          "maxHeight": 3.150195474054808,
-          "finalSpeed": 2.9232490828476947,
+          "duration": 5.798731302264291,
+          "distance": 15.97863108771279,
+          "maxHeight": 4.841962743278053,
+          "finalSpeed": 3.391884533579834,
           "landed": true,
           "truncated": false,
-          "stallEvents": 1
+          "stallEvents": 1,
+          "modelVersion": "2.0.0-rigid-body",
+          "mass": 0.0049896,
+          "sampledAerodynamics": {
+            "airspeedMetersPerSecond": {
+              "min": 0.42224970467333994,
+              "max": 10
+            },
+            "densityKgPerCubicMeter": {
+              "min": 1.2244307617855765,
+              "max": 1.225000018124288
+            },
+            "reynoldsNumber": {
+              "min": 2422.1006302780725,
+              "max": 57375.50069631906
+            },
+            "angleOfAttackRadians": {
+              "min": 0.03450434480230966,
+              "max": 2.3928067385032885
+            },
+            "liftNewtons": {
+              "min": -0.026621356039072758,
+              "max": 0.5262649072163395
+            },
+            "dragNewtons": {
+              "min": 0.0018063360589872512,
+              "max": 0.08275463711504394
+            }
+          }
         }
       },
       {
         "rank": 4,
-        "designId": "delta-wing",
-        "name": "Delta Wing",
-        "flight": {
-          "designId": "delta-wing",
-          "settings": {
-            "speed": 10,
-            "angle": 0,
-            "height": 1.8,
-            "windSpeed": 0,
-            "windDirection": 0,
-            "turbulence": 0,
-            "paperWeight": 80,
-            "trim": 2,
-            "seed": 42,
-            "maxTime": 60,
-            "dt": 0.008333333333333333
-          },
-          "duration": 5.883976071426066,
-          "distance": 21.96272517250889,
-          "maxHeight": 3.5153604752543215,
-          "finalSpeed": 3.2806391083887774,
-          "landed": true,
-          "truncated": false,
-          "stallEvents": 1
-        }
-      },
-      {
-        "rank": 5,
         "designId": "canard",
         "name": "Canard",
         "flight": {
           "designId": "canard",
           "settings": {
-            "speed": 8.5,
-            "angle": 0,
+            "speed": 10,
+            "angle": 30,
             "height": 1.8,
             "windSpeed": 0,
             "windDirection": 0,
@@ -170,23 +366,53 @@
             "trim": 2,
             "seed": 42,
             "maxTime": 60,
-            "dt": 0.008333333333333333
+            "dt": 0.008333333333333333,
+            "airTemperature": 15,
+            "fieldElevation": 0
           },
-          "duration": 5.43791179735233,
-          "distance": 16.933501919626803,
-          "maxHeight": 2.9410291002715305,
-          "finalSpeed": 2.8325421423487733,
+          "duration": 5.049949742896319,
+          "distance": 13.100856392979862,
+          "maxHeight": 4.561627655240127,
+          "finalSpeed": 2.9165251281139026,
           "landed": true,
           "truncated": false,
-          "stallEvents": 1
+          "stallEvents": 1,
+          "modelVersion": "2.0.0-rigid-body",
+          "mass": 0.0049896,
+          "sampledAerodynamics": {
+            "airspeedMetersPerSecond": {
+              "min": 0.3872370529303266,
+              "max": 10
+            },
+            "densityKgPerCubicMeter": {
+              "min": 1.2244636642297597,
+              "max": 1.225000018124288
+            },
+            "reynoldsNumber": {
+              "min": 2273.1647198382193,
+              "max": 58714.87244504004
+            },
+            "angleOfAttackRadians": {
+              "min": 0.03592031729089512,
+              "max": 2.4323124381427617
+            },
+            "liftNewtons": {
+              "min": -0.028954017262926037,
+              "max": 0.5521573009758034
+            },
+            "dragNewtons": {
+              "min": 0.0018729480443784956,
+              "max": 0.1046446709505735
+            }
+          }
         }
       },
       {
-        "rank": 6,
-        "designId": "swallow",
-        "name": "Swallow",
+        "rank": 5,
+        "designId": "delta-wing",
+        "name": "Delta Wing",
         "flight": {
-          "designId": "swallow",
+          "designId": "delta-wing",
           "settings": {
             "speed": 8.5,
             "angle": 0,
@@ -195,22 +421,52 @@
             "windDirection": 0,
             "turbulence": 0,
             "paperWeight": 80,
-            "trim": 2,
+            "trim": 0,
             "seed": 42,
             "maxTime": 60,
-            "dt": 0.008333333333333333
+            "dt": 0.008333333333333333,
+            "airTemperature": 15,
+            "fieldElevation": 0
           },
-          "duration": 4.793019035605219,
-          "distance": 15.899774711635862,
-          "maxHeight": 2.904661962991943,
-          "finalSpeed": 3.246477532490643,
+          "duration": 3.6891434749859893,
+          "distance": 14.09711194305012,
+          "maxHeight": 2.9930794545885293,
+          "finalSpeed": 4.972227509029539,
           "landed": true,
           "truncated": false,
-          "stallEvents": 1
+          "stallEvents": 0,
+          "modelVersion": "2.0.0-rigid-body",
+          "mass": 0.0049896,
+          "sampledAerodynamics": {
+            "airspeedMetersPerSecond": {
+              "min": 1.9748703674195809,
+              "max": 8.5
+            },
+            "densityKgPerCubicMeter": {
+              "min": 1.2246480639931578,
+              "max": 1.225000018124288
+            },
+            "reynoldsNumber": {
+              "min": 12236.080452623004,
+              "max": 52669.84002790632
+            },
+            "angleOfAttackRadians": {
+              "min": 0.03276924549965653,
+              "max": 0.3126190650153986
+            },
+            "liftNewtons": {
+              "min": 0.03911328281658767,
+              "max": 0.208854044197124
+            },
+            "dragNewtons": {
+              "min": 0.007524449626846509,
+              "max": 0.04178323562567985
+            }
+          }
         }
       },
       {
-        "rank": 7,
+        "rank": 6,
         "designId": "classic-dart",
         "name": "Classic Dart",
         "flight": {
@@ -223,28 +479,116 @@
             "windDirection": 0,
             "turbulence": 0,
             "paperWeight": 80,
-            "trim": 2,
+            "trim": 0,
             "seed": 42,
             "maxTime": 60,
-            "dt": 0.008333333333333333
+            "dt": 0.008333333333333333,
+            "airTemperature": 15,
+            "fieldElevation": 0
           },
-          "duration": 4.46014958124203,
-          "distance": 19.938883102007473,
-          "maxHeight": 3.529712478990257,
-          "finalSpeed": 5.626771809494846,
+          "duration": 3.278145417382806,
+          "distance": 15.931896864774355,
+          "maxHeight": 3.4200738275262665,
+          "finalSpeed": 6.571878270208703,
           "landed": true,
           "truncated": false,
-          "stallEvents": 1
+          "stallEvents": 0,
+          "modelVersion": "2.0.0-rigid-body",
+          "mass": 0.0049896,
+          "sampledAerodynamics": {
+            "airspeedMetersPerSecond": {
+              "min": 2.9662786004718615,
+              "max": 10
+            },
+            "densityKgPerCubicMeter": {
+              "min": 1.2245978901725625,
+              "max": 1.225000018124288
+            },
+            "reynoldsNumber": {
+              "min": 16874.85275644512,
+              "max": 56895.957486178806
+            },
+            "angleOfAttackRadians": {
+              "min": 0.03834335738530719,
+              "max": 0.20677797334856163
+            },
+            "liftNewtons": {
+              "min": 0.03680224660268974,
+              "max": 0.15295377158118717
+            },
+            "dragNewtons": {
+              "min": 0.007735514275374172,
+              "max": 0.034505645838858394
+            }
+          }
         }
       },
       {
-        "rank": 8,
+        "rank": 7,
         "designId": "needle",
         "name": "Needle",
         "flight": {
           "designId": "needle",
           "settings": {
             "speed": 10,
+            "angle": 5,
+            "height": 1.8,
+            "windSpeed": 0,
+            "windDirection": 0,
+            "turbulence": 0,
+            "paperWeight": 80,
+            "trim": 0,
+            "seed": 42,
+            "maxTime": 60,
+            "dt": 0.008333333333333333,
+            "airTemperature": 15,
+            "fieldElevation": 0
+          },
+          "duration": 3.2173929575015694,
+          "distance": 17.684122345755906,
+          "maxHeight": 3.2414975638824424,
+          "finalSpeed": 6.872923465679099,
+          "landed": true,
+          "truncated": false,
+          "stallEvents": 0,
+          "modelVersion": "2.0.0-rigid-body",
+          "mass": 0.0049896,
+          "sampledAerodynamics": {
+            "airspeedMetersPerSecond": {
+              "min": 4.019173324278892,
+              "max": 10
+            },
+            "densityKgPerCubicMeter": {
+              "min": 1.2246188520973835,
+              "max": 1.225000018124288
+            },
+            "reynoldsNumber": {
+              "min": 23841.667824800432,
+              "max": 59325.88900381769
+            },
+            "angleOfAttackRadians": {
+              "min": 0.04428156170362995,
+              "max": 0.16075715794584375
+            },
+            "liftNewtons": {
+              "min": 0.0380317002953174,
+              "max": 0.1022656030920728
+            },
+            "dragNewtons": {
+              "min": 0.008782118734948345,
+              "max": 0.02521227597317866
+            }
+          }
+        }
+      },
+      {
+        "rank": 8,
+        "designId": "swallow",
+        "name": "Swallow",
+        "flight": {
+          "designId": "swallow",
+          "settings": {
+            "speed": 4,
             "angle": 0,
             "height": 1.8,
             "windSpeed": 0,
@@ -254,17 +598,54 @@
             "trim": 2,
             "seed": 42,
             "maxTime": 60,
-            "dt": 0.008333333333333333
+            "dt": 0.008333333333333333,
+            "airTemperature": 15,
+            "fieldElevation": 0
           },
-          "duration": 4.0577161096220316,
-          "distance": 19.948296148811977,
-          "maxHeight": 3.3032132912390826,
-          "finalSpeed": 6.214870105614254,
+          "duration": 3.0641726495115926,
+          "distance": 9.170253751683518,
+          "maxHeight": 1.867376218713204,
+          "finalSpeed": 3.2005915175248387,
           "landed": true,
           "truncated": false,
-          "stallEvents": 0
+          "stallEvents": 0,
+          "modelVersion": "2.0.0-rigid-body",
+          "mass": 0.0049896,
+          "sampledAerodynamics": {
+            "airspeedMetersPerSecond": {
+              "min": 2.2516443822025414,
+              "max": 4
+            },
+            "densityKgPerCubicMeter": {
+              "min": 1.224780423236894,
+              "max": 1.225000018124288
+            },
+            "reynoldsNumber": {
+              "min": 11866.780412060774,
+              "max": 21081.085132738484
+            },
+            "angleOfAttackRadians": {
+              "min": 0.10653919249906482,
+              "max": 0.24570080794506427
+            },
+            "liftNewtons": {
+              "min": 0.042450218548078074,
+              "max": 0.07808030099894019
+            },
+            "dragNewtons": {
+              "min": 0.008979831532380335,
+              "max": 0.016692071905092455
+            }
+          }
         }
       }
-    ]
+    ],
+    "performance": {
+      "elapsedMs": 2043.19514,
+      "cpuMs": 1814.528,
+      "maxProgressIntervalMs": 32.67824799999994,
+      "maxTrialsBetweenCheckpoints": 12,
+      "note": "Execution-machine measurements; browser timing depends on hardware and scheduling. Progress intervals include event-loop yields."
+    }
   }
 }

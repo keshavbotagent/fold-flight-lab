@@ -1,11 +1,16 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { DESIGNS } from '../src/lib/designs.ts';
-import { DEFAULT_SETTINGS, simulateFlight } from '../src/lib/physics.ts';
-import type { FlightSample } from '../src/lib/types.ts';
+import { DEFAULT_SETTINGS, getAtmosphere, simulateFlight } from '../src/lib/physics.ts';
+import { EARTH_RADIUS } from '../src/lib/atmosphere.ts';
+import type { FlightSample, LaunchSettings } from '../src/lib/types.ts';
 
-const gravity = 9.81;
-const specificEnergy = (s: FlightSample) => gravity * s.y + (s.vx ** 2 + s.vy ** 2 + s.vz ** 2) / 2;
+const specificEnergy = (s: FlightSample, settings: LaunchSettings) => {
+  const groundRadius = EARTH_RADIUS + settings.fieldElevation;
+  const groundGravity = getAtmosphere(settings).gravity;
+  const potential = groundGravity * groundRadius * s.y / (groundRadius + s.y);
+  return potential + (s.vx ** 2 + s.vy ** 2 + s.vz ** 2) / 2;
+};
 const almost = (actual: number, expected: number, tolerance: number, label: string) =>
   assert.ok(Math.abs(actual - expected) <= tolerance, `${label}: ${actual} versus ${expected}, tolerance ${tolerance}`);
 
@@ -28,16 +33,19 @@ test('all designs dissipate mechanical energy in still air and return finite fli
     assert.ok(flight.landed, `${design.name}: should reach the ground within a minute`);
     assert.equal(flight.truncated, false);
     assert.ok(flight.duration > 0 && flight.distance > 0);
-    const initialEnergy = specificEnergy(flight.samples[0]);
+    const initialEnergy = specificEnergy(flight.samples[0], flight.settings);
+    let previousEnergy = initialEnergy;
     let previousTime = -1;
     for (const sample of flight.samples) {
       for (const [key, value] of Object.entries(sample)) assert.ok(Number.isFinite(value), `${design.name}: finite ${key}`);
       assert.ok(sample.t > previousTime, `${design.name}: sample times increase`);
       assert.ok(sample.y >= 0, `${design.name}: no sample below ground`);
-      assert.ok(specificEnergy(sample) <= initialEnergy * 1.01 + 0.05, `${design.name}: still-air energy cannot be created`);
+      const energy = specificEnergy(sample, flight.settings);
+      assert.ok(energy <= previousEnergy + initialEnergy * 1e-7 + 1e-8, `${design.name}: still-air energy cannot increase between recorded samples (${energy - previousEnergy}J/kg)`);
+      previousEnergy = energy;
       previousTime = sample.t;
     }
-    assert.ok(specificEnergy(flight.samples.at(-1)!) < initialEnergy, `${design.name}: drag dissipates energy`);
+    assert.ok(specificEnergy(flight.samples.at(-1)!, flight.settings) < initialEnergy, `${design.name}: drag dissipates energy`);
   }
 });
 

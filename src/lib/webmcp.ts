@@ -30,7 +30,20 @@ function emptyInput(input: unknown) {
 }
 
 function scores(ranking: RankedFlight[]) {
-  return ranking.map(row => ({ rank: row.rank, id: row.design.id, name: row.design.name, airtimeSeconds: row.flight.duration, distanceMetres: row.flight.distance, landed: row.flight.landed, capped: row.flight.truncated, launch: { speed: row.flight.settings.speed, angle: row.flight.settings.angle, trim: row.flight.settings.trim } }));
+  return ranking.map(row => ({
+    rank: row.rank, id: row.design.id, name: row.design.name,
+    airtimeSeconds: row.flight.duration, distanceMetres: row.flight.distance,
+    landed: row.flight.landed, capped: row.flight.truncated,
+    physicsModel: row.flight.modelVersion ?? null, massKg: row.flight.mass ?? row.design.mass * row.flight.settings.paperWeight / 80,
+    launch: { speed: row.flight.settings.speed, angle: row.flight.settings.angle, trim: row.flight.settings.trim },
+    testedConditions: {
+      height: row.flight.settings.height, paperWeight: row.flight.settings.paperWeight,
+      windSpeed: row.flight.settings.windSpeed, windDirection: row.flight.settings.windDirection,
+      turbulence: row.flight.settings.turbulence, seed: row.flight.settings.seed,
+      airTemperature: row.flight.settings.airTemperature, fieldElevation: row.flight.settings.fieldElevation,
+      dt: row.flight.settings.dt,
+    },
+  }));
 }
 
 /** Optional browser integration; the ordinary interface works without WebMCP. */
@@ -51,7 +64,7 @@ export function useFlightTools(state: LabState, compare: () => RankedFlight[]) {
       execute(input) {
         emptyInput(input);
         const current = latest.current.state;
-        return { selectedId: current.selectedId, conditions: { ...current.settings }, comparisonMethod: current.comparisonMethod, playing: current.playing, designs: DESIGNS.map(d => ({ id: d.id, name: d.name, category: d.category })), results: scores(current.ranking) };
+        return { selectedId: current.selectedId, conditions: { ...current.settings }, physicsModel: current.ranking[0]?.flight.modelVersion ?? null, comparisonMethod: current.comparisonMethod, playing: current.playing, designs: DESIGNS.map(d => ({ id: d.id, name: d.name, category: d.category })), results: scores(current.ranking) };
       },
     }, {
       name: 'compare_current_airframes',

@@ -20,6 +20,29 @@ interface FlightView {
 const WORLD_UP = new THREE.Vector3(0, 1, 0);
 const PAPER_HEIGHT = .68;
 
+function providedQuaternion(sample: FlightSample): THREE.Quaternion | null {
+  const { qx, qy, qz, qw } = sample;
+  if (typeof qx !== 'number' || typeof qy !== 'number' || typeof qz !== 'number' || typeof qw !== 'number') return null;
+  // A malformed recorded attitude should stay finite rather than fall back to a
+  // heading inferred from the velocity: the quaternion is authoritative.
+  const quaternion = new THREE.Quaternion(qx, qy, qz, qw);
+  if (![qx, qy, qz, qw].every(Number.isFinite) || quaternion.lengthSq() < 1e-16) return quaternion.identity();
+  return quaternion.normalize();
+}
+
+function legacyQuaternion(sample: FlightSample): THREE.Quaternion {
+  const yaw = typeof sample.yaw === 'number' && Number.isFinite(sample.yaw)
+    ? sample.yaw : Math.atan2(-sample.vz, sample.vx);
+  const heading = new THREE.Quaternion().setFromAxisAngle(WORLD_UP, yaw);
+  const attitude = new THREE.Quaternion().setFromEuler(new THREE.Euler(sample.roll, 0, sample.pitch, 'ZXY'));
+  return heading.multiply(attitude).normalize();
+}
+
+function normalizedSample(sample: FlightSample): FlightSample {
+  const quaternion = providedQuaternion(sample);
+  return quaternion ? { ...sample, qx: quaternion.x, qy: quaternion.y, qz: quaternion.z, qw: quaternion.w } : sample;
+}
+
 function textSprite(text: string, color = '#8b969e'): THREE.Sprite {
   const canvas = document.createElement('canvas');
   canvas.width = 256;
@@ -49,9 +72,9 @@ function lineSegments(points: THREE.Vector3[], color: string, opacity: number): 
 
 function atTime(samples: FlightSample[], seconds: number): { sample: FlightSample; lower: number; upper: number } | null {
   if (!samples.length) return null;
-  if (seconds <= samples[0].t) return { sample: samples[0], lower: 0, upper: 0 };
+  if (seconds <= samples[0].t) return { sample: normalizedSample(samples[0]), lower: 0, upper: 0 };
   const last = samples.length - 1;
-  if (seconds >= samples[last].t) return { sample: samples[last], lower: last, upper: last };
+  if (seconds >= samples[last].t) return { sample: normalizedSample(samples[last]), lower: last, upper: last };
   let low = 0;
   let high = last;
   while (high - low > 1) {
@@ -62,17 +85,34 @@ function atTime(samples: FlightSample[], seconds: number): { sample: FlightSampl
   const a = samples[low];
   const b = samples[high];
   const fraction = (seconds - a.t) / Math.max(.000001, b.t - a.t);
-  const lerp = (key: keyof FlightSample) => THREE.MathUtils.lerp(a[key], b[key], fraction);
-  return {
-    lower: low,
-    upper: high,
-    sample: {
-      t: seconds,
-      x: lerp('x'), y: lerp('y'), z: lerp('z'),
-      vx: lerp('vx'), vy: lerp('vy'), vz: lerp('vz'),
-      pitch: lerp('pitch'), roll: lerp('roll'),
-    },
+  const lerp = (key: 'x' | 'y' | 'z' | 'vx' | 'vy' | 'vz' | 'pitch' | 'roll') => THREE.MathUtils.lerp(a[key], b[key], fraction);
+  const sample: FlightSample = {
+    t: seconds,
+    x: lerp('x'), y: lerp('y'), z: lerp('z'),
+    vx: lerp('vx'), vy: lerp('vy'), vz: lerp('vz'),
+    pitch: lerp('pitch'), roll: lerp('roll'),
   };
+  for (const key of ['yaw', 'omegaX', 'omegaY', 'omegaZ', 'airspeed', 'alpha', 'lift', 'drag', 'density', 'reynolds'] as const) {
+    const aValue = a[key];
+    const bValue = b[key];
+    if (typeof aValue === 'number' && Number.isFinite(aValue)) {
+      sample[key] = typeof bValue === 'number' && Number.isFinite(bValue)
+        ? THREE.MathUtils.lerp(aValue, bValue, fraction) : aValue;
+    } else if (typeof bValue === 'number' && Number.isFinite(bValue)) {
+      sample[key] = bValue;
+    }
+  }
+  const aQuaternion = providedQuaternion(a);
+  const bQuaternion = providedQuaternion(b);
+  if (aQuaternion || bQuaternion) {
+    const quaternion = (aQuaternion ?? legacyQuaternion(a))
+      .slerp(bQuaternion ?? legacyQuaternion(b), fraction).normalize();
+    sample.qx = quaternion.x;
+    sample.qy = quaternion.y;
+    sample.qz = quaternion.z;
+    sample.qw = quaternion.w;
+  }
+  return { lower: low, upper: high, sample };
 }
 
 /** Three.js stage. Replay positions use the simulation's metres and seconds. */
@@ -422,11 +462,9 @@ export class FlightScene {
     const { sample, upper } = interpolated;
     view.position.set(sample.x, Math.max(.045, sample.y), sample.z);
     view.plane.position.copy(view.position);
-    const yaw = Math.atan2(-sample.vz, sample.vx);
-    // Local bank around +X, local nose pitch around +Z, then heading around Y.
-    const heading = new THREE.Quaternion().setFromAxisAngle(WORLD_UP, yaw);
-    const attitude = new THREE.Quaternion().setFromEuler(new THREE.Euler(sample.roll, 0, sample.pitch, 'ZXY'));
-    view.plane.quaternion.copy(heading).multiply(attitude);
+    // Six-DoF physics records body-to-world attitude independently of velocity.
+    // Older saved flights retain their pitch/roll/yaw playback convention.
+    view.plane.quaternion.copy(providedQuaternion(sample) ?? legacyQuaternion(sample));
     if (sample.y <= .045 && seconds >= view.result.duration) {
       view.plane.position.y = .065;
       view.plane.rotation.x *= .3;

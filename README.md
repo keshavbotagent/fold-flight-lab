@@ -7,10 +7,14 @@ and environment, replay its 3D trajectory, and compare predicted flight duration
 The eight representative configurations are Classic Dart, Nakamura Lock, Wide
 Glider, Delta Wing, Condor, Needle, Canard, and Swallow. Each has a distinct folded
 shape, estimated aerodynamic coefficients, and practical folding instructions.
+The v2 engine integrates six-degree-of-freedom rigid-body motion, including
+quaternion attitude, aerodynamic moments, mass distribution, altitude-dependent
+Earth gravity, and a variable atmosphere.
 
 ## Run locally
 
-Use Node.js 20.19+ or 22.12+ and npm.
+Use Node.js 22.12+ and npm; Node.js 20.19 within the Node 20 release line is also
+supported by Vite.
 
 ```sh
 npm install
@@ -34,7 +38,7 @@ production build.
 
 - Select an airframe and adjust launch speed, angle, and release height. Expand
   **Paper, wind & trim** to change paper stock, wind, gust intensity, and elevator
-  trim.
+  trim, along with air temperature and field elevation.
 - Launch and inspect the flight using playback, replay, timeline, and camera
   controls. The telemetry shows time, horizontal displacement, altitude, and
   ground speed.
@@ -43,7 +47,8 @@ production build.
 - Use **Find best launches** to give every design the same search: seven angles
   `[0, 5, 10, 15, 20, 25, 30]°`, five speeds `[4, 5.5, 7, 8.5, 10] m/s`, and three
   trim offsets `[-2, 0, 2]°`. This is **105 trials per design, 840 trials total**.
-  Paper, release height, weather, gust seed, and numerical settings remain shared.
+  Paper, release height, weather, temperature, field elevation, gust seed, and
+  numerical settings remain shared.
 - Replay a leaderboard entry or export the current ranking as CSV.
 
 The objective is duration from release to first ground contact. Horizontal
@@ -62,9 +67,10 @@ The default shared configuration is:
 | Release height | 1.8 m |
 | Paper stock | A4, 80 g/m²; 4.9896 g per plane |
 | Wind / gust intensity | 0 m/s / 0 |
+| Air temperature / field elevation | 15°C / 0 m above sea level |
 | Additional elevator trim | 0° |
 | Gust seed | 42 |
-| Integration step | 1/120 s, reduced internally for rapid aerodynamic turning |
+| Integration step | 1/120 s, with internal adaptive substeps |
 | Flight time cap | 60 s |
 
 Run the shared browser physics engine from the command line:
@@ -90,9 +96,18 @@ identifies the best tested launch under its assumptions.
 
 All airframes use the same uncut A4 sheet and paper stock. Paper weight scales
 mass equally across the catalog. Wing geometry, lift, drag, stall, trim, and
-stability values are estimates. The simulation includes gravity, air-relative
-lift and drag, passive attitude response, and repeatable gusts. It does not run
-CFD or provide physical validation of a real folded plane.
+stability values are estimates. The v2 six-degree-of-freedom model integrates
+translational forces and rotational moments using quaternion attitude. Estimated
+CG, aerodynamic-center positions, inertias, and damping derivatives determine
+the passive pitch, roll, and yaw response.
+
+Earth gravity varies with altitude. A dry-air atmosphere uses altitude-dependent
+pressure, configured temperature, and Sutherland's viscosity relation to obtain
+density and Reynolds number. Lift, profile drag, induced drag, and post-stall
+effects use air-relative flow and repeatable gusts. The catalog's low-Reynolds-
+number force and moment coefficients remain uncalibrated; they are a substantial
+source of uncertainty even with a more detailed numerical solver. The simulation
+does not run CFD or provide physical validation of a real folded plane.
 
 A long simulated flight is a candidate for a real throw test. Fold precision,
 paper stiffness, center of mass, humidity, drafts, and launch technique can change
@@ -101,15 +116,18 @@ which real paper airplane flies longest.
 
 Read [the flight model](docs/model.md) for forces, integration, units, and bounds,
 and [the airframe assumptions](docs/airframes.md) for catalog geometry and folding
-details.
+details, coefficient tables, sign conventions, and linked NASA/MIT equation
+references. Those sources support the physical framework; the eight airframes'
+parameter values are representative estimates.
 
 ## Source map
 
 | File | Role |
 | --- | --- |
 | `src/App.tsx` | Controls, playback, comparisons, and CSV export. |
-| `src/lib/designs.ts` | Eight airframes, coefficients, and folding instructions. |
-| `src/lib/physics.ts` | Deterministic flight simulation and default settings. |
+| `src/lib/designs.ts` | Eight airframes, estimated dynamics, and folding instructions. |
+| `src/lib/physics.ts` | Deterministic six-degree-of-freedom flight integration and defaults. |
+| `src/lib/atmosphere.ts` | Earth gravity, pressure, density, viscosity, and atmospheric settings. |
 | `src/lib/experiments.ts` | Matched comparisons and equal-budget launch search. |
 | `src/lib/scene.ts`, `src/lib/planeMesh.ts` | Three.js scene and folded plane meshes. |
 | `scripts/benchmark.ts` | Reproducible reports and integration-step replay. |

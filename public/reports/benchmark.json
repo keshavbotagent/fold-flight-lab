@@ -1,0 +1,2131 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-10-06T07:20:56.114Z",
+  "interpretation": "Model predictions from a simplified paper-plane aerodynamic simulator; not measured physical flight results.",
+  "objective": "Longest airtime among completed landings; distance breaks airtime ties. Time-capped trajectories cannot win optimization.",
+  "software": {
+    "name": "fold-flight-lab",
+    "version": "1.0.0",
+    "three": "0.186.1"
+  },
+  "baselineSettings": {
+    "speed": 7,
+    "angle": 12,
+    "height": 1.8,
+    "windSpeed": 0,
+    "windDirection": 0,
+    "turbulence": 0,
+    "paperWeight": 80,
+    "trim": 0,
+    "seed": 42,
+    "maxTime": 60,
+    "dt": 0.008333333333333333
+  },
+  "designs": [
+    {
+      "id": "classic-dart",
+      "name": "Classic Dart",
+      "category": "Dart",
+      "subtitle": "A sharp, steady classic",
+      "description": "A pointed nose, deep center keel, and narrow wings favor a firm launch. Its small wing area gives it a higher wing loading than the broad gliders.",
+      "color": "#ee896f",
+      "shape": "dart",
+      "mass": 0.0049896,
+      "wingArea": 0.0128,
+      "span": 0.154,
+      "length": 0.279,
+      "cd0": 0.035,
+      "liftSlope": 2.6,
+      "maxCl": 0.82,
+      "trimAngle": 4.3,
+      "stability": 0.88,
+      "dihedral": 5,
+      "foldSteps": [
+        "Start with an A4 sheet in portrait orientation. Fold it lengthwise in half, crease, and reopen.",
+        "Fold the two top corners inward so their edges meet the center crease.",
+        "Fold the new sloping edges inward to the center again, making a long pointed nose.",
+        "Fold the plane in half along the center crease with the folded layers on the outside.",
+        "Fold each wing downward, keeping a center keel about 2 cm deep and matching the two wing edges.",
+        "Open the wings so their tips sit a little higher than their roots. Keep the nose and both wings symmetrical."
+      ]
+    },
+    {
+      "id": "nakamura-lock",
+      "name": "Nakamura Lock",
+      "category": "Locked glider",
+      "subtitle": "Folded for balance",
+      "description": "A folded nose tab locks the layers together while broad wings and a modest keel support a stable glide. The extra nose layers shift the balance forward.",
+      "color": "#91bdeb",
+      "shape": "nakamura",
+      "mass": 0.0049896,
+      "wingArea": 0.0202,
+      "span": 0.241,
+      "length": 0.218,
+      "cd0": 0.042,
+      "liftSlope": 3.25,
+      "maxCl": 1.04,
+      "trimAngle": 5.5,
+      "stability": 0.91,
+      "dihedral": 7,
+      "foldSteps": [
+        "With the A4 sheet in portrait orientation, make a lengthwise center crease and reopen.",
+        "Fold the top corners to the center crease to make a triangular nose.",
+        "Fold the whole nose downward across the base of that triangle, making an envelope-shaped top.",
+        "Fold the new top corners inward toward the center, leaving a small triangular tip exposed beneath them.",
+        "Fold that exposed tip upward over the two corner folds to lock them in place.",
+        "Fold the sheet in half along the center crease with the locking tab on the outside.",
+        "Fold two broad matching wings down, leaving a keel about 1.5 cm deep, then raise the wing tips slightly."
+      ]
+    },
+    {
+      "id": "wide-glider",
+      "name": "Wide Glider",
+      "category": "Glider",
+      "subtitle": "Room to catch the air",
+      "description": "Broad, nearly rectangular wings reduce wing loading and suit a gentle release. A shallow center keel and raised tips help it settle into a glide.",
+      "color": "#91cdb4",
+      "shape": "wide",
+      "mass": 0.0049896,
+      "wingArea": 0.0234,
+      "span": 0.284,
+      "length": 0.173,
+      "cd0": 0.046,
+      "liftSlope": 3.55,
+      "maxCl": 1.1,
+      "trimAngle": 5.2,
+      "stability": 0.85,
+      "dihedral": 8,
+      "foldSteps": [
+        "Turn the A4 sheet to landscape orientation. Fold it across the middle to mark the nose-to-tail centerline, then reopen.",
+        "Fold the two corners of one long edge inward to the centerline, making a broad triangular nose.",
+        "Fold the nose tip back about 3 cm to make a blunt, layered leading edge.",
+        "Fold the sheet in half along its centerline with the nose folds on the outside.",
+        "Fold each wing down parallel to the centerline, leaving a narrow keel about 1 cm deep.",
+        "Open the wide wings and lift their tips evenly. Keep the trailing edges straight before adding any trim."
+      ]
+    },
+    {
+      "id": "delta-wing",
+      "name": "Delta Wing",
+      "category": "Swept wing",
+      "subtitle": "A clean triangular planform",
+      "description": "Swept leading edges and a compact triangular wing offer a balance between the dart and the broad gliders. Symmetrical folds matter to its straight flight.",
+      "color": "#e7b968",
+      "shape": "delta",
+      "mass": 0.0049896,
+      "wingArea": 0.0191,
+      "span": 0.211,
+      "length": 0.243,
+      "cd0": 0.038,
+      "liftSlope": 2.95,
+      "maxCl": 0.96,
+      "trimAngle": 4.8,
+      "stability": 0.8,
+      "dihedral": 4,
+      "foldSteps": [
+        "Place an A4 sheet in portrait orientation, crease it lengthwise in half, and reopen.",
+        "Fold both top corners to the centerline to form a pointed nose.",
+        "Fold each sloping leading edge toward the centerline, stopping short of the center so the nose stays broad.",
+        "Fold a small part of the pointed tip inward to reinforce the nose.",
+        "Fold the sheet in half along the centerline with the nose layers outside.",
+        "Fold the wings down along matching lines that run from the nose toward the rear corners, leaving a slim center keel.",
+        "Spread the triangular wings and raise both tips slightly; flatten any twist along the swept leading edges."
+      ]
+    },
+    {
+      "id": "condor",
+      "name": "Condor",
+      "category": "Broad glider",
+      "subtitle": "Long wings, soft release",
+      "description": "Long wings with small upright tips provide a broad lifting surface. A rolled front fold adds nose weight, while the raised tips help the wings resist uneven handling.",
+      "color": "#b3c981",
+      "shape": "glider",
+      "mass": 0.0049896,
+      "wingArea": 0.0242,
+      "span": 0.292,
+      "length": 0.184,
+      "cd0": 0.049,
+      "liftSlope": 3.6,
+      "maxCl": 1.12,
+      "trimAngle": 5.8,
+      "stability": 0.82,
+      "dihedral": 10,
+      "foldSteps": [
+        "Lay an A4 sheet in landscape orientation. Mark the nose-to-tail centerline by folding across the middle and reopening.",
+        "Fold one long edge down about 1.5 cm, then fold that strip over once more to make a weighted straight nose.",
+        "Fold the two nose corners inward as small matching triangles to soften the front corners.",
+        "Fold the sheet in half along the centerline with the weighted nose layers outside.",
+        "Fold broad wings down parallel to the centerline, leaving a center keel about 1 cm deep.",
+        "Fold a narrow strip at each wing tip upward to make matching small fins.",
+        "Open the wings and give them a gentle upward V. Check that both tip fins stand at the same angle."
+      ]
+    },
+    {
+      "id": "needle",
+      "name": "Needle",
+      "category": "Narrow dart",
+      "subtitle": "Slim and fast to launch",
+      "description": "A very narrow wing and long reinforced nose concentrate the sheet into a slender dart. It needs more airspeed to support its weight than the larger-wing designs.",
+      "color": "#b19bd8",
+      "shape": "needle",
+      "mass": 0.0049896,
+      "wingArea": 0.0104,
+      "span": 0.12,
+      "length": 0.287,
+      "cd0": 0.031,
+      "liftSlope": 2.3,
+      "maxCl": 0.74,
+      "trimAngle": 4,
+      "stability": 0.9,
+      "dihedral": 3,
+      "foldSteps": [
+        "Start with an A4 sheet in portrait orientation. Make a lengthwise center crease and reopen.",
+        "Fold both top corners to the centerline.",
+        "Fold the two sloping edges inward to the centerline again to make a longer nose.",
+        "Fold the new outer sloping edges inward once more, keeping both sides aligned.",
+        "Fold the plane in half along the centerline with the folded layers outside.",
+        "Fold two narrow wings downward, leaving a deep center keel and matching the rear corners.",
+        "Spread the wings just above level. Keep both leading edges straight and use only a very small trailing-edge trim."
+      ]
+    },
+    {
+      "id": "canard",
+      "name": "Canard",
+      "category": "Foreplane",
+      "subtitle": "A little lift up front",
+      "description": "Small forward tabs sit ahead of the main wings. This representative canard has a layered nose and more profile drag, with trim that is sensitive to the foreplane angle.",
+      "color": "#d997b4",
+      "shape": "canard",
+      "mass": 0.0049896,
+      "wingArea": 0.0205,
+      "span": 0.239,
+      "length": 0.202,
+      "cd0": 0.054,
+      "liftSlope": 3.15,
+      "maxCl": 1.05,
+      "trimAngle": 6,
+      "stability": 0.71,
+      "dihedral": 6,
+      "foldSteps": [
+        "With an A4 sheet in portrait orientation, make a lengthwise center crease and reopen.",
+        "Fold both top corners inward to the centerline to form a triangular nose.",
+        "Fold the pointed nose downward across the base of the triangle, leaving the nose layers accessible.",
+        "Fold the new top corners inward partway, leaving two matching short triangular tabs at the front.",
+        "Fold the plane in half along the centerline with those front tabs on the outside.",
+        "Fold the large rear wings down, starting the wing creases behind the front tabs and leaving a small center keel.",
+        "Open the front tabs outward as two small foreplanes, keeping their size and angle equal.",
+        "Open the main wings into a gentle upward V. Adjust the front tabs by tiny equal amounts when trimming."
+      ]
+    },
+    {
+      "id": "swallow",
+      "name": "Swallow",
+      "category": "Stunt glider",
+      "subtitle": "Responsive to a little trim",
+      "description": "Swept wings and folded rear tips make a responsive glider. Lower modeled stability lets launch angle and trim change its path more strongly than the locked designs.",
+      "color": "#78bec8",
+      "shape": "stunt",
+      "mass": 0.0049896,
+      "wingArea": 0.0174,
+      "span": 0.226,
+      "length": 0.224,
+      "cd0": 0.059,
+      "liftSlope": 3.2,
+      "maxCl": 1,
+      "trimAngle": 6.2,
+      "stability": 0.58,
+      "dihedral": 3,
+      "foldSteps": [
+        "Place an A4 sheet in portrait orientation, crease it lengthwise in half, and reopen.",
+        "Fold the top corners to the centerline to make a triangular nose.",
+        "Fold the nose tip downward about 4 cm to reinforce it and shorten the point.",
+        "Fold the outer nose edges inward once more, keeping the left and right folds symmetrical.",
+        "Fold the plane in half along the centerline and fold two broad swept wings down, leaving a small keel.",
+        "Fold each rear outer corner upward as a small matching triangular wingtip, giving the back corners an angled silhouette.",
+        "Open the wings almost level. Start with straight trailing edges, then add tiny equal upward trim folds for a looping tendency."
+      ]
+    }
+  ],
+  "baseline": [
+    {
+      "rank": 1,
+      "designId": "condor",
+      "name": "Condor",
+      "flight": {
+        "designId": "condor",
+        "settings": {
+          "speed": 7,
+          "angle": 12,
+          "height": 1.8,
+          "windSpeed": 0,
+          "windDirection": 0,
+          "turbulence": 0,
+          "paperWeight": 80,
+          "trim": 0,
+          "seed": 42,
+          "maxTime": 60,
+          "dt": 0.008333333333333333
+        },
+        "duration": 5.372410114155265,
+        "distance": 15.928861158178876,
+        "maxHeight": 2.927097231932335,
+        "finalSpeed": 2.9314969199783185,
+        "landed": true,
+        "truncated": false,
+        "stallEvents": 1
+      }
+    },
+    {
+      "rank": 2,
+      "designId": "wide-glider",
+      "name": "Wide Glider",
+      "flight": {
+        "designId": "wide-glider",
+        "settings": {
+          "speed": 7,
+          "angle": 12,
+          "height": 1.8,
+          "windSpeed": 0,
+          "windDirection": 0,
+          "turbulence": 0,
+          "paperWeight": 80,
+          "trim": 0,
+          "seed": 42,
+          "maxTime": 60,
+          "dt": 0.008333333333333333
+        },
+        "duration": 5.106201771120862,
+        "distance": 15.91337392823187,
+        "maxHeight": 2.9291100079365915,
+        "finalSpeed": 3.3013077256662178,
+        "landed": true,
+        "truncated": false,
+        "stallEvents": 1
+      }
+    },
+    {
+      "rank": 3,
+      "designId": "nakamura-lock",
+      "name": "Nakamura Lock",
+      "flight": {
+        "designId": "nakamura-lock",
+        "settings": {
+          "speed": 7,
+          "angle": 12,
+          "height": 1.8,
+          "windSpeed": 0,
+          "windDirection": 0,
+          "turbulence": 0,
+          "paperWeight": 80,
+          "trim": 0,
+          "seed": 42,
+          "maxTime": 60,
+          "dt": 0.008333333333333333
+        },
+        "duration": 4.670957399487489,
+        "distance": 15.528031907084124,
+        "maxHeight": 2.986153084694811,
+        "finalSpeed": 3.9013409440821,
+        "landed": true,
+        "truncated": false,
+        "stallEvents": 1
+      }
+    },
+    {
+      "rank": 4,
+      "designId": "canard",
+      "name": "Canard",
+      "flight": {
+        "designId": "canard",
+        "settings": {
+          "speed": 7,
+          "angle": 12,
+          "height": 1.8,
+          "windSpeed": 0,
+          "windDirection": 0,
+          "turbulence": 0,
+          "paperWeight": 80,
+          "trim": 0,
+          "seed": 42,
+          "maxTime": 60,
+          "dt": 0.008333333333333333
+        },
+        "duration": 4.217338301142482,
+        "distance": 13.110094592528233,
+        "maxHeight": 2.8617789749096025,
+        "finalSpeed": 3.7679505249402583,
+        "landed": true,
+        "truncated": false,
+        "stallEvents": 1
+      }
+    },
+    {
+      "rank": 5,
+      "designId": "delta-wing",
+      "name": "Delta Wing",
+      "flight": {
+        "designId": "delta-wing",
+        "settings": {
+          "speed": 7,
+          "angle": 12,
+          "height": 1.8,
+          "windSpeed": 0,
+          "windDirection": 0,
+          "turbulence": 0,
+          "paperWeight": 80,
+          "trim": 0,
+          "seed": 42,
+          "maxTime": 60,
+          "dt": 0.008333333333333333
+        },
+        "duration": 4.110049257340624,
+        "distance": 13.859432462453109,
+        "maxHeight": 2.910761382321234,
+        "finalSpeed": 4.7526633976878365,
+        "landed": true,
+        "truncated": false,
+        "stallEvents": 1
+      }
+    },
+    {
+      "rank": 6,
+      "designId": "swallow",
+      "name": "Swallow",
+      "flight": {
+        "designId": "swallow",
+        "settings": {
+          "speed": 7,
+          "angle": 12,
+          "height": 1.8,
+          "windSpeed": 0,
+          "windDirection": 0,
+          "turbulence": 0,
+          "paperWeight": 80,
+          "trim": 0,
+          "seed": 42,
+          "maxTime": 60,
+          "dt": 0.008333333333333333
+        },
+        "duration": 3.937501801727316,
+        "distance": 12.60474756258187,
+        "maxHeight": 2.8384554340549824,
+        "finalSpeed": 4.024184125622525,
+        "landed": true,
+        "truncated": false,
+        "stallEvents": 1
+      }
+    },
+    {
+      "rank": 7,
+      "designId": "classic-dart",
+      "name": "Classic Dart",
+      "flight": {
+        "designId": "classic-dart",
+        "settings": {
+          "speed": 7,
+          "angle": 12,
+          "height": 1.8,
+          "windSpeed": 0,
+          "windDirection": 0,
+          "turbulence": 0,
+          "paperWeight": 80,
+          "trim": 0,
+          "seed": 42,
+          "maxTime": 60,
+          "dt": 0.008333333333333333
+        },
+        "duration": 3.399620379431511,
+        "distance": 13.430237807716264,
+        "maxHeight": 2.7311874624467607,
+        "finalSpeed": 5.65490023144781,
+        "landed": true,
+        "truncated": false,
+        "stallEvents": 0
+      }
+    },
+    {
+      "rank": 8,
+      "designId": "needle",
+      "name": "Needle",
+      "flight": {
+        "designId": "needle",
+        "settings": {
+          "speed": 7,
+          "angle": 12,
+          "height": 1.8,
+          "windSpeed": 0,
+          "windDirection": 0,
+          "turbulence": 0,
+          "paperWeight": 80,
+          "trim": 0,
+          "seed": 42,
+          "maxTime": 60,
+          "dt": 0.008333333333333333
+        },
+        "duration": 2.8888387718839,
+        "distance": 13.015279820695769,
+        "maxHeight": 2.519389977206607,
+        "finalSpeed": 5.976667534611806,
+        "landed": true,
+        "truncated": false,
+        "stallEvents": 0
+      }
+    }
+  ],
+  "optimization": {
+    "ranges": {
+      "angles": [
+        0,
+        5,
+        10,
+        15,
+        20,
+        25,
+        30
+      ],
+      "speeds": [
+        4,
+        5.5,
+        7,
+        8.5,
+        10
+      ],
+      "trims": [
+        -2,
+        0,
+        2
+      ]
+    },
+    "trials": 840,
+    "trialsPerDesign": 105,
+    "changedVariables": [
+      "angle",
+      "speed",
+      "trim"
+    ],
+    "sharedVariables": [
+      "height",
+      "windSpeed",
+      "windDirection",
+      "turbulence",
+      "paperWeight",
+      "seed",
+      "maxTime",
+      "dt"
+    ],
+    "ranking": [
+      {
+        "rank": 1,
+        "designId": "wide-glider",
+        "name": "Wide Glider",
+        "flight": {
+          "designId": "wide-glider",
+          "settings": {
+            "speed": 8.5,
+            "angle": 0,
+            "height": 1.8,
+            "windSpeed": 0,
+            "windDirection": 0,
+            "turbulence": 0,
+            "paperWeight": 80,
+            "trim": 2,
+            "seed": 42,
+            "maxTime": 60,
+            "dt": 0.008333333333333333
+          },
+          "duration": 6.856440879947995,
+          "distance": 20.143145356579236,
+          "maxHeight": 3.023839823414341,
+          "finalSpeed": 2.8152478596349724,
+          "landed": true,
+          "truncated": false,
+          "stallEvents": 1
+        }
+      },
+      {
+        "rank": 2,
+        "designId": "condor",
+        "name": "Condor",
+        "flight": {
+          "designId": "condor",
+          "settings": {
+            "speed": 7,
+            "angle": 0,
+            "height": 1.8,
+            "windSpeed": 0,
+            "windDirection": 0,
+            "turbulence": 0,
+            "paperWeight": 80,
+            "trim": 2,
+            "seed": 42,
+            "maxTime": 60,
+            "dt": 0.008333333333333333
+          },
+          "duration": 6.709833845665092,
+          "distance": 17.958915047065542,
+          "maxHeight": 2.67867749372578,
+          "finalSpeed": 2.6086857735041913,
+          "landed": true,
+          "truncated": false,
+          "stallEvents": 1
+        }
+      },
+      {
+        "rank": 3,
+        "designId": "nakamura-lock",
+        "name": "Nakamura Lock",
+        "flight": {
+          "designId": "nakamura-lock",
+          "settings": {
+            "speed": 8.5,
+            "angle": 0,
+            "height": 1.8,
+            "windSpeed": 0,
+            "windDirection": 0,
+            "turbulence": 0,
+            "paperWeight": 80,
+            "trim": 2,
+            "seed": 42,
+            "maxTime": 60,
+            "dt": 0.008333333333333333
+          },
+          "duration": 6.458541042977336,
+          "distance": 20.745744949423386,
+          "maxHeight": 3.150195474054808,
+          "finalSpeed": 2.9232490828476947,
+          "landed": true,
+          "truncated": false,
+          "stallEvents": 1
+        }
+      },
+      {
+        "rank": 4,
+        "designId": "delta-wing",
+        "name": "Delta Wing",
+        "flight": {
+          "designId": "delta-wing",
+          "settings": {
+            "speed": 10,
+            "angle": 0,
+            "height": 1.8,
+            "windSpeed": 0,
+            "windDirection": 0,
+            "turbulence": 0,
+            "paperWeight": 80,
+            "trim": 2,
+            "seed": 42,
+            "maxTime": 60,
+            "dt": 0.008333333333333333
+          },
+          "duration": 5.883976071426066,
+          "distance": 21.96272517250889,
+          "maxHeight": 3.5153604752543215,
+          "finalSpeed": 3.2806391083887774,
+          "landed": true,
+          "truncated": false,
+          "stallEvents": 1
+        }
+      },
+      {
+        "rank": 5,
+        "designId": "canard",
+        "name": "Canard",
+        "flight": {
+          "designId": "canard",
+          "settings": {
+            "speed": 8.5,
+            "angle": 0,
+            "height": 1.8,
+            "windSpeed": 0,
+            "windDirection": 0,
+            "turbulence": 0,
+            "paperWeight": 80,
+            "trim": 2,
+            "seed": 42,
+            "maxTime": 60,
+            "dt": 0.008333333333333333
+          },
+          "duration": 5.43791179735233,
+          "distance": 16.933501919626803,
+          "maxHeight": 2.9410291002715305,
+          "finalSpeed": 2.8325421423487733,
+          "landed": true,
+          "truncated": false,
+          "stallEvents": 1
+        }
+      },
+      {
+        "rank": 6,
+        "designId": "swallow",
+        "name": "Swallow",
+        "flight": {
+          "designId": "swallow",
+          "settings": {
+            "speed": 8.5,
+            "angle": 0,
+            "height": 1.8,
+            "windSpeed": 0,
+            "windDirection": 0,
+            "turbulence": 0,
+            "paperWeight": 80,
+            "trim": 2,
+            "seed": 42,
+            "maxTime": 60,
+            "dt": 0.008333333333333333
+          },
+          "duration": 4.793019035605219,
+          "distance": 15.899774711635862,
+          "maxHeight": 2.904661962991943,
+          "finalSpeed": 3.246477532490643,
+          "landed": true,
+          "truncated": false,
+          "stallEvents": 1
+        }
+      },
+      {
+        "rank": 7,
+        "designId": "classic-dart",
+        "name": "Classic Dart",
+        "flight": {
+          "designId": "classic-dart",
+          "settings": {
+            "speed": 10,
+            "angle": 0,
+            "height": 1.8,
+            "windSpeed": 0,
+            "windDirection": 0,
+            "turbulence": 0,
+            "paperWeight": 80,
+            "trim": 2,
+            "seed": 42,
+            "maxTime": 60,
+            "dt": 0.008333333333333333
+          },
+          "duration": 4.46014958124203,
+          "distance": 19.938883102007473,
+          "maxHeight": 3.529712478990257,
+          "finalSpeed": 5.626771809494846,
+          "landed": true,
+          "truncated": false,
+          "stallEvents": 1
+        }
+      },
+      {
+        "rank": 8,
+        "designId": "needle",
+        "name": "Needle",
+        "flight": {
+          "designId": "needle",
+          "settings": {
+            "speed": 10,
+            "angle": 0,
+            "height": 1.8,
+            "windSpeed": 0,
+            "windDirection": 0,
+            "turbulence": 0,
+            "paperWeight": 80,
+            "trim": 2,
+            "seed": 42,
+            "maxTime": 60,
+            "dt": 0.008333333333333333
+          },
+          "duration": 4.0577161096220316,
+          "distance": 19.948296148811977,
+          "maxHeight": 3.3032132912390826,
+          "finalSpeed": 6.214870105614254,
+          "landed": true,
+          "truncated": false,
+          "stallEvents": 0
+        }
+      }
+    ]
+  },
+  "convergence": {
+    "selectedLaunchWinnerStable": true,
+    "fullGridWinnerStable": true,
+    "additionalGridTrials": 1680,
+    "fullGridSearchTrials": 2520,
+    "note": "Selected launches are replayed and the full equal-budget grid is independently repeated at finer steps. Numerical sensitivity is not physical validation.",
+    "steps": [
+      {
+        "dt": 0.008333333333333333,
+        "ranking": [
+          {
+            "rank": 1,
+            "designId": "wide-glider",
+            "name": "Wide Glider",
+            "flight": {
+              "designId": "wide-glider",
+              "settings": {
+                "speed": 8.5,
+                "angle": 0,
+                "height": 1.8,
+                "windSpeed": 0,
+                "windDirection": 0,
+                "turbulence": 0,
+                "paperWeight": 80,
+                "trim": 2,
+                "seed": 42,
+                "maxTime": 60,
+                "dt": 0.008333333333333333
+              },
+              "duration": 6.856440879947995,
+              "distance": 20.143145356579236,
+              "maxHeight": 3.023839823414341,
+              "finalSpeed": 2.8152478596349724,
+              "landed": true,
+              "truncated": false,
+              "stallEvents": 1
+            }
+          },
+          {
+            "rank": 2,
+            "designId": "condor",
+            "name": "Condor",
+            "flight": {
+              "designId": "condor",
+              "settings": {
+                "speed": 7,
+                "angle": 0,
+                "height": 1.8,
+                "windSpeed": 0,
+                "windDirection": 0,
+                "turbulence": 0,
+                "paperWeight": 80,
+                "trim": 2,
+                "seed": 42,
+                "maxTime": 60,
+                "dt": 0.008333333333333333
+              },
+              "duration": 6.709833845665092,
+              "distance": 17.958915047065542,
+              "maxHeight": 2.67867749372578,
+              "finalSpeed": 2.6086857735041913,
+              "landed": true,
+              "truncated": false,
+              "stallEvents": 1
+            }
+          },
+          {
+            "rank": 3,
+            "designId": "nakamura-lock",
+            "name": "Nakamura Lock",
+            "flight": {
+              "designId": "nakamura-lock",
+              "settings": {
+                "speed": 8.5,
+                "angle": 0,
+                "height": 1.8,
+                "windSpeed": 0,
+                "windDirection": 0,
+                "turbulence": 0,
+                "paperWeight": 80,
+                "trim": 2,
+                "seed": 42,
+                "maxTime": 60,
+                "dt": 0.008333333333333333
+              },
+              "duration": 6.458541042977336,
+              "distance": 20.745744949423386,
+              "maxHeight": 3.150195474054808,
+              "finalSpeed": 2.9232490828476947,
+              "landed": true,
+              "truncated": false,
+              "stallEvents": 1
+            }
+          },
+          {
+            "rank": 4,
+            "designId": "delta-wing",
+            "name": "Delta Wing",
+            "flight": {
+              "designId": "delta-wing",
+              "settings": {
+                "speed": 10,
+                "angle": 0,
+                "height": 1.8,
+                "windSpeed": 0,
+                "windDirection": 0,
+                "turbulence": 0,
+                "paperWeight": 80,
+                "trim": 2,
+                "seed": 42,
+                "maxTime": 60,
+                "dt": 0.008333333333333333
+              },
+              "duration": 5.883976071426066,
+              "distance": 21.96272517250889,
+              "maxHeight": 3.5153604752543215,
+              "finalSpeed": 3.2806391083887774,
+              "landed": true,
+              "truncated": false,
+              "stallEvents": 1
+            }
+          },
+          {
+            "rank": 5,
+            "designId": "canard",
+            "name": "Canard",
+            "flight": {
+              "designId": "canard",
+              "settings": {
+                "speed": 8.5,
+                "angle": 0,
+                "height": 1.8,
+                "windSpeed": 0,
+                "windDirection": 0,
+                "turbulence": 0,
+                "paperWeight": 80,
+                "trim": 2,
+                "seed": 42,
+                "maxTime": 60,
+                "dt": 0.008333333333333333
+              },
+              "duration": 5.43791179735233,
+              "distance": 16.933501919626803,
+              "maxHeight": 2.9410291002715305,
+              "finalSpeed": 2.8325421423487733,
+              "landed": true,
+              "truncated": false,
+              "stallEvents": 1
+            }
+          },
+          {
+            "rank": 6,
+            "designId": "swallow",
+            "name": "Swallow",
+            "flight": {
+              "designId": "swallow",
+              "settings": {
+                "speed": 8.5,
+                "angle": 0,
+                "height": 1.8,
+                "windSpeed": 0,
+                "windDirection": 0,
+                "turbulence": 0,
+                "paperWeight": 80,
+                "trim": 2,
+                "seed": 42,
+                "maxTime": 60,
+                "dt": 0.008333333333333333
+              },
+              "duration": 4.793019035605219,
+              "distance": 15.899774711635862,
+              "maxHeight": 2.904661962991943,
+              "finalSpeed": 3.246477532490643,
+              "landed": true,
+              "truncated": false,
+              "stallEvents": 1
+            }
+          },
+          {
+            "rank": 7,
+            "designId": "classic-dart",
+            "name": "Classic Dart",
+            "flight": {
+              "designId": "classic-dart",
+              "settings": {
+                "speed": 10,
+                "angle": 0,
+                "height": 1.8,
+                "windSpeed": 0,
+                "windDirection": 0,
+                "turbulence": 0,
+                "paperWeight": 80,
+                "trim": 2,
+                "seed": 42,
+                "maxTime": 60,
+                "dt": 0.008333333333333333
+              },
+              "duration": 4.46014958124203,
+              "distance": 19.938883102007473,
+              "maxHeight": 3.529712478990257,
+              "finalSpeed": 5.626771809494846,
+              "landed": true,
+              "truncated": false,
+              "stallEvents": 1
+            }
+          },
+          {
+            "rank": 8,
+            "designId": "needle",
+            "name": "Needle",
+            "flight": {
+              "designId": "needle",
+              "settings": {
+                "speed": 10,
+                "angle": 0,
+                "height": 1.8,
+                "windSpeed": 0,
+                "windDirection": 0,
+                "turbulence": 0,
+                "paperWeight": 80,
+                "trim": 2,
+                "seed": 42,
+                "maxTime": 60,
+                "dt": 0.008333333333333333
+              },
+              "duration": 4.0577161096220316,
+              "distance": 19.948296148811977,
+              "maxHeight": 3.3032132912390826,
+              "finalSpeed": 6.214870105614254,
+              "landed": true,
+              "truncated": false,
+              "stallEvents": 0
+            }
+          }
+        ]
+      },
+      {
+        "dt": 0.004166666666666667,
+        "ranking": [
+          {
+            "rank": 1,
+            "designId": "wide-glider",
+            "name": "Wide Glider",
+            "flight": {
+              "designId": "wide-glider",
+              "settings": {
+                "speed": 8.5,
+                "angle": 0,
+                "height": 1.8,
+                "windSpeed": 0,
+                "windDirection": 0,
+                "turbulence": 0,
+                "paperWeight": 80,
+                "trim": 2,
+                "seed": 42,
+                "maxTime": 60,
+                "dt": 0.004166666666666667
+              },
+              "duration": 6.868271028908654,
+              "distance": 20.11099388422502,
+              "maxHeight": 3.0295860882467363,
+              "finalSpeed": 2.808189634730304,
+              "landed": true,
+              "truncated": false,
+              "stallEvents": 1
+            }
+          },
+          {
+            "rank": 2,
+            "designId": "condor",
+            "name": "Condor",
+            "flight": {
+              "designId": "condor",
+              "settings": {
+                "speed": 7,
+                "angle": 0,
+                "height": 1.8,
+                "windSpeed": 0,
+                "windDirection": 0,
+                "turbulence": 0,
+                "paperWeight": 80,
+                "trim": 2,
+                "seed": 42,
+                "maxTime": 60,
+                "dt": 0.004166666666666667
+              },
+              "duration": 6.734275717971512,
+              "distance": 17.958370878767777,
+              "maxHeight": 2.6843167909308465,
+              "finalSpeed": 2.6011550347102856,
+              "landed": true,
+              "truncated": false,
+              "stallEvents": 1
+            }
+          },
+          {
+            "rank": 3,
+            "designId": "nakamura-lock",
+            "name": "Nakamura Lock",
+            "flight": {
+              "designId": "nakamura-lock",
+              "settings": {
+                "speed": 8.5,
+                "angle": 0,
+                "height": 1.8,
+                "windSpeed": 0,
+                "windDirection": 0,
+                "turbulence": 0,
+                "paperWeight": 80,
+                "trim": 2,
+                "seed": 42,
+                "maxTime": 60,
+                "dt": 0.004166666666666667
+              },
+              "duration": 6.45932583231285,
+              "distance": 20.693472001260133,
+              "maxHeight": 3.1574111731458254,
+              "finalSpeed": 2.9169312418356,
+              "landed": true,
+              "truncated": false,
+              "stallEvents": 1
+            }
+          },
+          {
+            "rank": 4,
+            "designId": "delta-wing",
+            "name": "Delta Wing",
+            "flight": {
+              "designId": "delta-wing",
+              "settings": {
+                "speed": 10,
+                "angle": 0,
+                "height": 1.8,
+                "windSpeed": 0,
+                "windDirection": 0,
+                "turbulence": 0,
+                "paperWeight": 80,
+                "trim": 2,
+                "seed": 42,
+                "maxTime": 60,
+                "dt": 0.004166666666666667
+              },
+              "duration": 5.899725485180465,
+              "distance": 21.9779986133596,
+              "maxHeight": 3.524048474495287,
+              "finalSpeed": 3.2421683050185535,
+              "landed": true,
+              "truncated": false,
+              "stallEvents": 1
+            }
+          },
+          {
+            "rank": 5,
+            "designId": "canard",
+            "name": "Canard",
+            "flight": {
+              "designId": "canard",
+              "settings": {
+                "speed": 8.5,
+                "angle": 0,
+                "height": 1.8,
+                "windSpeed": 0,
+                "windDirection": 0,
+                "turbulence": 0,
+                "paperWeight": 80,
+                "trim": 2,
+                "seed": 42,
+                "maxTime": 60,
+                "dt": 0.004166666666666667
+              },
+              "duration": 5.450664135584598,
+              "distance": 16.934533202031606,
+              "maxHeight": 2.947355907871435,
+              "finalSpeed": 2.8127848000473654,
+              "landed": true,
+              "truncated": false,
+              "stallEvents": 1
+            }
+          },
+          {
+            "rank": 6,
+            "designId": "swallow",
+            "name": "Swallow",
+            "flight": {
+              "designId": "swallow",
+              "settings": {
+                "speed": 8.5,
+                "angle": 0,
+                "height": 1.8,
+                "windSpeed": 0,
+                "windDirection": 0,
+                "turbulence": 0,
+                "paperWeight": 80,
+                "trim": 2,
+                "seed": 42,
+                "maxTime": 60,
+                "dt": 0.004166666666666667
+              },
+              "duration": 4.790275881914926,
+              "distance": 15.881079696468566,
+              "maxHeight": 2.91226338243639,
+              "finalSpeed": 3.2272621024165735,
+              "landed": true,
+              "truncated": false,
+              "stallEvents": 1
+            }
+          },
+          {
+            "rank": 7,
+            "designId": "classic-dart",
+            "name": "Classic Dart",
+            "flight": {
+              "designId": "classic-dart",
+              "settings": {
+                "speed": 10,
+                "angle": 0,
+                "height": 1.8,
+                "windSpeed": 0,
+                "windDirection": 0,
+                "turbulence": 0,
+                "paperWeight": 80,
+                "trim": 2,
+                "seed": 42,
+                "maxTime": 60,
+                "dt": 0.004166666666666667
+              },
+              "duration": 4.464046152552526,
+              "distance": 19.95547540979047,
+              "maxHeight": 3.5417021692278174,
+              "finalSpeed": 5.616739619115093,
+              "landed": true,
+              "truncated": false,
+              "stallEvents": 1
+            }
+          },
+          {
+            "rank": 8,
+            "designId": "needle",
+            "name": "Needle",
+            "flight": {
+              "designId": "needle",
+              "settings": {
+                "speed": 10,
+                "angle": 0,
+                "height": 1.8,
+                "windSpeed": 0,
+                "windDirection": 0,
+                "turbulence": 0,
+                "paperWeight": 80,
+                "trim": 2,
+                "seed": 42,
+                "maxTime": 60,
+                "dt": 0.004166666666666667
+              },
+              "duration": 4.0593159614513565,
+              "distance": 19.918153255912102,
+              "maxHeight": 3.313437222912147,
+              "finalSpeed": 6.217515706852663,
+              "landed": true,
+              "truncated": false,
+              "stallEvents": 0
+            }
+          }
+        ]
+      },
+      {
+        "dt": 0.0020833333333333333,
+        "ranking": [
+          {
+            "rank": 1,
+            "designId": "wide-glider",
+            "name": "Wide Glider",
+            "flight": {
+              "designId": "wide-glider",
+              "settings": {
+                "speed": 8.5,
+                "angle": 0,
+                "height": 1.8,
+                "windSpeed": 0,
+                "windDirection": 0,
+                "turbulence": 0,
+                "paperWeight": 80,
+                "trim": 2,
+                "seed": 42,
+                "maxTime": 60,
+                "dt": 0.0020833333333333333
+              },
+              "duration": 6.8659290953997605,
+              "distance": 20.0897767865101,
+              "maxHeight": 3.0331962294478982,
+              "finalSpeed": 2.8065593739528434,
+              "landed": true,
+              "truncated": false,
+              "stallEvents": 1
+            }
+          },
+          {
+            "rank": 2,
+            "designId": "condor",
+            "name": "Condor",
+            "flight": {
+              "designId": "condor",
+              "settings": {
+                "speed": 7,
+                "angle": 0,
+                "height": 1.8,
+                "windSpeed": 0,
+                "windDirection": 0,
+                "turbulence": 0,
+                "paperWeight": 80,
+                "trim": 2,
+                "seed": 42,
+                "maxTime": 60,
+                "dt": 0.0020833333333333333
+              },
+              "duration": 6.7381484051706515,
+              "distance": 17.953221932672637,
+              "maxHeight": 2.686773397827922,
+              "finalSpeed": 2.5993857840856363,
+              "landed": true,
+              "truncated": false,
+              "stallEvents": 1
+            }
+          },
+          {
+            "rank": 3,
+            "designId": "nakamura-lock",
+            "name": "Nakamura Lock",
+            "flight": {
+              "designId": "nakamura-lock",
+              "settings": {
+                "speed": 8.5,
+                "angle": 0,
+                "height": 1.8,
+                "windSpeed": 0,
+                "windDirection": 0,
+                "turbulence": 0,
+                "paperWeight": 80,
+                "trim": 2,
+                "seed": 42,
+                "maxTime": 60,
+                "dt": 0.0020833333333333333
+              },
+              "duration": 6.457343831663823,
+              "distance": 20.674457791582316,
+              "maxHeight": 3.1601972834871868,
+              "finalSpeed": 2.914852495635402,
+              "landed": true,
+              "truncated": false,
+              "stallEvents": 1
+            }
+          },
+          {
+            "rank": 4,
+            "designId": "delta-wing",
+            "name": "Delta Wing",
+            "flight": {
+              "designId": "delta-wing",
+              "settings": {
+                "speed": 10,
+                "angle": 0,
+                "height": 1.8,
+                "windSpeed": 0,
+                "windDirection": 0,
+                "turbulence": 0,
+                "paperWeight": 80,
+                "trim": 2,
+                "seed": 42,
+                "maxTime": 60,
+                "dt": 0.0020833333333333333
+              },
+              "duration": 5.900524814765258,
+              "distance": 21.971843976053155,
+              "maxHeight": 3.5275697258422425,
+              "finalSpeed": 3.23366393531441,
+              "landed": true,
+              "truncated": false,
+              "stallEvents": 1
+            }
+          },
+          {
+            "rank": 5,
+            "designId": "canard",
+            "name": "Canard",
+            "flight": {
+              "designId": "canard",
+              "settings": {
+                "speed": 8.5,
+                "angle": 0,
+                "height": 1.8,
+                "windSpeed": 0,
+                "windDirection": 0,
+                "turbulence": 0,
+                "paperWeight": 80,
+                "trim": 2,
+                "seed": 42,
+                "maxTime": 60,
+                "dt": 0.0020833333333333333
+              },
+              "duration": 5.452264470222632,
+              "distance": 16.930218953526598,
+              "maxHeight": 2.9498580582427505,
+              "finalSpeed": 2.808121039973179,
+              "landed": true,
+              "truncated": false,
+              "stallEvents": 1
+            }
+          },
+          {
+            "rank": 6,
+            "designId": "swallow",
+            "name": "Swallow",
+            "flight": {
+              "designId": "swallow",
+              "settings": {
+                "speed": 8.5,
+                "angle": 0,
+                "height": 1.8,
+                "windSpeed": 0,
+                "windDirection": 0,
+                "turbulence": 0,
+                "paperWeight": 80,
+                "trim": 2,
+                "seed": 42,
+                "maxTime": 60,
+                "dt": 0.0020833333333333333
+              },
+              "duration": 4.7896236638052425,
+              "distance": 15.875433826523668,
+              "maxHeight": 2.9141636913376425,
+              "finalSpeed": 3.2230473911027775,
+              "landed": true,
+              "truncated": false,
+              "stallEvents": 1
+            }
+          },
+          {
+            "rank": 7,
+            "designId": "classic-dart",
+            "name": "Classic Dart",
+            "flight": {
+              "designId": "classic-dart",
+              "settings": {
+                "speed": 10,
+                "angle": 0,
+                "height": 1.8,
+                "windSpeed": 0,
+                "windDirection": 0,
+                "turbulence": 0,
+                "paperWeight": 80,
+                "trim": 2,
+                "seed": 42,
+                "maxTime": 60,
+                "dt": 0.0020833333333333333
+              },
+              "duration": 4.465341487886306,
+              "distance": 19.9605195097657,
+              "maxHeight": 3.5443728688731566,
+              "finalSpeed": 5.614030607574368,
+              "landed": true,
+              "truncated": false,
+              "stallEvents": 1
+            }
+          },
+          {
+            "rank": 8,
+            "designId": "needle",
+            "name": "Needle",
+            "flight": {
+              "designId": "needle",
+              "settings": {
+                "speed": 10,
+                "angle": 0,
+                "height": 1.8,
+                "windSpeed": 0,
+                "windDirection": 0,
+                "turbulence": 0,
+                "paperWeight": 80,
+                "trim": 2,
+                "seed": 42,
+                "maxTime": 60,
+                "dt": 0.0020833333333333333
+              },
+              "duration": 4.05994597106497,
+              "distance": 19.911624657824078,
+              "maxHeight": 3.315791156354268,
+              "finalSpeed": 6.217854594684809,
+              "landed": true,
+              "truncated": false,
+              "stallEvents": 0
+            }
+          }
+        ]
+      }
+    ],
+    "gridSearchSteps": [
+      {
+        "dt": 0.008333333333333333,
+        "trials": 840,
+        "ranking": [
+          {
+            "rank": 1,
+            "designId": "wide-glider",
+            "name": "Wide Glider",
+            "flight": {
+              "designId": "wide-glider",
+              "settings": {
+                "speed": 8.5,
+                "angle": 0,
+                "height": 1.8,
+                "windSpeed": 0,
+                "windDirection": 0,
+                "turbulence": 0,
+                "paperWeight": 80,
+                "trim": 2,
+                "seed": 42,
+                "maxTime": 60,
+                "dt": 0.008333333333333333
+              },
+              "duration": 6.856440879947995,
+              "distance": 20.143145356579236,
+              "maxHeight": 3.023839823414341,
+              "finalSpeed": 2.8152478596349724,
+              "landed": true,
+              "truncated": false,
+              "stallEvents": 1
+            }
+          },
+          {
+            "rank": 2,
+            "designId": "condor",
+            "name": "Condor",
+            "flight": {
+              "designId": "condor",
+              "settings": {
+                "speed": 7,
+                "angle": 0,
+                "height": 1.8,
+                "windSpeed": 0,
+                "windDirection": 0,
+                "turbulence": 0,
+                "paperWeight": 80,
+                "trim": 2,
+                "seed": 42,
+                "maxTime": 60,
+                "dt": 0.008333333333333333
+              },
+              "duration": 6.709833845665092,
+              "distance": 17.958915047065542,
+              "maxHeight": 2.67867749372578,
+              "finalSpeed": 2.6086857735041913,
+              "landed": true,
+              "truncated": false,
+              "stallEvents": 1
+            }
+          },
+          {
+            "rank": 3,
+            "designId": "nakamura-lock",
+            "name": "Nakamura Lock",
+            "flight": {
+              "designId": "nakamura-lock",
+              "settings": {
+                "speed": 8.5,
+                "angle": 0,
+                "height": 1.8,
+                "windSpeed": 0,
+                "windDirection": 0,
+                "turbulence": 0,
+                "paperWeight": 80,
+                "trim": 2,
+                "seed": 42,
+                "maxTime": 60,
+                "dt": 0.008333333333333333
+              },
+              "duration": 6.458541042977336,
+              "distance": 20.745744949423386,
+              "maxHeight": 3.150195474054808,
+              "finalSpeed": 2.9232490828476947,
+              "landed": true,
+              "truncated": false,
+              "stallEvents": 1
+            }
+          },
+          {
+            "rank": 4,
+            "designId": "delta-wing",
+            "name": "Delta Wing",
+            "flight": {
+              "designId": "delta-wing",
+              "settings": {
+                "speed": 10,
+                "angle": 0,
+                "height": 1.8,
+                "windSpeed": 0,
+                "windDirection": 0,
+                "turbulence": 0,
+                "paperWeight": 80,
+                "trim": 2,
+                "seed": 42,
+                "maxTime": 60,
+                "dt": 0.008333333333333333
+              },
+              "duration": 5.883976071426066,
+              "distance": 21.96272517250889,
+              "maxHeight": 3.5153604752543215,
+              "finalSpeed": 3.2806391083887774,
+              "landed": true,
+              "truncated": false,
+              "stallEvents": 1
+            }
+          },
+          {
+            "rank": 5,
+            "designId": "canard",
+            "name": "Canard",
+            "flight": {
+              "designId": "canard",
+              "settings": {
+                "speed": 8.5,
+                "angle": 0,
+                "height": 1.8,
+                "windSpeed": 0,
+                "windDirection": 0,
+                "turbulence": 0,
+                "paperWeight": 80,
+                "trim": 2,
+                "seed": 42,
+                "maxTime": 60,
+                "dt": 0.008333333333333333
+              },
+              "duration": 5.43791179735233,
+              "distance": 16.933501919626803,
+              "maxHeight": 2.9410291002715305,
+              "finalSpeed": 2.8325421423487733,
+              "landed": true,
+              "truncated": false,
+              "stallEvents": 1
+            }
+          },
+          {
+            "rank": 6,
+            "designId": "swallow",
+            "name": "Swallow",
+            "flight": {
+              "designId": "swallow",
+              "settings": {
+                "speed": 8.5,
+                "angle": 0,
+                "height": 1.8,
+                "windSpeed": 0,
+                "windDirection": 0,
+                "turbulence": 0,
+                "paperWeight": 80,
+                "trim": 2,
+                "seed": 42,
+                "maxTime": 60,
+                "dt": 0.008333333333333333
+              },
+              "duration": 4.793019035605219,
+              "distance": 15.899774711635862,
+              "maxHeight": 2.904661962991943,
+              "finalSpeed": 3.246477532490643,
+              "landed": true,
+              "truncated": false,
+              "stallEvents": 1
+            }
+          },
+          {
+            "rank": 7,
+            "designId": "classic-dart",
+            "name": "Classic Dart",
+            "flight": {
+              "designId": "classic-dart",
+              "settings": {
+                "speed": 10,
+                "angle": 0,
+                "height": 1.8,
+                "windSpeed": 0,
+                "windDirection": 0,
+                "turbulence": 0,
+                "paperWeight": 80,
+                "trim": 2,
+                "seed": 42,
+                "maxTime": 60,
+                "dt": 0.008333333333333333
+              },
+              "duration": 4.46014958124203,
+              "distance": 19.938883102007473,
+              "maxHeight": 3.529712478990257,
+              "finalSpeed": 5.626771809494846,
+              "landed": true,
+              "truncated": false,
+              "stallEvents": 1
+            }
+          },
+          {
+            "rank": 8,
+            "designId": "needle",
+            "name": "Needle",
+            "flight": {
+              "designId": "needle",
+              "settings": {
+                "speed": 10,
+                "angle": 0,
+                "height": 1.8,
+                "windSpeed": 0,
+                "windDirection": 0,
+                "turbulence": 0,
+                "paperWeight": 80,
+                "trim": 2,
+                "seed": 42,
+                "maxTime": 60,
+                "dt": 0.008333333333333333
+              },
+              "duration": 4.0577161096220316,
+              "distance": 19.948296148811977,
+              "maxHeight": 3.3032132912390826,
+              "finalSpeed": 6.214870105614254,
+              "landed": true,
+              "truncated": false,
+              "stallEvents": 0
+            }
+          }
+        ]
+      },
+      {
+        "dt": 0.004166666666666667,
+        "trials": 840,
+        "ranking": [
+          {
+            "rank": 1,
+            "designId": "wide-glider",
+            "name": "Wide Glider",
+            "flight": {
+              "designId": "wide-glider",
+              "settings": {
+                "speed": 8.5,
+                "angle": 0,
+                "height": 1.8,
+                "windSpeed": 0,
+                "windDirection": 0,
+                "turbulence": 0,
+                "paperWeight": 80,
+                "trim": 2,
+                "seed": 42,
+                "maxTime": 60,
+                "dt": 0.004166666666666667
+              },
+              "duration": 6.868271028908654,
+              "distance": 20.11099388422502,
+              "maxHeight": 3.0295860882467363,
+              "finalSpeed": 2.808189634730304,
+              "landed": true,
+              "truncated": false,
+              "stallEvents": 1
+            }
+          },
+          {
+            "rank": 2,
+            "designId": "condor",
+            "name": "Condor",
+            "flight": {
+              "designId": "condor",
+              "settings": {
+                "speed": 7,
+                "angle": 0,
+                "height": 1.8,
+                "windSpeed": 0,
+                "windDirection": 0,
+                "turbulence": 0,
+                "paperWeight": 80,
+                "trim": 2,
+                "seed": 42,
+                "maxTime": 60,
+                "dt": 0.004166666666666667
+              },
+              "duration": 6.734275717971512,
+              "distance": 17.958370878767777,
+              "maxHeight": 2.6843167909308465,
+              "finalSpeed": 2.6011550347102856,
+              "landed": true,
+              "truncated": false,
+              "stallEvents": 1
+            }
+          },
+          {
+            "rank": 3,
+            "designId": "nakamura-lock",
+            "name": "Nakamura Lock",
+            "flight": {
+              "designId": "nakamura-lock",
+              "settings": {
+                "speed": 8.5,
+                "angle": 0,
+                "height": 1.8,
+                "windSpeed": 0,
+                "windDirection": 0,
+                "turbulence": 0,
+                "paperWeight": 80,
+                "trim": 2,
+                "seed": 42,
+                "maxTime": 60,
+                "dt": 0.004166666666666667
+              },
+              "duration": 6.45932583231285,
+              "distance": 20.693472001260133,
+              "maxHeight": 3.1574111731458254,
+              "finalSpeed": 2.9169312418356,
+              "landed": true,
+              "truncated": false,
+              "stallEvents": 1
+            }
+          },
+          {
+            "rank": 4,
+            "designId": "delta-wing",
+            "name": "Delta Wing",
+            "flight": {
+              "designId": "delta-wing",
+              "settings": {
+                "speed": 10,
+                "angle": 0,
+                "height": 1.8,
+                "windSpeed": 0,
+                "windDirection": 0,
+                "turbulence": 0,
+                "paperWeight": 80,
+                "trim": 2,
+                "seed": 42,
+                "maxTime": 60,
+                "dt": 0.004166666666666667
+              },
+              "duration": 5.899725485180465,
+              "distance": 21.9779986133596,
+              "maxHeight": 3.524048474495287,
+              "finalSpeed": 3.2421683050185535,
+              "landed": true,
+              "truncated": false,
+              "stallEvents": 1
+            }
+          },
+          {
+            "rank": 5,
+            "designId": "canard",
+            "name": "Canard",
+            "flight": {
+              "designId": "canard",
+              "settings": {
+                "speed": 8.5,
+                "angle": 0,
+                "height": 1.8,
+                "windSpeed": 0,
+                "windDirection": 0,
+                "turbulence": 0,
+                "paperWeight": 80,
+                "trim": 2,
+                "seed": 42,
+                "maxTime": 60,
+                "dt": 0.004166666666666667
+              },
+              "duration": 5.450664135584598,
+              "distance": 16.934533202031606,
+              "maxHeight": 2.947355907871435,
+              "finalSpeed": 2.8127848000473654,
+              "landed": true,
+              "truncated": false,
+              "stallEvents": 1
+            }
+          },
+          {
+            "rank": 6,
+            "designId": "swallow",
+            "name": "Swallow",
+            "flight": {
+              "designId": "swallow",
+              "settings": {
+                "speed": 8.5,
+                "angle": 0,
+                "height": 1.8,
+                "windSpeed": 0,
+                "windDirection": 0,
+                "turbulence": 0,
+                "paperWeight": 80,
+                "trim": 2,
+                "seed": 42,
+                "maxTime": 60,
+                "dt": 0.004166666666666667
+              },
+              "duration": 4.790275881914926,
+              "distance": 15.881079696468566,
+              "maxHeight": 2.91226338243639,
+              "finalSpeed": 3.2272621024165735,
+              "landed": true,
+              "truncated": false,
+              "stallEvents": 1
+            }
+          },
+          {
+            "rank": 7,
+            "designId": "classic-dart",
+            "name": "Classic Dart",
+            "flight": {
+              "designId": "classic-dart",
+              "settings": {
+                "speed": 10,
+                "angle": 0,
+                "height": 1.8,
+                "windSpeed": 0,
+                "windDirection": 0,
+                "turbulence": 0,
+                "paperWeight": 80,
+                "trim": 2,
+                "seed": 42,
+                "maxTime": 60,
+                "dt": 0.004166666666666667
+              },
+              "duration": 4.464046152552526,
+              "distance": 19.95547540979047,
+              "maxHeight": 3.5417021692278174,
+              "finalSpeed": 5.616739619115093,
+              "landed": true,
+              "truncated": false,
+              "stallEvents": 1
+            }
+          },
+          {
+            "rank": 8,
+            "designId": "needle",
+            "name": "Needle",
+            "flight": {
+              "designId": "needle",
+              "settings": {
+                "speed": 10,
+                "angle": 0,
+                "height": 1.8,
+                "windSpeed": 0,
+                "windDirection": 0,
+                "turbulence": 0,
+                "paperWeight": 80,
+                "trim": 2,
+                "seed": 42,
+                "maxTime": 60,
+                "dt": 0.004166666666666667
+              },
+              "duration": 4.0593159614513565,
+              "distance": 19.918153255912102,
+              "maxHeight": 3.313437222912147,
+              "finalSpeed": 6.217515706852663,
+              "landed": true,
+              "truncated": false,
+              "stallEvents": 0
+            }
+          }
+        ]
+      },
+      {
+        "dt": 0.0020833333333333333,
+        "trials": 840,
+        "ranking": [
+          {
+            "rank": 1,
+            "designId": "wide-glider",
+            "name": "Wide Glider",
+            "flight": {
+              "designId": "wide-glider",
+              "settings": {
+                "speed": 8.5,
+                "angle": 0,
+                "height": 1.8,
+                "windSpeed": 0,
+                "windDirection": 0,
+                "turbulence": 0,
+                "paperWeight": 80,
+                "trim": 2,
+                "seed": 42,
+                "maxTime": 60,
+                "dt": 0.0020833333333333333
+              },
+              "duration": 6.8659290953997605,
+              "distance": 20.0897767865101,
+              "maxHeight": 3.0331962294478982,
+              "finalSpeed": 2.8065593739528434,
+              "landed": true,
+              "truncated": false,
+              "stallEvents": 1
+            }
+          },
+          {
+            "rank": 2,
+            "designId": "condor",
+            "name": "Condor",
+            "flight": {
+              "designId": "condor",
+              "settings": {
+                "speed": 7,
+                "angle": 0,
+                "height": 1.8,
+                "windSpeed": 0,
+                "windDirection": 0,
+                "turbulence": 0,
+                "paperWeight": 80,
+                "trim": 2,
+                "seed": 42,
+                "maxTime": 60,
+                "dt": 0.0020833333333333333
+              },
+              "duration": 6.7381484051706515,
+              "distance": 17.953221932672637,
+              "maxHeight": 2.686773397827922,
+              "finalSpeed": 2.5993857840856363,
+              "landed": true,
+              "truncated": false,
+              "stallEvents": 1
+            }
+          },
+          {
+            "rank": 3,
+            "designId": "nakamura-lock",
+            "name": "Nakamura Lock",
+            "flight": {
+              "designId": "nakamura-lock",
+              "settings": {
+                "speed": 8.5,
+                "angle": 0,
+                "height": 1.8,
+                "windSpeed": 0,
+                "windDirection": 0,
+                "turbulence": 0,
+                "paperWeight": 80,
+                "trim": 2,
+                "seed": 42,
+                "maxTime": 60,
+                "dt": 0.0020833333333333333
+              },
+              "duration": 6.457343831663823,
+              "distance": 20.674457791582316,
+              "maxHeight": 3.1601972834871868,
+              "finalSpeed": 2.914852495635402,
+              "landed": true,
+              "truncated": false,
+              "stallEvents": 1
+            }
+          },
+          {
+            "rank": 4,
+            "designId": "delta-wing",
+            "name": "Delta Wing",
+            "flight": {
+              "designId": "delta-wing",
+              "settings": {
+                "speed": 10,
+                "angle": 0,
+                "height": 1.8,
+                "windSpeed": 0,
+                "windDirection": 0,
+                "turbulence": 0,
+                "paperWeight": 80,
+                "trim": 2,
+                "seed": 42,
+                "maxTime": 60,
+                "dt": 0.0020833333333333333
+              },
+              "duration": 5.900524814765258,
+              "distance": 21.971843976053155,
+              "maxHeight": 3.5275697258422425,
+              "finalSpeed": 3.23366393531441,
+              "landed": true,
+              "truncated": false,
+              "stallEvents": 1
+            }
+          },
+          {
+            "rank": 5,
+            "designId": "canard",
+            "name": "Canard",
+            "flight": {
+              "designId": "canard",
+              "settings": {
+                "speed": 8.5,
+                "angle": 0,
+                "height": 1.8,
+                "windSpeed": 0,
+                "windDirection": 0,
+                "turbulence": 0,
+                "paperWeight": 80,
+                "trim": 2,
+                "seed": 42,
+                "maxTime": 60,
+                "dt": 0.0020833333333333333
+              },
+              "duration": 5.452264470222632,
+              "distance": 16.930218953526598,
+              "maxHeight": 2.9498580582427505,
+              "finalSpeed": 2.808121039973179,
+              "landed": true,
+              "truncated": false,
+              "stallEvents": 1
+            }
+          },
+          {
+            "rank": 6,
+            "designId": "swallow",
+            "name": "Swallow",
+            "flight": {
+              "designId": "swallow",
+              "settings": {
+                "speed": 8.5,
+                "angle": 0,
+                "height": 1.8,
+                "windSpeed": 0,
+                "windDirection": 0,
+                "turbulence": 0,
+                "paperWeight": 80,
+                "trim": 2,
+                "seed": 42,
+                "maxTime": 60,
+                "dt": 0.0020833333333333333
+              },
+              "duration": 4.7896236638052425,
+              "distance": 15.875433826523668,
+              "maxHeight": 2.9141636913376425,
+              "finalSpeed": 3.2230473911027775,
+              "landed": true,
+              "truncated": false,
+              "stallEvents": 1
+            }
+          },
+          {
+            "rank": 7,
+            "designId": "classic-dart",
+            "name": "Classic Dart",
+            "flight": {
+              "designId": "classic-dart",
+              "settings": {
+                "speed": 10,
+                "angle": 0,
+                "height": 1.8,
+                "windSpeed": 0,
+                "windDirection": 0,
+                "turbulence": 0,
+                "paperWeight": 80,
+                "trim": 2,
+                "seed": 42,
+                "maxTime": 60,
+                "dt": 0.0020833333333333333
+              },
+              "duration": 4.465341487886306,
+              "distance": 19.9605195097657,
+              "maxHeight": 3.5443728688731566,
+              "finalSpeed": 5.614030607574368,
+              "landed": true,
+              "truncated": false,
+              "stallEvents": 1
+            }
+          },
+          {
+            "rank": 8,
+            "designId": "needle",
+            "name": "Needle",
+            "flight": {
+              "designId": "needle",
+              "settings": {
+                "speed": 10,
+                "angle": 0,
+                "height": 1.8,
+                "windSpeed": 0,
+                "windDirection": 0,
+                "turbulence": 0,
+                "paperWeight": 80,
+                "trim": 2,
+                "seed": 42,
+                "maxTime": 60,
+                "dt": 0.0020833333333333333
+              },
+              "duration": 4.05994597106497,
+              "distance": 19.911624657824078,
+              "maxHeight": 3.315791156354268,
+              "finalSpeed": 6.217854594684809,
+              "landed": true,
+              "truncated": false,
+              "stallEvents": 0
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

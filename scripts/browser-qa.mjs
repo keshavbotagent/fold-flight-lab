@@ -125,6 +125,69 @@ async function verifyQuaternionRendering(page) {
   assert.deepEqual(result.errors, []);
 }
 
+async function verifyFoldGuide(page, name, exhaustive = true) {
+  const dialog = page.getByRole('dialog');
+  assert.equal(await dialog.getByRole('heading', { level: 2 }).innerText(), `Fold a ${name}`);
+  const chooser = dialog.getByRole('list', { name: 'Folding steps', exact: true });
+  const total = await chooser.getByRole('button').count();
+  assert.ok(total >= 6 && total <= 12, `${name} has a complete folding sequence`);
+  assert.equal(await dialog.getByRole('button', { name: 'Previous step', exact: true }).isDisabled(), true);
+  assert.match(await dialog.locator('.fold-step-count').innerText(), new RegExp(`^Step 1 of ${total}`));
+  await dialog.getByRole('button', { name: 'Close dialog', exact: true }).focus();
+  await page.keyboard.press('Shift+Tab');
+  assert.equal(await dialog.locator('.fold-overview > summary').evaluate(element => element === document.activeElement), true, 'focus wraps to the last visible control');
+  await page.keyboard.press('Tab');
+  assert.equal(await dialog.getByRole('button', { name: 'Close dialog', exact: true }).evaluate(element => element === document.activeElement), true, 'focus stays inside the modal and skips disabled/hidden controls');
+  const signatures = new Set();
+  for (let index = 0; index < (exhaustive ? total : 2); index++) {
+    if (index > 0) await dialog.getByRole('button', { name: 'Next step', exact: true }).click();
+    assert.match(await dialog.locator('.fold-step-count').innerText(), new RegExp(`^Step ${index + 1} of ${total}`));
+    assert.equal(await chooser.getByRole('button').nth(index).getAttribute('aria-current'), 'step');
+    const diagrams = dialog.locator('svg.fold-diagram');
+    assert.equal(await diagrams.count(), 2, 'every step has action and result illustrations');
+    const diagramData = await diagrams.evaluateAll(elements => elements.map(svg => {
+      const box = svg.getBBox();
+      return {
+        role: svg.getAttribute('role'),
+        title: svg.querySelector('title')?.textContent,
+        description: svg.querySelector('desc')?.textContent,
+        labelled: svg.getAttribute('aria-labelledby')?.split(' ').every(id => document.getElementById(id)),
+        polygons: svg.querySelectorAll('polygon').length,
+        box: { x: box.x, y: box.y, width: box.width, height: box.height },
+        signature: [...svg.querySelectorAll('polygon, polyline, path:not(defs path)')].map(node => `${node.tagName}:${node.getAttribute('points') ?? node.getAttribute('d')}:${node.getAttribute('class')}`).join('|'),
+      };
+    }));
+    for (const image of diagramData) {
+      assert.equal(image.role, 'img');
+      assert.ok(image.title?.includes(name) && image.description?.length > 15 && image.labelled, 'diagrams have unique linked titles and meaningful descriptions');
+      assert.ok(image.polygons > 0 && image.box.width > 20 && image.box.height > 10, 'diagram contains visible paper geometry');
+      assert.ok([image.box.x, image.box.y, image.box.width, image.box.height].every(Number.isFinite), 'diagram geometry is finite');
+      assert.ok(image.box.x >= -2 && image.box.y >= -2 && image.box.x + image.box.width <= 242 && image.box.y + image.box.height <= 242, `${name} step ${index + 1} fits its viewBox: ${JSON.stringify(image.box)}`);
+    }
+    const signature = diagramData.map(image => image.signature).join('\n');
+    assert.ok(!signatures.has(signature), `${name} step ${index + 1} has its own folding geometry`);
+    signatures.add(signature);
+  }
+  if (!exhaustive) await chooser.getByRole('button').last().click();
+  assert.equal(await dialog.getByRole('button', { name: 'Next step', exact: true }).count(), 0);
+  assert.equal(await dialog.getByRole('button', { name: 'Start again', exact: true }).isEnabled(), true);
+  assert.match(await dialog.locator('.fold-step-count').innerText(), /Ready to fly/);
+  await dialog.getByRole('button', { name: 'Previous step', exact: true }).click();
+  assert.match(await dialog.locator('.fold-step-count').innerText(), new RegExp(`^Step ${total - 1} of ${total}`));
+  await chooser.getByRole('button').last().click();
+  await dialog.getByRole('button', { name: 'Start again', exact: true }).click();
+  assert.match(await dialog.locator('.fold-step-count').innerText(), new RegExp(`^Step 1 of ${total}`));
+  await dialog.getByText('All steps at a glance', { exact: true }).click();
+  assert.equal(await dialog.locator('.fold-list li').count(), total);
+  await dialog.locator('.fold-overview-link').nth(2).click();
+  assert.match(await dialog.locator('.fold-step-count').innerText(), new RegExp(`^Step 3 of ${total}`));
+  await dialog.getByText('All steps at a glance', { exact: true }).click();
+  await chooser.getByRole('button').first().click();
+  const ids = await dialog.locator('[id]').evaluateAll(elements => elements.map(element => element.id));
+  assert.equal(new Set(ids).size, ids.length, 'SVG accessibility and marker IDs are unique');
+  return total;
+}
+
 try {
   const context = await browser.newContext({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1, acceptDownloads: true });
   // This checks the optional registration contract, not native browser support.
@@ -266,11 +329,22 @@ try {
   assert.equal(await page.locator('.design-option.selected .design-option-name').innerText(), 'Wide Glider');
   await page.getByRole('button', { name: 'Pause flight', exact: true }).click();
   await page.getByRole('button', { name: 'Fold guide', exact: true }).click();
-  assert.equal(await page.getByRole('dialog').getByRole('heading', { level: 2 }).innerText(), 'Fold a Wide Glider');
-  assert.ok(await page.getByRole('dialog').locator('.fold-list li').count() >= 4);
+  await verifyFoldGuide(page, 'Wide Glider');
   await screenshot(page, 'desktop-fold-guide.png');
   await page.keyboard.press('Escape');
   assert.equal(await page.getByRole('dialog').count(), 0);
+  assert.equal(await page.getByRole('button', { name: 'Fold guide', exact: true }).evaluate(element => element === document.activeElement), true, 'closing restores focus to the guide button');
+  const designNames = await page.locator('.design-option-name').allTextContents();
+  for (const name of designNames.filter(name => name !== 'Wide Glider')) {
+    await page.locator('.design-option').filter({ hasText: name }).click();
+    await page.getByRole('button', { name: 'Fold guide', exact: true }).click();
+    await verifyFoldGuide(page, name);
+    await page.keyboard.press('Escape');
+  }
+  await page.locator('.design-option').filter({ hasText: 'Wide Glider' }).click();
+  await page.getByRole('button', { name: 'Fold guide', exact: true }).click();
+  assert.match(await page.getByRole('dialog').locator('.fold-step-count').innerText(), /^Step 1 of/);
+  await page.keyboard.press('Escape');
   await page.getByRole('button', { name: 'Model & assumptions', exact: true }).click();
   const modelText = await page.getByRole('dialog').innerText();
   assert.ok(/six.?degree|6.?dof/i.test(modelText), 'model describes six degrees of freedom');
@@ -278,7 +352,7 @@ try {
   assert.ok(/estimat|uncalibrat/i.test(modelText), 'model distinguishes numerical validation from calibration');
   await screenshot(page, 'desktop-model.png');
   await page.getByRole('button', { name: 'Close dialog', exact: true }).click();
-  record('row replay and accessible model/fold dialogs work');
+  record('row replay, illustrated folding steps for all eight planes, and accessible dialogs work');
   await page.waitForFunction(() => window.__qaFlightTools?.length === 2);
   const toolContract = await page.evaluate(() => {
     const tools = window.__qaFlightTools;
@@ -326,6 +400,10 @@ try {
   await mobile.getByRole('button', { name: 'Pause flight', exact: true }).click();
   await mobile.getByRole('button', { name: 'Fold guide', exact: true }).click();
   assert.ok(await mobile.getByRole('dialog').isVisible());
+  const mobileDesign = await mobile.locator('.design-option.selected .design-option-name').innerText();
+  await verifyFoldGuide(mobile, mobileDesign, false);
+  const foldSizing = await mobile.getByRole('dialog').evaluate(element => ({ width: element.clientWidth, content: element.scrollWidth }));
+  assert.ok(foldSizing.content <= foldSizing.width + 1, `fold guide has no horizontal overflow: ${JSON.stringify(foldSizing)}`);
   await screenshot(mobile, 'mobile-fold-guide.png');
   await mobile.getByRole('button', { name: 'Close dialog', exact: true }).click();
   await mobile.getByRole('button', { name: 'How it works', exact: true }).click();

@@ -39,6 +39,10 @@ production build.
 - Select an airframe and adjust launch speed, angle, and release height. Expand
   **Paper, wind & altitude** to change paper stock, wind, gust intensity, elevator
   trim, air temperature, relative humidity, sea-level pressure, and ground elevation.
+- Open **Fold guide** for illustrated instructions for the selected plane. Each
+  step shows the fold line and motion arrows beside the resulting paper shape.
+  Use **Next step**, **Previous step**, or the numbered steps to follow along;
+  **All steps at a glance** keeps the complete instructions available.
 - Launch and inspect the flight using playback, replay, timeline, and camera
   controls. The telemetry shows time, horizontal displacement, height above ground,
   altitude above sea level, and

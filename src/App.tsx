@@ -9,6 +9,7 @@ import { FlightScene } from './lib/scene';
 import { useFlightTools } from './lib/webmcp';
 import type { FlightResult, LaunchSettings, RankedFlight } from './lib/types';
 import benchmark from './data/tested-results.json';
+import { FoldGuide } from './components/FoldGuide';
 
 type CameraMode = 'orbit' | 'follow' | 'top';
 type ModalMode = 'model' | 'folds' | null;
@@ -38,7 +39,7 @@ function Modal({ mode, designId, settings, onClose }: { mode: ModalMode; designI
     const keydown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') onClose();
       if (event.key === 'Tab') {
-        const elements = dialog.current?.querySelectorAll<HTMLElement>('button, a, input, select, [tabindex="0"]');
+        const elements = Array.from(dialog.current?.querySelectorAll<HTMLElement>('button:not([disabled]), a[href], input:not([disabled]), select:not([disabled]), summary, [tabindex="0"]') ?? []).filter(element => element.getClientRects().length > 0 && element.checkVisibility?.() !== false);
         if (elements?.length) {
           const first = elements[0], last = elements[elements.length - 1];
           if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
@@ -51,14 +52,10 @@ function Modal({ mode, designId, settings, onClose }: { mode: ModalMode; designI
   }, [mode, onClose]);
   if (!mode) return null;
   return <div className="modal-backdrop" onClick={e => { if (e.target === e.currentTarget) onClose(); }}>
-    <div ref={dialog} className={`modal ${mode === 'model' ? 'wide' : ''}`} role="dialog" aria-modal="true" aria-labelledby="dialog-title">
+    <div ref={dialog} className={`modal wide ${mode === 'folds' ? 'fold-modal' : ''}`} role="dialog" aria-modal="true" aria-labelledby="dialog-title">
       <div className="modal-header"><div><p className="eyebrow">{mode === 'model' ? 'BEHIND THE FLIGHT' : 'ONE SHEET. NO CUTS.'}</p><h2 id="dialog-title">{mode === 'model' ? 'Model & assumptions' : `Fold a ${design.name}`}</h2></div><button className="modal-close icon-button" aria-label="Close dialog" onClick={onClose}><X size={20} /></button></div>
       <div className="modal-body">
-        {mode === 'folds' ? <>
-          <p className="design-description">A starting guide for a representative {design.name.toLowerCase()}. Use one A4 sheet of 80 g/m² paper and press every crease firmly. Small differences in your folds will change the real flight.</p>
-          <ol className="fold-list">{design.foldSteps.map((step, index) => <li key={step}><span>{String(index + 1).padStart(2, '0')}</span><p>{step}</p></li>)}</ol>
-          <div className="modal-note">Keep both wings symmetric. Begin with a gentle, level throw; adjust the trailing edges a little at a time.</div>
-        </> : <>
+        {mode === 'folds' ? <FoldGuide key={design.id} design={design} /> : <>
           <p>Flight follows a six-degree-of-freedom (6DoF) rigid-body model with Earth gravity, aerodynamic forces and rotational moments. Airframe coefficients and inertia factors are engineering estimates without experimental calibration.</p>
           <div className="model-grid">
             <div className="model-card"><Wind size={21} /><h3>Earth gravity & atmosphere</h3><p>Altitude above sea level is ground elevation plus the plane’s height above ground. Sea-level pressure and altitude set local pressure. Temperature and humidity determine moist-air density; humid air is less dense at the same temperature and pressure. Gravity decreases with altitude.</p></div>

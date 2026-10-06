@@ -14,6 +14,14 @@ sheet area. Span and length describe the representative flying configuration.
 The canard's area includes its forward tabs. Its rendering and flight model are
 representations rather than an exact crease-pattern reconstruction.
 
+The illustrated **Fold guide** provides a separate action and result diagram for
+every step of all eight configurations. Fold lines, motion arrows, layer edges,
+and explicitly labeled top, side, and front views explain the paper changes.
+The final front views show matching wings, a hanging center keel, and raised
+tips. The diagrams are schematic instructions, not scaled cutting templates;
+no design calls for cutting the A4 sheet. The canard is a representative exposed-
+flap construction, with its main wing folds behind the front-tab hinges.
+
 Drag coefficient, lift slope, maximum lift coefficient, trim angle, stability,
 dihedral, mass distribution, and all stability derivatives are engineering
 estimates. They are not measured wind-tunnel data, calibrated flight-test data,

@@ -35,6 +35,8 @@ function scores(ranking: RankedFlight[]) {
     airtimeSeconds: row.flight.duration, distanceMetres: row.flight.distance,
     landed: row.flight.landed, capped: row.flight.truncated,
     physicsModel: row.flight.modelVersion ?? null, massKg: row.flight.mass ?? row.design.mass * row.flight.settings.paperWeight / 80,
+    releaseAltitudeMSLMetres: row.flight.settings.fieldElevation + row.flight.settings.height,
+    peakAltitudeMSLMetres: row.flight.settings.fieldElevation + row.flight.maxHeight,
     launch: { speed: row.flight.settings.speed, angle: row.flight.settings.angle, trim: row.flight.settings.trim },
     testedConditions: {
       height: row.flight.settings.height, paperWeight: row.flight.settings.paperWeight,

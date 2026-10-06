@@ -37,10 +37,11 @@ production build.
 ## Use the lab
 
 - Select an airframe and adjust launch speed, angle, and release height. Expand
-  **Paper, wind & trim** to change paper stock, wind, gust intensity, and elevator
-  trim, along with air temperature and field elevation.
+  **Paper, wind & altitude** to change paper stock, wind, gust intensity, elevator
+  trim, air temperature, and ground elevation above sea level.
 - Launch and inspect the flight using playback, replay, timeline, and camera
-  controls. The telemetry shows time, horizontal displacement, altitude, and
+  controls. The telemetry shows time, horizontal displacement, height above ground,
+  altitude above sea level, and
   ground speed.
 - Use **Compare all designs** for eight flights with the same launch settings and
   environment.
@@ -64,7 +65,7 @@ The default shared configuration is:
 | Setting | Default |
 | --- | --- |
 | Launch speed / elevation | 7 m/s / 12° |
-| Release height | 1.8 m |
+| Release height | 1.8 m above the launch ground |
 | Paper stock | A4, 80 g/m²; 4.9896 g per plane |
 | Wind / gust intensity | 0 m/s / 0 |
 | Air temperature / field elevation | 15°C / 0 m above sea level |
@@ -72,6 +73,12 @@ The default shared configuration is:
 | Gust seed | 42 |
 | Integration step | 1/120 s, with internal adaptive substeps |
 | Flight time cap | 60 s |
+
+Open **Paper, wind & altitude** to set **Ground elevation** in metres above mean
+sea level (−500 to 6,000 m). Flight altitude is ground elevation plus height above
+ground: a 2 m release on a 1,500 m field starts at 1,502 m above sea level. Pressure,
+density, gravity, lift, and drag use this altitude throughout flight. Landing
+occurs at the local ground. Telemetry and exported CSV distinguish the two heights.
 
 Run the shared browser physics engine from the command line:
 

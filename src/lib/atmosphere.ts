@@ -7,7 +7,7 @@ const SEA_LEVEL_PRESSURE = 101_325;
 const SEA_LEVEL_TEMPERATURE = 288.15;
 const LAPSE_RATE = 0.0065;
 
-/** ISA pressure, local temperature, ideal-gas density and Sutherland viscosity. */
+/** Field elevation and height above ground combine into mean-sea-level altitude. */
 export function getAtmosphere(
   settings: Pick<LaunchSettings, 'airTemperature' | 'fieldElevation'>,
   height = 0,
@@ -33,5 +33,5 @@ export function getAtmosphere(
   const dynamicViscosity = 1.716e-5 * Math.pow(temperatureKelvin / 273.15, 1.5)
     * (273.15 + 110.4) / (temperatureKelvin + 110.4);
   const gravity = STANDARD_GRAVITY * Math.pow(EARTH_RADIUS / (EARTH_RADIUS + altitude), 2);
-  return { gravity, density, dynamicViscosity, pressure, temperatureKelvin };
+  return { altitudeMSL: altitude, gravity, density, dynamicViscosity, pressure, temperatureKelvin };
 }

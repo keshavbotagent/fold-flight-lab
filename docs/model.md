@@ -44,6 +44,14 @@ g(h) = g₀ × (R / (R + h))²
 h = fieldElevation + heightAboveGround
 ```
 
+For example, a 2 m release on ground 1,500 m above mean sea level starts at
+1,502 m above sea level. At landing it is back at 1,500 m, with height above ground
+equal to zero. Negative ground elevations represent locations below sea level.
+The **Ground elevation** control is under **Paper, wind & altitude**; live telemetry
+shows absolute altitude as well as height above ground. CSV exports include
+`release_altitude_msl_m` and `peak_altitude_msl_m`, in addition to ground elevation
+and above-ground heights. Atmosphere diagnostics expose `altitudeMSL` explicitly.
+
 Gravity acts vertically downward. This approximation excludes local latitude,
 Earth rotation, and terrain anomalies; those effects are far smaller than the
 uncertainty of the paper-plane coefficients in ordinary throws.

@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { DESIGNS } from '../src/lib/designs.ts';
 import { DEFAULT_SETTINGS, PHYSICS_VERSION, evaluateAerodynamics, getAtmosphere, getMassProperties, simulateFlight } from '../src/lib/physics.ts';
-import { EARTH_RADIUS } from '../src/lib/atmosphere.ts';
+import { EARTH_RADIUS, STANDARD_GRAVITY } from '../src/lib/atmosphere.ts';
 import type { FlightSample, LaunchSettings, PlaneDesign } from '../src/lib/types.ts';
 
 const radians = (degrees: number) => degrees * Math.PI / 180;
@@ -48,6 +48,42 @@ test('atmosphere matches sea-level reference air and responds to temperature and
   assert.ok(high.gravity < seaLevel.gravity, 'gravity follows altitude');
   const inFlight = getAtmosphere(conditions, 100);
   assert.ok(inFlight.pressure < seaLevel.pressure && inFlight.gravity < seaLevel.gravity, 'flight altitude also affects the atmosphere');
+});
+
+test('sea-level altitude combines ground elevation and flight height exactly once', () => {
+  const elevated = getAtmosphere({ airTemperature: 15, fieldElevation: 1500 }, 2);
+  assert.equal(elevated.altitudeMSL, 1502);
+  near(elevated.gravity, STANDARD_GRAVITY * (EARTH_RADIUS / (EARTH_RADIUS + 1502)) ** 2,
+    1e-12, 'gravity uses absolute altitude');
+  // The same absolute altitude and local temperature must yield the same air,
+  // irrespective of how altitude is split between ground and flight height.
+  const equivalent = getAtmosphere({ airTemperature: 15 - 0.0065 * 2, fieldElevation: 1502 }, 0);
+  for (const key of ['pressure', 'density', 'gravity', 'temperatureKelvin', 'dynamicViscosity'] as const) {
+    near(elevated[key], equivalent[key], 1e-10, `equal absolute altitude: ${key}`);
+  }
+  const belowSeaLevel = getAtmosphere({ airTemperature: 15, fieldElevation: -400 }, 2);
+  const seaLevel = getAtmosphere({ airTemperature: 15, fieldElevation: 0 }, 2);
+  assert.equal(belowSeaLevel.altitudeMSL, -398);
+  assert.ok(belowSeaLevel.pressure > seaLevel.pressure && belowSeaLevel.density > seaLevel.density);
+  assert.ok(belowSeaLevel.gravity > seaLevel.gravity);
+});
+
+test('elevated fields change the atmosphere while landing stays relative to local ground', () => {
+  const conditions = { height: 2, speed: 0, angle: 0, windSpeed: 0, turbulence: 0, dt: 1 / 480 };
+  const seaLevel = simulateFlight(DESIGNS[0], { ...conditions, fieldElevation: 0 }, { densityScale: 0 });
+  const elevated = simulateFlight(DESIGNS[0], { ...conditions, fieldElevation: 5000 }, { densityScale: 0 });
+  assert.ok(elevated.landed && !elevated.truncated);
+  assert.equal(elevated.samples[0].y, 2, 'release height remains 2 metres above local ground');
+  assert.equal(elevated.samples.at(-1)!.y, 0, 'ground contact stays at zero above-ground height');
+  assert.equal(getAtmosphere(elevated.settings, elevated.samples.at(-1)!.y).altitudeMSL, 5000);
+  const groundGravity = getAtmosphere(elevated.settings, 0).gravity;
+  near(elevated.duration, Math.sqrt(2 * conditions.height / groundGravity), 1e-6,
+    'short drop agrees with the local-gravity analytical limit');
+  assert.ok(elevated.duration > seaLevel.duration, 'lower gravity at elevation slightly lengthens the isolated drop');
+  const ordinarySeaFlight = simulateFlight(DESIGNS[2], { fieldElevation: 0 });
+  const ordinaryHighFlight = simulateFlight(DESIGNS[2], { fieldElevation: 3000 });
+  assert.ok(ordinaryHighFlight.samples[0].density! < ordinarySeaFlight.samples[0].density!, 'flight forces use thinner high-altitude air');
+  assert.notEqual(ordinaryHighFlight.duration, ordinarySeaFlight.duration, 'elevation changes the aerodynamic flight prediction');
 });
 
 test('mass and positive body inertias scale with the amount of paper', () => {

@@ -59,10 +59,14 @@ async function verifyCSV(page, filename) {
   const header = lines[0].split(',');
   assert.ok(header.includes('seed') && header.includes('time_capped') && header.includes('trim_deg'));
   assert.ok(header.includes('air_temperature_c') && header.includes('field_elevation_m') && header.includes('model_version'), 'exports identify the atmosphere and physics model');
+  assert.ok(header.includes('release_altitude_msl_m') && header.includes('peak_altitude_msl_m'), 'exports distinguish absolute altitude from height above ground');
   const rows = lines.slice(1).map(line => line.split(','));
   for (let i = 0; i < rows.length; i++) {
     assert.equal(Number(rows[i][0]), i + 1);
     assert.equal(rows[i].length, header.length);
+    const value = name => Number(rows[i][header.indexOf(name)]);
+    assert.equal(value('release_altitude_msl_m'), value('field_elevation_m') + value('height_m'));
+    assert.equal(value('peak_altitude_msl_m'), value('field_elevation_m') + value('max_height_m'));
     if (i > 0) assert.ok(Number(rows[i - 1][2]) >= Number(rows[i][2]), 'exported airtime ranking is descending');
   }
   return lines.length - 1;
@@ -150,14 +154,18 @@ try {
   await setSlider(page, 'Launch speed', 8);
   await setSlider(page, 'Launch angle', 10);
   await setSlider(page, 'Release height', 2);
-  await page.getByRole('button', { name: 'Paper, wind & trim', exact: true }).click();
+  await page.getByRole('button', { name: 'Paper, wind & altitude', exact: true }).click();
   await setSlider(page, 'Paper weight', 85);
   await setSlider(page, 'Wind speed', 2);
   await page.getByLabel('Wind direction', { exact: true }).selectOption('0');
   await setSlider(page, 'Gust intensity', 0);
   await setSlider(page, 'Air temperature', 25);
-  await setSlider(page, 'Field elevation', 1500);
-  await page.getByRole('button', { name: 'Paper, wind & trim', exact: true }).click();
+  await setSlider(page, 'Ground elevation', 1500);
+  assert.match(await page.getByLabel('Altitude above sea level', { exact: true }).innerText(), /^1502\.0 m above sea level$/);
+  await setSlider(page, 'Ground elevation', -400);
+  assert.match(await page.getByLabel('Altitude above sea level', { exact: true }).innerText(), /^-398\.0 m above sea level$/);
+  await setSlider(page, 'Ground elevation', 1500);
+  await page.getByRole('button', { name: 'Paper, wind & altitude', exact: true }).click();
   await page.getByRole('button', { name: 'Launch plane', exact: false }).click();
   await page.getByRole('button', { name: 'Pause flight', exact: true }).click();
   await page.getByRole('slider', { name: 'Flight timeline', exact: true }).press('Home');
@@ -169,13 +177,19 @@ try {
   assert.ok(await diagnosticValue(page, 'Air density') < 1.15, 'warm high-elevation launch reduces the displayed density');
   assert.ok(await diagnosticValue(page, 'Gravity') < 9.807, 'local gravity reflects the launch elevation');
   assert.ok(await diagnosticValue(page, 'Drag') > 0);
+  assert.match(await page.getByLabel('Altitude above sea level', { exact: true }).innerText(), /^1502\.0 m above sea level$/);
+  const flightHeight = Number.parseFloat(await page.locator('.metric').filter({ hasText: 'ABOVE GROUND' }).locator('.metric-value').innerText());
+  assert.equal(flightHeight, 2, 'sea-level elevation does not add to height above ground');
+  await page.getByRole('slider', { name: 'Flight timeline', exact: true }).press('End');
+  assert.match(await page.getByLabel('Altitude above sea level', { exact: true }).innerText(), /^1500\.0 m above sea level$/);
   record('temperature, elevation and wind change diagnostics; airspeed differs from ground speed');
-  await page.getByRole('button', { name: 'Paper, wind & trim', exact: true }).click();
+  await page.getByRole('button', { name: 'Paper, wind & altitude', exact: true }).click();
   await page.getByRole('button', { name: 'Reset conditions', exact: true }).click();
   assert.equal(await page.getByRole('slider', { name: 'Launch speed', exact: true }).inputValue(), '7');
   assert.equal(await page.getByRole('slider', { name: 'Air temperature', exact: true }).inputValue(), '15');
-  assert.equal(await page.getByRole('slider', { name: 'Field elevation', exact: true }).inputValue(), '0');
-  await page.getByRole('button', { name: 'Paper, wind & trim', exact: true }).click();
+  assert.equal(await page.getByRole('slider', { name: 'Ground elevation', exact: true }).inputValue(), '0');
+  assert.match(await page.getByLabel('Altitude above sea level', { exact: true }).innerText(), /^1\.8 m above sea level$/);
+  await page.getByRole('button', { name: 'Paper, wind & altitude', exact: true }).click();
   record('airframe selection, sliders and weather reset respond');
 
   await page.getByRole('button', { name: 'Launch plane', exact: false }).click();

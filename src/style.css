@@ -192,6 +192,7 @@ input[type='range']::-moz-range-progress { background: var(--orange); height: 4p
 .advanced-toggle svg:last-child { margin-left: auto; }
 .advanced-controls { margin-top: 18px; }
 .advanced-controls .slider-control + .slider-control { margin-top: 17px; }
+.altitude-help { margin: 9px 0 17px; color: var(--muted); font-size: 12px; line-height: 1.6; }
 .launch-actions { display: flex; flex-direction: column; gap: 9px; margin-top: 9px; }
 .launch-section > .launch-button { width: 100%; margin-top: 16px; }
 .launch-section > .launch-button > span { padding: 3px 4px; margin-left: auto; color: #5c3125; border: 1px solid #7f3d2840; border-radius: 3px; font: 12px var(--mono); letter-spacing: .7px; }
@@ -273,6 +274,7 @@ input[type='range']::-moz-range-progress { background: var(--orange); height: 4p
 .metric-value { display: inline; color: #e6ebf0; font: 25px var(--mono); letter-spacing: -.8px; line-height: 1.3; }
 .metric:first-child .metric-value { color: var(--orange); }
 .metric-unit { margin-left: 5px; color: var(--faint); font: 12px var(--mono); letter-spacing: 0; }
+.metric-altitude { display: block; margin-top: 5px; color: var(--muted); font: 12px/1.5 var(--mono); overflow-wrap: anywhere; }
 .forces-strip { flex: 0 0 auto; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px 16px; padding: 13px 24px; border-top: 1px solid var(--border); background: #171e26; }
 .force-diagnostic { min-width: 0; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 3px 7px; }
 .force-label { color: var(--faint); font-size: 12px; line-height: 1.5; white-space: nowrap; }

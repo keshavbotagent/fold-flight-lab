@@ -14,6 +14,8 @@ export interface AirframeDynamics {
   yawInertiaFactor: number;
 }
 export interface Atmosphere {
+  /** Absolute altitude in metres above mean sea level, after model bounds. */
+  altitudeMSL: number;
   gravity: number;
   density: number;
   dynamicViscosity: number;

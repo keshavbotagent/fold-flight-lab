@@ -6,6 +6,7 @@ import { chromium } from '@playwright/test';
 const baseURL = process.env.QA_BASE_URL ?? 'http://127.0.0.1:5173';
 const DESIGN_COUNT = 11;
 const CHAMPIONS = ['Suzanne', 'Sky King', 'Krstić Dart'];
+const MOBILE_ONLY = process.argv.includes('--mobile-only');
 const artifactPath = resolve('artifacts');
 await mkdir(artifactPath, { recursive: true });
 const browser = await chromium.launch({
@@ -203,7 +204,9 @@ async function verifyFoldGuide(page, name, exhaustive = true) {
   return total;
 }
 
+let layoutBoxes = null;
 try {
+  if (!MOBILE_ONLY) {
   const context = await browser.newContext({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1, acceptDownloads: true });
   // This checks the optional registration contract, not native browser support.
   await context.addInitScript(() => {
@@ -229,7 +232,7 @@ try {
   assert.match(await page.getByLabel('Environment details', { exact: true }).innerText(), /26°C.*46% humidity.*215 m above sea level/);
   const renderer = await verifyRenderer(page);
   await screenshot(page, 'desktop-initial.png');
-  const layoutBoxes = await page.evaluate(() => Object.fromEntries(
+  layoutBoxes = await page.evaluate(() => Object.fromEntries(
     ['.control-panel', '.launch-button', '.flight-panel', '.scene-shell'].map(selector => {
       const rect = document.querySelector(selector).getBoundingClientRect();
       return [selector, { x: rect.x, y: rect.y, width: rect.width, height: rect.height, bottom: rect.bottom }];
@@ -413,6 +416,7 @@ try {
   record('WebMCP registry contract via mock: schemas, annotations, invalid input and compare/readback');
   // Avoid running two software WebGL render loops while capturing mobile.
   await context.close();
+  }
 
   const mobileContext = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 1, isMobile: true, hasTouch: true });
   const mobile = await mobileContext.newPage();
@@ -436,11 +440,18 @@ try {
   for (const name of CHAMPIONS) {
     await mobile.locator('.design-option').filter({ has: mobile.locator('.design-option-name').filter({ hasText: new RegExp(`^${name}$`) }) }).click();
     await mobile.getByRole('button', { name: 'Fold guide', exact: true }).click();
+    assert.ok(await mobile.locator('.fold-step-nav').evaluate(element => element.clientHeight <= 56), `${name} uses one compact row of mobile steps`);
     await verifyFoldGuide(mobile, name, false);
     const championSizing = await mobile.getByRole('dialog').evaluate(element => ({ width: element.clientWidth, content: element.scrollWidth }));
     assert.ok(championSizing.content <= championSizing.width + 1, `${name} guide fits the mobile viewport: ${JSON.stringify(championSizing)}`);
     if (name === 'Krstić Dart') {
       await mobile.getByRole('dialog').getByRole('list', { name: 'Folding steps', exact: true }).getByRole('button').nth(24).click();
+      const activeInView = await mobile.locator('.fold-step-nav').evaluate(element => {
+        const list = element.getBoundingClientRect(), active = element.querySelector('[aria-current="step"]').getBoundingClientRect();
+        return active.left >= list.left - 1 && active.right <= list.right + 1;
+      });
+      assert.ok(activeInView, 'the selected mobile step stays visible while scrolling the numbered list');
+      await mobile.getByRole('dialog').locator('.fold-panel').first().scrollIntoViewIfNeeded();
       await screenshot(mobile, 'mobile-champion-guide.png');
     }
     await mobile.getByRole('button', { name: 'Close dialog', exact: true }).click();
@@ -451,8 +462,8 @@ try {
   await mobile.getByRole('button', { name: 'Close dialog', exact: true }).click();
   record('390px mobile has live WebGL, usable dialogs and no page overflow', JSON.stringify(sizing));
   assert.deepEqual(browserErrors, [], 'no uncaught JavaScript or browser console errors');
-  record('desktop and mobile have no JavaScript/console errors');
-  await writeFile(resolve(artifactPath, 'browser-qa.json'), JSON.stringify({ ok: true, checks, desktopLayout: layoutBoxes, mobileLayout: sizing, browserErrors, optionalWebMCP: 'Registry contract tested with a document.modelContext stub; native browser tool invocation was not available.' }, null, 2));
+  record(MOBILE_ONLY ? 'mobile has no JavaScript/console errors' : 'desktop and mobile have no JavaScript/console errors');
+  await writeFile(resolve(artifactPath, MOBILE_ONLY ? 'browser-qa-mobile.json' : 'browser-qa.json'), JSON.stringify({ ok: true, checks, desktopLayout: layoutBoxes, mobileLayout: sizing, browserErrors, optionalWebMCP: MOBILE_ONLY ? 'Not repeated by the targeted mobile run.' : 'Registry contract tested with a document.modelContext stub; native browser tool invocation was not available.' }, null, 2));
   console.log(JSON.stringify({ ok: true, checks: checks.length, artifacts: artifactPath }));
 } finally {
   await browser.close();

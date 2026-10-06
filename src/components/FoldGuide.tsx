@@ -1,4 +1,4 @@
-import { useId, useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 import type { CSSProperties } from 'react';
 import { RotateCcw } from 'lucide-react';
 import type { PlaneDesign } from '../lib/types';
@@ -29,11 +29,21 @@ function FoldDiagram({ frame, title, description, color }: {
 export function FoldGuide({ design }: { design: PlaneDesign }) {
   const guide = getFoldGuide(design.id);
   const [current, setCurrent] = useState(0);
+  const stepNav = useRef<HTMLOListElement>(null);
   const step = guide.steps[current];
   const last = current === guide.steps.length - 1;
   const nextRequired = guide.steps.findIndex((candidate, index) => index > current && !candidate.optional);
   const hasMountainFolds = guide.steps.some(item => [item.before, item.after].some(frame => frame.lines?.some(line => line.kind === 'mountain')));
   const hasHiddenEdges = guide.steps.some(item => [item.before, item.after].some(frame => frame.lines?.some(line => line.kind === 'hidden')));
+  useEffect(() => {
+    const list = stepNav.current;
+    const active = list?.querySelector<HTMLButtonElement>('[aria-current="step"]');
+    if (!list || !active || list.scrollWidth <= list.clientWidth) return;
+    const left = active.getBoundingClientRect().left - list.getBoundingClientRect().left + list.scrollLeft;
+    if (left < list.scrollLeft || left + active.offsetWidth > list.scrollLeft + list.clientWidth) {
+      list.scrollLeft = left - (list.clientWidth - active.offsetWidth) / 2;
+    }
+  }, [current]);
   return <div className="fold-guide" style={{ '--fold-accent': design.color } as CSSProperties}>
     <p className="fold-materials">One A4 sheet <span>·</span> 210 × 297 mm <span>·</span> {guide.orientation === 'portrait' ? 'Portrait' : 'Landscape'} to start</p>
     {design.achievement && <p className="fold-source">Original schematic adaptation · <a href={design.achievement.designSourceUrl} target="_blank" rel="noreferrer">Published folding method</a></p>}
@@ -44,7 +54,7 @@ export function FoldGuide({ design }: { design: PlaneDesign }) {
       {hasHiddenEdges && <span><svg viewBox="0 0 30 12" aria-hidden="true"><path d="M2 6 H28" className="fold-line fold-line-hidden" /></svg>Hidden edge</span>}
       <span><svg viewBox="0 0 30 12" aria-hidden="true"><path d="M2 9 Q13 -2 27 6 M21 2 L27 6 L21 10" className="fold-arrow" /></svg>Move this way</span>
     </div>
-    <ol className="fold-step-nav" aria-label="Folding steps">
+    <ol ref={stepNav} className="fold-step-nav" aria-label="Folding steps">
       {guide.steps.map((item, index) => <li key={item.title}><button type="button" aria-label={`Step ${index + 1}: ${item.title}`} aria-current={current === index ? 'step' : undefined} onClick={() => setCurrent(index)} title={item.title}>{String(index + 1).padStart(2, '0')}</button></li>)}
     </ol>
     <section className="fold-current-step" aria-label="Current folding step">

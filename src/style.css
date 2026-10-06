@@ -464,7 +464,8 @@ input[type='range']::-moz-range-progress { background: var(--orange); height: 4p
   .fold-modal .modal-body { padding: 18px 16px 20px; }
   .fold-materials { column-gap: 7px; font-size: 14px; }
   .fold-legend { gap: 9px 13px; font-size: 13px; }
-  .fold-step-nav { gap: 7px; margin: 18px 0; }
+  .fold-step-nav { flex-wrap: nowrap; gap: 7px; margin: 18px 0; padding: 2px; overflow-x: auto; overscroll-behavior-inline: contain; scrollbar-width: thin; }
+  .fold-step-nav > li { flex: 0 0 auto; }
   .fold-step-nav button { width: 44px; height: 44px; }
   .fold-panels { grid-template-columns: minmax(0, 1fr); gap: 12px; }
   .fold-panel { padding: 12px 14px 10px; }

@@ -1,6 +1,6 @@
 # Validation record
 
-Solver **`2.1.0-moist-air`** passes 37 automated physics, experiment, catalogue and shipped-data tests. The Chromium browser suite passes 12 groups of interface checks at 1440 × 900 and 390 × 844 pixels. Run `npm test` and, with Vite running on port 5173, `node scripts/browser-qa.mjs` to reproduce them.
+Solver **`2.1.0-moist-air`** passes 37 automated physics, experiment, catalogue and shipped-data tests. The Chromium browser suite passes 12 groups of interface checks at 1440 × 900 and 390 × 844 pixels. A subsequent three-group mobile run verifies the compact step selector, selected-step visibility, guide navigation, focus, overflow and console behavior after the mobile layout adjustment. Run `npm test` and, with Vite running on port 5173, `node scripts/browser-qa.mjs` to reproduce the full suite; use `--mobile-only` for the targeted mobile checks.
 
 These checks validate equations, numerical integration, consistency and interface behavior. They do not establish agreement with measured paper-plane flights. Aerodynamic coefficients, aerodynamic-center/center-of-gravity positions, damping derivatives and inertia factors are estimates; folding errors, flexibility, humidity effects on paper properties and detailed separated flow remain outside this model.
 

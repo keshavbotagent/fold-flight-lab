@@ -21,6 +21,8 @@ export interface FoldFrame {
 }
 export interface FoldStep {
   title: string;
+  /** Historical preparation that is unnecessary for the standard model. */
+  optional?: boolean;
   instruction: string;
   detail?: string;
   before: FoldFrame;

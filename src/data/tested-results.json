@@ -1,6 +1,6 @@
 {
   "modelVersion": "2.1.0-moist-air",
-  "generatedAt": "2026-10-06T08:38:36.179Z",
+  "generatedAt": "2026-10-06T10:33:23.335Z",
   "baselineSettings": {
     "speed": 7,
     "angle": 12,
@@ -140,6 +140,30 @@
         "defaultToFinestReplayDurationChangePercent": 0.00112058642319555,
         "gridDurationChangePercent": 0.0000017346071278490413,
         "completionConsistent": true
+      },
+      {
+        "designId": "suzanne",
+        "name": "Suzanne",
+        "replayDurationChangePercent": 1.6401553133732497e-8,
+        "defaultToFinestReplayDurationChangePercent": 1.4352747535401987e-7,
+        "gridDurationChangePercent": 1.6401553133732497e-8,
+        "completionConsistent": true
+      },
+      {
+        "designId": "sky-king",
+        "name": "Sky King",
+        "replayDurationChangePercent": 0.00012237587518262833,
+        "defaultToFinestReplayDurationChangePercent": 0.0016497751263153417,
+        "gridDurationChangePercent": 0.00012237587518262833,
+        "completionConsistent": true
+      },
+      {
+        "designId": "krstic-dart",
+        "name": "Krstić Dart",
+        "replayDurationChangePercent": 8.938865245402193e-9,
+        "defaultToFinestReplayDurationChangePercent": 1.6676218922601422e-7,
+        "gridDurationChangePercent": 8.938865245402193e-9,
+        "completionConsistent": true
       }
     ],
     "interpretation": "Numerical step-sensitivity check using a declared 1% duration tolerance; not validation of physical flight accuracy."
@@ -168,7 +192,7 @@
         2
       ]
     },
-    "trials": 840,
+    "trials": 1155,
     "trialsPerDesign": 105,
     "changedVariables": [
       "angle",
@@ -492,6 +516,126 @@
       },
       {
         "rank": 6,
+        "designId": "sky-king",
+        "name": "Sky King",
+        "flight": {
+          "designId": "sky-king",
+          "settings": {
+            "speed": 10,
+            "angle": 30,
+            "height": 1.8,
+            "windSpeed": 2,
+            "windDirection": 180,
+            "turbulence": 0,
+            "paperWeight": 80,
+            "trim": 2,
+            "seed": 42,
+            "maxTime": 60,
+            "dt": 0.008333333333333333,
+            "airTemperature": 26,
+            "fieldElevation": 215,
+            "relativeHumidity": 46,
+            "seaLevelPressure": 1008.3
+          },
+          "duration": 3.9647669901380294,
+          "distance": 4.304606979314503,
+          "maxHeight": 5.541093948952166,
+          "finalSpeed": 2.6372762097899987,
+          "landed": true,
+          "truncated": false,
+          "stallEvents": 1,
+          "modelVersion": "2.1.0-moist-air",
+          "mass": 0.0049896,
+          "sampledAerodynamics": {
+            "airspeedMetersPerSecond": {
+              "min": 0.6659323508689208,
+              "max": 11.774591973880774
+            },
+            "densityKgPerCubicMeter": {
+              "min": 1.1371554619848299,
+              "max": 1.137759397126312
+            },
+            "reynoldsNumber": {
+              "min": 4776.269192026329,
+              "max": 84475.94577763726
+            },
+            "angleOfAttackRadians": {
+              "min": 0.03559037165684575,
+              "max": 2.0755496418423935
+            },
+            "liftNewtons": {
+              "min": -0.016389252046107798,
+              "max": 0.8423725665979052
+            },
+            "dragNewtons": {
+              "min": 0.004412812599166291,
+              "max": 0.23111104002649294
+            }
+          }
+        }
+      },
+      {
+        "rank": 7,
+        "designId": "suzanne",
+        "name": "Suzanne",
+        "flight": {
+          "designId": "suzanne",
+          "settings": {
+            "speed": 10,
+            "angle": 15,
+            "height": 1.8,
+            "windSpeed": 2,
+            "windDirection": 180,
+            "turbulence": 0,
+            "paperWeight": 80,
+            "trim": -2,
+            "seed": 42,
+            "maxTime": 60,
+            "dt": 0.008333333333333333,
+            "airTemperature": 26,
+            "fieldElevation": 215,
+            "relativeHumidity": 46,
+            "seaLevelPressure": 1008.3
+          },
+          "duration": 3.7827158948070068,
+          "distance": 8.542950835741712,
+          "maxHeight": 4.350409707606546,
+          "finalSpeed": 4.79439369648562,
+          "landed": true,
+          "truncated": false,
+          "stallEvents": 0,
+          "modelVersion": "2.1.0-moist-air",
+          "mass": 0.0049896,
+          "sampledAerodynamics": {
+            "airspeedMetersPerSecond": {
+              "min": 2.1390763853729475,
+              "max": 11.943074690026966
+            },
+            "densityKgPerCubicMeter": {
+              "min": 1.137285191297401,
+              "max": 1.137759397126312
+            },
+            "reynoldsNumber": {
+              "min": 16371.618263725186,
+              "max": 91425.0112267001
+            },
+            "angleOfAttackRadians": {
+              "min": 0.021254954027091696,
+              "max": 0.34596275244865426
+            },
+            "liftNewtons": {
+              "min": 0.03746671979554961,
+              "max": 0.3292143487766241
+            },
+            "dragNewtons": {
+              "min": 0.009639788270616317,
+              "max": 0.08008542584261165
+            }
+          }
+        }
+      },
+      {
+        "rank": 8,
         "designId": "needle",
         "name": "Needle",
         "flight": {
@@ -551,7 +695,7 @@
         }
       },
       {
-        "rank": 7,
+        "rank": 9,
         "designId": "classic-dart",
         "name": "Classic Dart",
         "flight": {
@@ -611,7 +755,7 @@
         }
       },
       {
-        "rank": 8,
+        "rank": 10,
         "designId": "swallow",
         "name": "Swallow",
         "flight": {
@@ -669,12 +813,72 @@
             }
           }
         }
+      },
+      {
+        "rank": 11,
+        "designId": "krstic-dart",
+        "name": "Krstić Dart",
+        "flight": {
+          "designId": "krstic-dart",
+          "settings": {
+            "speed": 10,
+            "angle": 30,
+            "height": 1.8,
+            "windSpeed": 2,
+            "windDirection": 180,
+            "turbulence": 0,
+            "paperWeight": 80,
+            "trim": 2,
+            "seed": 42,
+            "maxTime": 60,
+            "dt": 0.008333333333333333,
+            "airTemperature": 26,
+            "fieldElevation": 215,
+            "relativeHumidity": 46,
+            "seaLevelPressure": 1008.3
+          },
+          "duration": 2.506719921734953,
+          "distance": 10.918485582328781,
+          "maxHeight": 4.36123762006257,
+          "finalSpeed": 6.517479685150753,
+          "landed": true,
+          "truncated": false,
+          "stallEvents": 0,
+          "modelVersion": "2.1.0-moist-air",
+          "mass": 0.0049896,
+          "sampledAerodynamics": {
+            "airspeedMetersPerSecond": {
+              "min": 5.481986292249326,
+              "max": 11.774591973880774
+            },
+            "densityKgPerCubicMeter": {
+              "min": 1.1372839971560085,
+              "max": 1.137759397126312
+            },
+            "reynoldsNumber": {
+              "min": 35207.03287486727,
+              "max": 75631.68154143941
+            },
+            "angleOfAttackRadians": {
+              "min": 0.13759245262065467,
+              "max": 0.3943050116203185
+            },
+            "liftNewtons": {
+              "min": 0.02497195497320737,
+              "max": 0.0503505728075245
+            },
+            "dragNewtons": {
+              "min": 0.012318773232799634,
+              "max": 0.022301502049606993
+            }
+          }
+        }
       }
     ],
     "performance": {
-      "elapsedMs": 2219.9326570000003,
-      "cpuMs": 2365.79,
-      "maxProgressIntervalMs": 46.06741699999998,
+      "elapsedMs": 3149.561788,
+      "cpuMs": 3203.059,
+      "maxProgressIntervalMs": 41.82316500000002,
       "maxTrialsBetweenCheckpoints": 12,
       "note": "Execution-machine measurements; browser timing depends on hardware and scheduling. Progress intervals include event-loop yields."
     }

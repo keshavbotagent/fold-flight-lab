@@ -68,12 +68,12 @@ export function useFlightTools(state: LabState, compare: () => RankedFlight[]) {
       execute(input) {
         emptyInput(input);
         const current = latest.current.state;
-        return { selectedId: current.selectedId, environment: isNewDelhiEnvironment(current.settings) ? NEW_DELHI_ENVIRONMENT.name : 'Custom environment', conditions: { ...current.settings }, physicsModel: current.ranking[0]?.flight.modelVersion ?? null, comparisonMethod: current.comparisonMethod, playing: current.playing, designs: DESIGNS.map(d => ({ id: d.id, name: d.name, category: d.category })), results: scores(current.ranking) };
+        return { selectedId: current.selectedId, environment: isNewDelhiEnvironment(current.settings) ? NEW_DELHI_ENVIRONMENT.name : 'Custom environment', conditions: { ...current.settings }, physicsModel: current.ranking[0]?.flight.modelVersion ?? null, comparisonMethod: current.comparisonMethod, playing: current.playing, designs: DESIGNS.map(d => ({ id: d.id, name: d.name, category: d.category, documentedAchievement: d.achievement ?? null, modelNotes: d.modelNotes ?? null })), results: scores(current.ranking) };
       },
     }, {
       name: 'compare_current_airframes',
       title: 'Compare current airframes',
-      description: 'Run all eight airframes under the current launch conditions, display the matched-launch ranking, and start the synchronized 3D replay. Uses the same action as Compare all designs.',
+      description: `Run all ${DESIGNS.length} airframes under the current launch conditions, display the matched-launch ranking, and start the synchronized 3D replay. Uses the same action as Compare all designs.`,
       inputSchema: schema,
       annotations: { readOnlyHint: false, untrustedContentHint: false },
       execute(input) {

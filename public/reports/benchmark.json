@@ -1,6 +1,6 @@
 {
   "schemaVersion": 3,
-  "generatedAt": "2026-10-06T08:38:36.179Z",
+  "generatedAt": "2026-10-06T10:33:23.335Z",
   "modelVersion": "2.1.0-moist-air",
   "environmentPreset": {
     "name": "New Delhi, India",
@@ -57,7 +57,13 @@
       "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/induced-drag-coefficient/",
       "https://www.grc.nasa.gov/www/k-12/airplane/viscosity.html",
       "https://www.grc.nasa.gov/www/k-12/airplane/atmosmet.html",
-      "https://ocw.mit.edu/courses/16-333-aircraft-stability-and-control-fall-2004/pages/lecture-notes/"
+      "https://ocw.mit.edu/courses/16-333-aircraft-stability-and-control-fall-2004/pages/lecture-notes/",
+      "https://www.guinnessworldrecords.com/news/2026/5/evolution-of-the-paper-plane-flight-and-how-far-its-actually-possible-to-throw-one",
+      "https://makezine.com/projects/worlds-best-paper-airplane/",
+      "https://www.guinnessworldrecords.jp/news/2015/12/paperaircraft",
+      "https://www.honda.co.jp/kids/jiyuu-kenkyu/challenge/c-13/skyking/",
+      "https://www.guinnessworldrecords.com/world-records/729614-farthest-throw-at-the-red-bull-paper-plane-championship",
+      "https://www.mensjournal.com/entertainment/how-to-make-best-paper-airplane"
     ]
   },
   "atmosphere": {
@@ -127,7 +133,7 @@
     "previousGeneratedAt": "2026-10-06T07:20:56.114Z",
     "source": "artifacts/v1-benchmark.json",
     "commonConditionsEqual": false,
-    "sameGridAndBudget": true,
+    "sameGridAndBudget": false,
     "previousTopThree": [
       {
         "rank": 1,
@@ -497,6 +503,220 @@
         "Fold each rear outer corner upward as a small matching triangular wingtip, giving the back corners an angled silhouette.",
         "Open the wings almost level. Start with straight trailing edges, then add tiny equal upward trim folds for a looping tendency."
       ]
+    },
+    {
+      "id": "suzanne",
+      "name": "Suzanne",
+      "category": "Distance glider",
+      "subtitle": "John Collins’s record-setting glider",
+      "description": "Broad swept wings and a layered nose distinguish this historical distance champion. The simulated one-sheet variant uses estimated geometry and balance.",
+      "color": "#eac27e",
+      "shape": "suzanne",
+      "mass": 0.0049896,
+      "wingArea": 0.0176,
+      "span": 0.142,
+      "length": 0.206,
+      "cd0": 0.04,
+      "liftSlope": 2.5,
+      "maxCl": 0.98,
+      "trimAngle": 4.8,
+      "stability": 0.87,
+      "dihedral": 10,
+      "dynamics": {
+        "centerOfGravity": 0.165,
+        "aerodynamicCenter": 0.25,
+        "pitchDamping": -3.3,
+        "rollDamping": -0.39,
+        "yawDamping": -0.2,
+        "yawStability": 0.065,
+        "sideForceSlope": 0.45,
+        "spanEfficiency": 0.77,
+        "rollInertiaFactor": 0.045,
+        "pitchInertiaFactor": 0.06,
+        "yawInertiaFactor": 0.049
+      },
+      "achievement": {
+        "organization": "Guinness World Records",
+        "title": "Former distance world record",
+        "status": "former-world-record",
+        "metric": "distance",
+        "value": 69.14,
+        "unit": "m",
+        "date": "2012-02-26",
+        "location": "McClellan, California, USA",
+        "credit": "Designed by John M. Collins; thrown by Joe Ayoob.",
+        "sourceUrl": "https://www.guinnessworldrecords.com/news/2026/5/evolution-of-the-paper-plane-flight-and-how-far-its-actually-possible-to-throw-one",
+        "designSourceUrl": "https://makezine.com/projects/worlds-best-paper-airplane/",
+        "designSourceLabel": "John Collins’s folding tutorial"
+      },
+      "modelNotes": "These original schematic instructions adapt Collins’s published method without tape. His record aircraft used 100 gsm A4 and adhesive tape; this comparison defaults to 80 gsm A4.",
+      "foldSteps": [
+        "Start with uncut A4, short edge at the top. Bring the top edge onto the left long edge, crease, then open the sheet again.",
+        "Bring the top edge onto the right long edge, crease, and reopen. The two diagonals now cross.",
+        "Fold the upper part of the left long edge onto the diagonal that runs upward to the top-right corner.",
+        "Fold the matching upper-right edge onto the other diagonal. Align the two sides carefully.",
+        "Fold the whole upper section down on a horizontal line through the original diagonal crossing.",
+        "Bring the new upper-left corner down to the center, using the existing diagonal as its hinge.",
+        "Fold the upper-right corner down to meet the first corner on the centerline.",
+        "Fold the airplane in half along its centerline, taking the left half away from you behind the right half.",
+        "Turn the closed model a quarter turn on the table so its nose points left and its long center fold is along the bottom.",
+        "Lower the near wing until its folded leading edge reaches the spine. Hold it loosely and leave the hinge uncreased.",
+        "Lower the same wing a little farther until the white triangle disappears. Only then press the wing hinge.",
+        "Turn the model over, fold the other wing to match the first, and return to the same side for checking.",
+        "Spread the two wings away from the keel. Turn the nose upward again and inspect the model from above.",
+        "For the creator’s taped physical preparation, make three 30 × 2.25 mm strips and seven 30 × 1.5 mm strips. Keep all paper uncut.",
+        "Return to the side view and put the first two narrow pieces at the two exposed ends of the layered center tab.",
+        "Apply the three short wider pieces around the nose and the adjacent front spine, in the creator’s numbered order.",
+        "Open the wings and view the underside. Attach the next two narrow strips to the matching sloping layer seams.",
+        "Use the next two narrow pieces at the matching rear wing edges, wrapping across the paper edge.",
+        "Place the three short pieces at the center rear edge and the two outer ends of the sloping layer seams.",
+        "Add the next two narrow pieces to the corresponding inner sloping layer seams near the wing roots.",
+        "Turn to the upper side and apply the two remaining full wider strips across the layered front body, last.",
+        "Hold the keel and raise both wings evenly. Check an included angle of about 165° at the nose and 155° farther back at mid-wing."
+      ]
+    },
+    {
+      "id": "sky-king",
+      "name": "Sky King",
+      "category": "Airtime glider",
+      "subtitle": "Takuo Toda’s historical airtime champion",
+      "description": "A blunt folded nose, broad wings, dorsal keel and downturned tips form this compact airtime design. Its flight coefficients remain estimates.",
+      "color": "#93cfbc",
+      "shape": "sky-king",
+      "mass": 0.0049896,
+      "wingArea": 0.01725,
+      "span": 0.1485,
+      "length": 0.1395,
+      "cd0": 0.047,
+      "liftSlope": 2.8,
+      "maxCl": 1,
+      "trimAngle": 5.8,
+      "stability": 0.84,
+      "dihedral": -3,
+      "dynamics": {
+        "centerOfGravity": 0.165,
+        "aerodynamicCenter": 0.25,
+        "pitchDamping": -3.4,
+        "rollDamping": -0.43,
+        "yawDamping": -0.24,
+        "yawStability": 0.08,
+        "sideForceSlope": 0.58,
+        "spanEfficiency": 0.76,
+        "rollInertiaFactor": 0.055,
+        "pitchInertiaFactor": 0.065,
+        "yawInertiaFactor": 0.049
+      },
+      "achievement": {
+        "organization": "Guinness World Records",
+        "title": "Former airtime world record",
+        "status": "former-world-record",
+        "metric": "duration",
+        "value": 27.9,
+        "unit": "s",
+        "date": "2009-04",
+        "credit": "Designed and thrown by Takuo Toda.",
+        "sourceUrl": "https://www.guinnessworldrecords.jp/news/2015/12/paperaircraft",
+        "designSourceUrl": "https://www.honda.co.jp/kids/jiyuu-kenkyu/challenge/c-13/skyking/",
+        "designSourceLabel": "Toda-supervised photographed guide"
+      },
+      "modelNotes": "Original simplified diagrams adapt a Toda-supervised Sky King guide; the nose pocket is schematic. Use the linked photographs for the exact construction. Toda’s later 29.2 s flight is a separate record; the model’s search uses shared forward-launch conditions.",
+      "foldSteps": [
+        "Fold lengthwise, then reopen.",
+        "Bring both top edges to the center.",
+        "Fold nose to tail; crease and reopen.",
+        "Fold the nose forward, matching both shoulders.",
+        "Bring the new top edges to center.",
+        "Undo only the two most recent folds.",
+        "Align each side edge with its diagonal precrease.",
+        "Fold both narrowed corners along their old creases.",
+        "Bring its point up to the V junction.",
+        "Bring the lifted point back to its lower hinge.",
+        "Undo the first tab fold; retain the tiny pleat.",
+        "Fold the upper point to the V junction; reopen.",
+        "Turn over; close lengthwise with nose layers outside.",
+        "Open the upper pocket; flatten an attached diamond.",
+        "Turn the upper facet inside; close the nose.",
+        "Fold one wing from the diamond’s lower vertex aft.",
+        "Turn over; fold the remaining wing to match.",
+        "Fold each tip strip to equal the keel margin.",
+        "Open wings; lower fins; gently raise both rear edges."
+      ]
+    },
+    {
+      "id": "krstic-dart",
+      "name": "Krstić Dart",
+      "category": "Championship dart",
+      "subtitle": "2022 Red Bull Paper Wings distance winner",
+      "description": "Repeated edge rolls create a dense, narrow paper beam with a wrapped nose lock. Its very small lifting area favors a strong distance launch over slow gliding.",
+      "color": "#d5a9d6",
+      "shape": "krstic",
+      "mass": 0.0049896,
+      "wingArea": 0.00364,
+      "span": 0.035,
+      "length": 0.195,
+      "cd0": 0.027,
+      "liftSlope": 1.05,
+      "maxCl": 0.5,
+      "trimAngle": 2.7,
+      "stability": 0.9,
+      "dihedral": 2,
+      "dynamics": {
+        "centerOfGravity": 0.18,
+        "aerodynamicCenter": 0.25,
+        "pitchDamping": -3.6,
+        "rollDamping": -0.2,
+        "yawDamping": -0.2,
+        "yawStability": 0.065,
+        "sideForceSlope": 0.62,
+        "spanEfficiency": 0.55,
+        "rollInertiaFactor": 0.024,
+        "pitchInertiaFactor": 0.065,
+        "yawInertiaFactor": 0.0633
+      },
+      "achievement": {
+        "organization": "Red Bull Paper Wings",
+        "title": "2022 world-final distance winner",
+        "status": "world-final-winner",
+        "metric": "distance",
+        "value": 61.11,
+        "unit": "m",
+        "date": "2022-05-14",
+        "location": "Hangar-7, Salzburg, Austria",
+        "credit": "Designed and thrown by Lazar Krstić (Serbia). “Krstić Dart” is this simulator’s descriptive name.",
+        "sourceUrl": "https://www.guinnessworldrecords.com/world-records/729614-farthest-throw-at-the-red-bull-paper-plane-championship",
+        "designSourceUrl": "https://www.mensjournal.com/entertainment/how-to-make-best-paper-airplane",
+        "designSourceLabel": "Krstić’s published championship method"
+      },
+      "modelNotes": "Original schematic diagrams group the publicly demonstrated construction. The published method recommends 100 gsm paper and an inverted throw; this comparison uses the same 80 gsm stock and launch attitude as every other plane. Remove any temporary folding clip before flying.",
+      "foldSteps": [
+        "Use an uncut A4 sheet. Bring the top short edge onto the left long edge and press the diagonal corner fold.",
+        "Turn the sheet 45° so the new diagonal edge runs vertically and its pointed end is at the top.",
+        "Lift the narrow outside edge of the lower sheet inward. Keep every roll pointing to the same nose.",
+        "Lift the loose top triangle, fold its inner corner toward the spine, then lay that layer back down.",
+        "Bring the lower folded edge over itself once, starting at the nose and pressing toward the tail.",
+        "Repeat that lower-edge roll once more. Flatten the stack without twisting the point.",
+        "Measure 195 mm from the nose along the spine. Fold the excess tail back at that mark.",
+        "Tuck the small upper and lower tail projections into the stack so the back edge is square.",
+        "Align the protruding upper paper with the squared tail, tuck its corner inward, then turn the lower edge over once. Then tuck the highlighted tail overhang back at the same 195 mm edge.",
+        "Align the next protruding corner with the same tail edge and make the next edge roll. Then tuck the highlighted tail overhang back at the same 195 mm edge.",
+        "Repeat the tail alignment and fold the edge over once more before the final rolling sequence. Then tuck the highlighted tail overhang back at the same 195 mm edge.",
+        "Roll the packed edge inward one more turn, keeping the point straight and the broad loose triangle outside. Then tuck the highlighted tail overhang back at the same 195 mm edge.",
+        "Roll the packed edge inward one more turn, keeping the point straight and the broad loose triangle outside. Then tuck the highlighted tail overhang back at the same 195 mm edge.",
+        "Roll the packed edge inward one more turn, keeping the point straight and the broad loose triangle outside. Then tuck the highlighted tail overhang back at the same 195 mm edge.",
+        "Roll the packed edge inward one more turn, keeping the point straight and the broad loose triangle outside. Then tuck the highlighted tail overhang back at the same 195 mm edge.",
+        "Turn the paper for the ruler check and compare the remaining triangle with the creator’s 85 mm reference.",
+        "Turn the checked packet back so its pointed end faces upward. Keep the loose triangle outside the spine.",
+        "Find the midpoint of the packed body with a ruler and fold it lengthwise. Keep the loose triangle accessible.",
+        "Fold the first wing away from the keel, then repeat on the other face so both wing roots and tail edges match. Then tuck the highlighted tail overhang back at the same 195 mm edge.",
+        "Pass the free triangular paper around the next side of the spine and press it flat. Keep the narrow wings clear.",
+        "Pass the free triangular paper around the next side of the spine and press it flat. Keep the narrow wings clear.",
+        "Pass the free triangular paper around the next side of the spine and press it flat. Keep the narrow wings clear.",
+        "Pass the free triangular paper around the next side of the spine and press it flat. Keep the narrow wings clear.",
+        "Pass the free triangular paper around the next side of the spine and press it flat. Keep the narrow wings clear.",
+        "Flatten the last loose flap across the body and fold its outer corner inward so it fits the side pocket.",
+        "Fold the terminal tab once more and slide it between the side-pocket layers. Press the lock flat and remove any temporary clip.",
+        "Look into the nose and open both narrow wings equally. Check the pocket lock, straight spine and matched tail."
+      ]
     }
   ],
   "baseline": [
@@ -622,6 +842,66 @@
     },
     {
       "rank": 3,
+      "designId": "suzanne",
+      "name": "Suzanne",
+      "flight": {
+        "designId": "suzanne",
+        "settings": {
+          "speed": 7,
+          "angle": 12,
+          "height": 1.8,
+          "windSpeed": 2,
+          "windDirection": 180,
+          "turbulence": 0,
+          "paperWeight": 80,
+          "trim": 0,
+          "seed": 42,
+          "maxTime": 60,
+          "dt": 0.008333333333333333,
+          "airTemperature": 26,
+          "fieldElevation": 215,
+          "relativeHumidity": 46,
+          "seaLevelPressure": 1008.3
+        },
+        "duration": 3.107741963903305,
+        "distance": 4.681942035504885,
+        "maxHeight": 3.44633934525205,
+        "finalSpeed": 4.177113625400377,
+        "landed": true,
+        "truncated": false,
+        "stallEvents": 1,
+        "modelVersion": "2.1.0-moist-air",
+        "mass": 0.0049896,
+        "sampledAerodynamics": {
+          "airspeedMetersPerSecond": {
+            "min": 1.832443488713365,
+            "max": 8.965942940959785
+          },
+          "densityKgPerCubicMeter": {
+            "min": 1.1373837144422416,
+            "max": 1.137759397126312
+          },
+          "reynoldsNumber": {
+            "min": 14025.875760641742,
+            "max": 68634.87462903491
+          },
+          "angleOfAttackRadians": {
+            "min": 0.03796812821326468,
+            "max": 0.6373657271683447
+          },
+          "liftNewtons": {
+            "min": 0.02784059666812549,
+            "max": 0.2618803217035393
+          },
+          "dragNewtons": {
+            "min": 0.009808084438490522,
+            "max": 0.06153944921004229
+          }
+        }
+      }
+    },
+    {
+      "rank": 4,
       "designId": "nakamura-lock",
       "name": "Nakamura Lock",
       "flight": {
@@ -681,7 +961,7 @@
       }
     },
     {
-      "rank": 4,
+      "rank": 5,
       "designId": "classic-dart",
       "name": "Classic Dart",
       "flight": {
@@ -741,7 +1021,67 @@
       }
     },
     {
-      "rank": 5,
+      "rank": 6,
+      "designId": "sky-king",
+      "name": "Sky King",
+      "flight": {
+        "designId": "sky-king",
+        "settings": {
+          "speed": 7,
+          "angle": 12,
+          "height": 1.8,
+          "windSpeed": 2,
+          "windDirection": 180,
+          "turbulence": 0,
+          "paperWeight": 80,
+          "trim": 0,
+          "seed": 42,
+          "maxTime": 60,
+          "dt": 0.008333333333333333,
+          "airTemperature": 26,
+          "fieldElevation": 215,
+          "relativeHumidity": 46,
+          "seaLevelPressure": 1008.3
+        },
+        "duration": 2.911678473832959,
+        "distance": 3.6973567122389817,
+        "maxHeight": 3.5465615664162913,
+        "finalSpeed": 3.98354077603597,
+        "landed": true,
+        "truncated": false,
+        "stallEvents": 1,
+        "modelVersion": "2.1.0-moist-air",
+        "mass": 0.0049896,
+        "sampledAerodynamics": {
+          "airspeedMetersPerSecond": {
+            "min": 1.5491008819384269,
+            "max": 8.965942940959785
+          },
+          "densityKgPerCubicMeter": {
+            "min": 1.1373727907276014,
+            "max": 1.137759397126312
+          },
+          "reynoldsNumber": {
+            "min": 11112.45378814093,
+            "max": 64325.49946580235
+          },
+          "angleOfAttackRadians": {
+            "min": 0.039872730931750845,
+            "max": 0.888536944186856
+          },
+          "liftNewtons": {
+            "min": 0.021155971843919118,
+            "max": 0.32601763141094664
+          },
+          "dragNewtons": {
+            "min": 0.0096531964387303,
+            "max": 0.08011110179541593
+          }
+        }
+      }
+    },
+    {
+      "rank": 7,
       "designId": "delta-wing",
       "name": "Delta Wing",
       "flight": {
@@ -801,7 +1141,7 @@
       }
     },
     {
-      "rank": 6,
+      "rank": 8,
       "designId": "needle",
       "name": "Needle",
       "flight": {
@@ -861,7 +1201,7 @@
       }
     },
     {
-      "rank": 7,
+      "rank": 9,
       "designId": "canard",
       "name": "Canard",
       "flight": {
@@ -921,7 +1261,7 @@
       }
     },
     {
-      "rank": 8,
+      "rank": 10,
       "designId": "swallow",
       "name": "Swallow",
       "flight": {
@@ -979,6 +1319,66 @@
           }
         }
       }
+    },
+    {
+      "rank": 11,
+      "designId": "krstic-dart",
+      "name": "Krstić Dart",
+      "flight": {
+        "designId": "krstic-dart",
+        "settings": {
+          "speed": 7,
+          "angle": 12,
+          "height": 1.8,
+          "windSpeed": 2,
+          "windDirection": 180,
+          "turbulence": 0,
+          "paperWeight": 80,
+          "trim": 0,
+          "seed": 42,
+          "maxTime": 60,
+          "dt": 0.008333333333333333,
+          "airTemperature": 26,
+          "fieldElevation": 215,
+          "relativeHumidity": 46,
+          "seaLevelPressure": 1008.3
+        },
+        "duration": 1.2655610047009125,
+        "distance": 7.1140573807679175,
+        "maxHeight": 1.9871625969356792,
+        "finalSpeed": 6.33241484999125,
+        "landed": true,
+        "truncated": false,
+        "stallEvents": 0,
+        "modelVersion": "2.1.0-moist-air",
+        "mass": 0.0049896,
+        "sampledAerodynamics": {
+          "airspeedMetersPerSecond": {
+            "min": 7.531301331634601,
+            "max": 8.965942940959785
+          },
+          "densityKgPerCubicMeter": {
+            "min": 1.1375427823947872,
+            "max": 1.137759397126312
+          },
+          "reynoldsNumber": {
+            "min": 48377.2956600219,
+            "max": 57590.89934781747
+          },
+          "angleOfAttackRadians": {
+            "min": 0.09351863004884513,
+            "max": 0.22141819831164594
+          },
+          "liftNewtons": {
+            "min": 0.016342793276546468,
+            "max": 0.027664615232316177
+          },
+          "dragNewtons": {
+            "min": 0.0071185282273412654,
+            "max": 0.014142851508913234
+          }
+        }
+      }
     }
   ],
   "optimization": {
@@ -1005,7 +1405,7 @@
         2
       ]
     },
-    "trials": 840,
+    "trials": 1155,
     "trialsPerDesign": 105,
     "changedVariables": [
       "angle",
@@ -1329,6 +1729,126 @@
       },
       {
         "rank": 6,
+        "designId": "sky-king",
+        "name": "Sky King",
+        "flight": {
+          "designId": "sky-king",
+          "settings": {
+            "speed": 10,
+            "angle": 30,
+            "height": 1.8,
+            "windSpeed": 2,
+            "windDirection": 180,
+            "turbulence": 0,
+            "paperWeight": 80,
+            "trim": 2,
+            "seed": 42,
+            "maxTime": 60,
+            "dt": 0.008333333333333333,
+            "airTemperature": 26,
+            "fieldElevation": 215,
+            "relativeHumidity": 46,
+            "seaLevelPressure": 1008.3
+          },
+          "duration": 3.9647669901380294,
+          "distance": 4.304606979314503,
+          "maxHeight": 5.541093948952166,
+          "finalSpeed": 2.6372762097899987,
+          "landed": true,
+          "truncated": false,
+          "stallEvents": 1,
+          "modelVersion": "2.1.0-moist-air",
+          "mass": 0.0049896,
+          "sampledAerodynamics": {
+            "airspeedMetersPerSecond": {
+              "min": 0.6659323508689208,
+              "max": 11.774591973880774
+            },
+            "densityKgPerCubicMeter": {
+              "min": 1.1371554619848299,
+              "max": 1.137759397126312
+            },
+            "reynoldsNumber": {
+              "min": 4776.269192026329,
+              "max": 84475.94577763726
+            },
+            "angleOfAttackRadians": {
+              "min": 0.03559037165684575,
+              "max": 2.0755496418423935
+            },
+            "liftNewtons": {
+              "min": -0.016389252046107798,
+              "max": 0.8423725665979052
+            },
+            "dragNewtons": {
+              "min": 0.004412812599166291,
+              "max": 0.23111104002649294
+            }
+          }
+        }
+      },
+      {
+        "rank": 7,
+        "designId": "suzanne",
+        "name": "Suzanne",
+        "flight": {
+          "designId": "suzanne",
+          "settings": {
+            "speed": 10,
+            "angle": 15,
+            "height": 1.8,
+            "windSpeed": 2,
+            "windDirection": 180,
+            "turbulence": 0,
+            "paperWeight": 80,
+            "trim": -2,
+            "seed": 42,
+            "maxTime": 60,
+            "dt": 0.008333333333333333,
+            "airTemperature": 26,
+            "fieldElevation": 215,
+            "relativeHumidity": 46,
+            "seaLevelPressure": 1008.3
+          },
+          "duration": 3.7827158948070068,
+          "distance": 8.542950835741712,
+          "maxHeight": 4.350409707606546,
+          "finalSpeed": 4.79439369648562,
+          "landed": true,
+          "truncated": false,
+          "stallEvents": 0,
+          "modelVersion": "2.1.0-moist-air",
+          "mass": 0.0049896,
+          "sampledAerodynamics": {
+            "airspeedMetersPerSecond": {
+              "min": 2.1390763853729475,
+              "max": 11.943074690026966
+            },
+            "densityKgPerCubicMeter": {
+              "min": 1.137285191297401,
+              "max": 1.137759397126312
+            },
+            "reynoldsNumber": {
+              "min": 16371.618263725186,
+              "max": 91425.0112267001
+            },
+            "angleOfAttackRadians": {
+              "min": 0.021254954027091696,
+              "max": 0.34596275244865426
+            },
+            "liftNewtons": {
+              "min": 0.03746671979554961,
+              "max": 0.3292143487766241
+            },
+            "dragNewtons": {
+              "min": 0.009639788270616317,
+              "max": 0.08008542584261165
+            }
+          }
+        }
+      },
+      {
+        "rank": 8,
         "designId": "needle",
         "name": "Needle",
         "flight": {
@@ -1388,7 +1908,7 @@
         }
       },
       {
-        "rank": 7,
+        "rank": 9,
         "designId": "classic-dart",
         "name": "Classic Dart",
         "flight": {
@@ -1448,7 +1968,7 @@
         }
       },
       {
-        "rank": 8,
+        "rank": 10,
         "designId": "swallow",
         "name": "Swallow",
         "flight": {
@@ -1506,12 +2026,72 @@
             }
           }
         }
+      },
+      {
+        "rank": 11,
+        "designId": "krstic-dart",
+        "name": "Krstić Dart",
+        "flight": {
+          "designId": "krstic-dart",
+          "settings": {
+            "speed": 10,
+            "angle": 30,
+            "height": 1.8,
+            "windSpeed": 2,
+            "windDirection": 180,
+            "turbulence": 0,
+            "paperWeight": 80,
+            "trim": 2,
+            "seed": 42,
+            "maxTime": 60,
+            "dt": 0.008333333333333333,
+            "airTemperature": 26,
+            "fieldElevation": 215,
+            "relativeHumidity": 46,
+            "seaLevelPressure": 1008.3
+          },
+          "duration": 2.506719921734953,
+          "distance": 10.918485582328781,
+          "maxHeight": 4.36123762006257,
+          "finalSpeed": 6.517479685150753,
+          "landed": true,
+          "truncated": false,
+          "stallEvents": 0,
+          "modelVersion": "2.1.0-moist-air",
+          "mass": 0.0049896,
+          "sampledAerodynamics": {
+            "airspeedMetersPerSecond": {
+              "min": 5.481986292249326,
+              "max": 11.774591973880774
+            },
+            "densityKgPerCubicMeter": {
+              "min": 1.1372839971560085,
+              "max": 1.137759397126312
+            },
+            "reynoldsNumber": {
+              "min": 35207.03287486727,
+              "max": 75631.68154143941
+            },
+            "angleOfAttackRadians": {
+              "min": 0.13759245262065467,
+              "max": 0.3943050116203185
+            },
+            "liftNewtons": {
+              "min": 0.02497195497320737,
+              "max": 0.0503505728075245
+            },
+            "dragNewtons": {
+              "min": 0.012318773232799634,
+              "max": 0.022301502049606993
+            }
+          }
+        }
       }
     ],
     "performance": {
-      "elapsedMs": 2219.9326570000003,
-      "cpuMs": 2365.79,
-      "maxProgressIntervalMs": 46.06741699999998,
+      "elapsedMs": 3149.561788,
+      "cpuMs": 3203.059,
+      "maxProgressIntervalMs": 41.82316500000002,
       "maxTrialsBetweenCheckpoints": 12,
       "note": "Execution-machine measurements; browser timing depends on hardware and scheduling. Progress intervals include event-loop yields."
     }
@@ -1597,12 +2177,36 @@
           "defaultToFinestReplayDurationChangePercent": 0.00112058642319555,
           "gridDurationChangePercent": 0.0000017346071278490413,
           "completionConsistent": true
+        },
+        {
+          "designId": "suzanne",
+          "name": "Suzanne",
+          "replayDurationChangePercent": 1.6401553133732497e-8,
+          "defaultToFinestReplayDurationChangePercent": 1.4352747535401987e-7,
+          "gridDurationChangePercent": 1.6401553133732497e-8,
+          "completionConsistent": true
+        },
+        {
+          "designId": "sky-king",
+          "name": "Sky King",
+          "replayDurationChangePercent": 0.00012237587518262833,
+          "defaultToFinestReplayDurationChangePercent": 0.0016497751263153417,
+          "gridDurationChangePercent": 0.00012237587518262833,
+          "completionConsistent": true
+        },
+        {
+          "designId": "krstic-dart",
+          "name": "Krstić Dart",
+          "replayDurationChangePercent": 8.938865245402193e-9,
+          "defaultToFinestReplayDurationChangePercent": 1.6676218922601422e-7,
+          "gridDurationChangePercent": 8.938865245402193e-9,
+          "completionConsistent": true
         }
       ],
       "interpretation": "Numerical step-sensitivity check using a declared 1% duration tolerance; not validation of physical flight accuracy."
     },
-    "additionalGridTrials": 1680,
-    "fullGridSearchTrials": 2520,
+    "additionalGridTrials": 2310,
+    "fullGridSearchTrials": 3465,
     "note": "Selected launches are replayed and the full equal-budget grid is independently repeated at finer steps. Numerical sensitivity is not physical validation.",
     "steps": [
       {
@@ -1911,6 +2515,126 @@
           },
           {
             "rank": 6,
+            "designId": "sky-king",
+            "name": "Sky King",
+            "flight": {
+              "designId": "sky-king",
+              "settings": {
+                "speed": 10,
+                "angle": 30,
+                "height": 1.8,
+                "windSpeed": 2,
+                "windDirection": 180,
+                "turbulence": 0,
+                "paperWeight": 80,
+                "trim": 2,
+                "seed": 42,
+                "maxTime": 60,
+                "dt": 0.008333333333333333,
+                "airTemperature": 26,
+                "fieldElevation": 215,
+                "relativeHumidity": 46,
+                "seaLevelPressure": 1008.3
+              },
+              "duration": 3.9647669901380294,
+              "distance": 4.304606979314503,
+              "maxHeight": 5.541093948952166,
+              "finalSpeed": 2.6372762097899987,
+              "landed": true,
+              "truncated": false,
+              "stallEvents": 1,
+              "modelVersion": "2.1.0-moist-air",
+              "mass": 0.0049896,
+              "sampledAerodynamics": {
+                "airspeedMetersPerSecond": {
+                  "min": 0.6659323508689208,
+                  "max": 11.774591973880774
+                },
+                "densityKgPerCubicMeter": {
+                  "min": 1.1371554619848299,
+                  "max": 1.137759397126312
+                },
+                "reynoldsNumber": {
+                  "min": 4776.269192026329,
+                  "max": 84475.94577763726
+                },
+                "angleOfAttackRadians": {
+                  "min": 0.03559037165684575,
+                  "max": 2.0755496418423935
+                },
+                "liftNewtons": {
+                  "min": -0.016389252046107798,
+                  "max": 0.8423725665979052
+                },
+                "dragNewtons": {
+                  "min": 0.004412812599166291,
+                  "max": 0.23111104002649294
+                }
+              }
+            }
+          },
+          {
+            "rank": 7,
+            "designId": "suzanne",
+            "name": "Suzanne",
+            "flight": {
+              "designId": "suzanne",
+              "settings": {
+                "speed": 10,
+                "angle": 15,
+                "height": 1.8,
+                "windSpeed": 2,
+                "windDirection": 180,
+                "turbulence": 0,
+                "paperWeight": 80,
+                "trim": -2,
+                "seed": 42,
+                "maxTime": 60,
+                "dt": 0.008333333333333333,
+                "airTemperature": 26,
+                "fieldElevation": 215,
+                "relativeHumidity": 46,
+                "seaLevelPressure": 1008.3
+              },
+              "duration": 3.7827158948070068,
+              "distance": 8.542950835741712,
+              "maxHeight": 4.350409707606546,
+              "finalSpeed": 4.79439369648562,
+              "landed": true,
+              "truncated": false,
+              "stallEvents": 0,
+              "modelVersion": "2.1.0-moist-air",
+              "mass": 0.0049896,
+              "sampledAerodynamics": {
+                "airspeedMetersPerSecond": {
+                  "min": 2.1390763853729475,
+                  "max": 11.943074690026966
+                },
+                "densityKgPerCubicMeter": {
+                  "min": 1.137285191297401,
+                  "max": 1.137759397126312
+                },
+                "reynoldsNumber": {
+                  "min": 16371.618263725186,
+                  "max": 91425.0112267001
+                },
+                "angleOfAttackRadians": {
+                  "min": 0.021254954027091696,
+                  "max": 0.34596275244865426
+                },
+                "liftNewtons": {
+                  "min": 0.03746671979554961,
+                  "max": 0.3292143487766241
+                },
+                "dragNewtons": {
+                  "min": 0.009639788270616317,
+                  "max": 0.08008542584261165
+                }
+              }
+            }
+          },
+          {
+            "rank": 8,
             "designId": "needle",
             "name": "Needle",
             "flight": {
@@ -1970,7 +2694,7 @@
             }
           },
           {
-            "rank": 7,
+            "rank": 9,
             "designId": "classic-dart",
             "name": "Classic Dart",
             "flight": {
@@ -2030,7 +2754,7 @@
             }
           },
           {
-            "rank": 8,
+            "rank": 10,
             "designId": "swallow",
             "name": "Swallow",
             "flight": {
@@ -2085,6 +2809,66 @@
                 "dragNewtons": {
                   "min": 0.001118748048358282,
                   "max": 0.16011783334822077
+                }
+              }
+            }
+          },
+          {
+            "rank": 11,
+            "designId": "krstic-dart",
+            "name": "Krstić Dart",
+            "flight": {
+              "designId": "krstic-dart",
+              "settings": {
+                "speed": 10,
+                "angle": 30,
+                "height": 1.8,
+                "windSpeed": 2,
+                "windDirection": 180,
+                "turbulence": 0,
+                "paperWeight": 80,
+                "trim": 2,
+                "seed": 42,
+                "maxTime": 60,
+                "dt": 0.008333333333333333,
+                "airTemperature": 26,
+                "fieldElevation": 215,
+                "relativeHumidity": 46,
+                "seaLevelPressure": 1008.3
+              },
+              "duration": 2.506719921734953,
+              "distance": 10.918485582328781,
+              "maxHeight": 4.36123762006257,
+              "finalSpeed": 6.517479685150753,
+              "landed": true,
+              "truncated": false,
+              "stallEvents": 0,
+              "modelVersion": "2.1.0-moist-air",
+              "mass": 0.0049896,
+              "sampledAerodynamics": {
+                "airspeedMetersPerSecond": {
+                  "min": 5.481986292249326,
+                  "max": 11.774591973880774
+                },
+                "densityKgPerCubicMeter": {
+                  "min": 1.1372839971560085,
+                  "max": 1.137759397126312
+                },
+                "reynoldsNumber": {
+                  "min": 35207.03287486727,
+                  "max": 75631.68154143941
+                },
+                "angleOfAttackRadians": {
+                  "min": 0.13759245262065467,
+                  "max": 0.3943050116203185
+                },
+                "liftNewtons": {
+                  "min": 0.02497195497320737,
+                  "max": 0.0503505728075245
+                },
+                "dragNewtons": {
+                  "min": 0.012318773232799634,
+                  "max": 0.022301502049606993
                 }
               }
             }
@@ -2397,6 +3181,126 @@
           },
           {
             "rank": 6,
+            "designId": "sky-king",
+            "name": "Sky King",
+            "flight": {
+              "designId": "sky-king",
+              "settings": {
+                "speed": 10,
+                "angle": 30,
+                "height": 1.8,
+                "windSpeed": 2,
+                "windDirection": 180,
+                "turbulence": 0,
+                "paperWeight": 80,
+                "trim": 2,
+                "seed": 42,
+                "maxTime": 60,
+                "dt": 0.004166666666666667,
+                "airTemperature": 26,
+                "fieldElevation": 215,
+                "relativeHumidity": 46,
+                "seaLevelPressure": 1008.3
+              },
+              "duration": 3.9647064333157642,
+              "distance": 4.304512396196774,
+              "maxHeight": 5.541093002611963,
+              "finalSpeed": 2.637387041107229,
+              "landed": true,
+              "truncated": false,
+              "stallEvents": 1,
+              "modelVersion": "2.1.0-moist-air",
+              "mass": 0.0049896,
+              "sampledAerodynamics": {
+                "airspeedMetersPerSecond": {
+                  "min": 0.6659689882297685,
+                  "max": 11.774591973880774
+                },
+                "densityKgPerCubicMeter": {
+                  "min": 1.1371554620947064,
+                  "max": 1.137759397126312
+                },
+                "reynoldsNumber": {
+                  "min": 4776.531966693122,
+                  "max": 84475.94577763726
+                },
+                "angleOfAttackRadians": {
+                  "min": 0.03559037165684575,
+                  "max": 2.075536709270122
+                },
+                "liftNewtons": {
+                  "min": -0.016389031298045757,
+                  "max": 0.8423725665979052
+                },
+                "dragNewtons": {
+                  "min": 0.004412812614132382,
+                  "max": 0.23111104002649294
+                }
+              }
+            }
+          },
+          {
+            "rank": 7,
+            "designId": "suzanne",
+            "name": "Suzanne",
+            "flight": {
+              "designId": "suzanne",
+              "settings": {
+                "speed": 10,
+                "angle": 15,
+                "height": 1.8,
+                "windSpeed": 2,
+                "windDirection": 180,
+                "turbulence": 0,
+                "paperWeight": 80,
+                "trim": -2,
+                "seed": 42,
+                "maxTime": 60,
+                "dt": 0.004166666666666667,
+                "airTemperature": 26,
+                "fieldElevation": 215,
+                "relativeHumidity": 46,
+                "seaLevelPressure": 1008.3
+              },
+              "duration": 3.782715888757346,
+              "distance": 8.542950827703788,
+              "maxHeight": 4.350414705375218,
+              "finalSpeed": 4.794393697996129,
+              "landed": true,
+              "truncated": false,
+              "stallEvents": 0,
+              "modelVersion": "2.1.0-moist-air",
+              "mass": 0.0049896,
+              "sampledAerodynamics": {
+                "airspeedMetersPerSecond": {
+                  "min": 2.1390763873346574,
+                  "max": 11.943074690026966
+                },
+                "densityKgPerCubicMeter": {
+                  "min": 1.1372851912972641,
+                  "max": 1.137759397126312
+                },
+                "reynoldsNumber": {
+                  "min": 16371.618278741456,
+                  "max": 91425.0112267001
+                },
+                "angleOfAttackRadians": {
+                  "min": 0.021254954027091696,
+                  "max": 0.3459627549028294
+                },
+                "liftNewtons": {
+                  "min": 0.03746671919488825,
+                  "max": 0.3292143487766241
+                },
+                "dragNewtons": {
+                  "min": 0.009639788109584555,
+                  "max": 0.08008542584261165
+                }
+              }
+            }
+          },
+          {
+            "rank": 8,
             "designId": "needle",
             "name": "Needle",
             "flight": {
@@ -2456,7 +3360,7 @@
             }
           },
           {
-            "rank": 7,
+            "rank": 9,
             "designId": "classic-dart",
             "name": "Classic Dart",
             "flight": {
@@ -2516,7 +3420,7 @@
             }
           },
           {
-            "rank": 8,
+            "rank": 10,
             "designId": "swallow",
             "name": "Swallow",
             "flight": {
@@ -2571,6 +3475,66 @@
                 "dragNewtons": {
                   "min": 0.00111873511295821,
                   "max": 0.16011783334822077
+                }
+              }
+            }
+          },
+          {
+            "rank": 11,
+            "designId": "krstic-dart",
+            "name": "Krstić Dart",
+            "flight": {
+              "designId": "krstic-dart",
+              "settings": {
+                "speed": 10,
+                "angle": 30,
+                "height": 1.8,
+                "windSpeed": 2,
+                "windDirection": 180,
+                "turbulence": 0,
+                "paperWeight": 80,
+                "trim": 2,
+                "seed": 42,
+                "maxTime": 60,
+                "dt": 0.004166666666666667,
+                "airTemperature": 26,
+                "fieldElevation": 215,
+                "relativeHumidity": 46,
+                "seaLevelPressure": 1008.3
+              },
+              "duration": 2.506719925691142,
+              "distance": 10.918485596577097,
+              "maxHeight": 4.361271108076217,
+              "finalSpeed": 6.517479694029061,
+              "landed": true,
+              "truncated": false,
+              "stallEvents": 0,
+              "modelVersion": "2.1.0-moist-air",
+              "mass": 0.0049896,
+              "sampledAerodynamics": {
+                "airspeedMetersPerSecond": {
+                  "min": 5.481986295119699,
+                  "max": 11.774591973880774
+                },
+                "densityKgPerCubicMeter": {
+                  "min": 1.1372839971544881,
+                  "max": 1.137759397126312
+                },
+                "reynoldsNumber": {
+                  "min": 35207.0328932526,
+                  "max": 75631.68154143941
+                },
+                "angleOfAttackRadians": {
+                  "min": 0.13759246289774757,
+                  "max": 0.3943050116412582
+                },
+                "liftNewtons": {
+                  "min": 0.024971954896421237,
+                  "max": 0.0503505728075245
+                },
+                "dragNewtons": {
+                  "min": 0.012318772760019555,
+                  "max": 0.022301502049606993
                 }
               }
             }
@@ -2883,6 +3847,126 @@
           },
           {
             "rank": 6,
+            "designId": "sky-king",
+            "name": "Sky King",
+            "flight": {
+              "designId": "sky-king",
+              "settings": {
+                "speed": 10,
+                "angle": 30,
+                "height": 1.8,
+                "windSpeed": 2,
+                "windDirection": 180,
+                "turbulence": 0,
+                "paperWeight": 80,
+                "trim": 2,
+                "seed": 42,
+                "maxTime": 60,
+                "dt": 0.0020833333333333333,
+                "airTemperature": 26,
+                "fieldElevation": 215,
+                "relativeHumidity": 46,
+                "seaLevelPressure": 1008.3
+              },
+              "duration": 3.9647015814775055,
+              "distance": 4.304494517603868,
+              "maxHeight": 5.541111547727526,
+              "finalSpeed": 2.637399900903123,
+              "landed": true,
+              "truncated": false,
+              "stallEvents": 1,
+              "modelVersion": "2.1.0-moist-air",
+              "mass": 0.0049896,
+              "sampledAerodynamics": {
+                "airspeedMetersPerSecond": {
+                  "min": 0.6659661236909856,
+                  "max": 11.774591973880774
+                },
+                "densityKgPerCubicMeter": {
+                  "min": 1.1371554620815387,
+                  "max": 1.137759397126312
+                },
+                "reynoldsNumber": {
+                  "min": 4776.511421304802,
+                  "max": 84475.94577763726
+                },
+                "angleOfAttackRadians": {
+                  "min": 0.03559037165684575,
+                  "max": 2.0755375369183566
+                },
+                "liftNewtons": {
+                  "min": -0.016389042838825103,
+                  "max": 0.8423725665979052
+                },
+                "dragNewtons": {
+                  "min": 0.0044128125784573865,
+                  "max": 0.23111104002649294
+                }
+              }
+            }
+          },
+          {
+            "rank": 7,
+            "designId": "suzanne",
+            "name": "Suzanne",
+            "flight": {
+              "designId": "suzanne",
+              "settings": {
+                "speed": 10,
+                "angle": 15,
+                "height": 1.8,
+                "windSpeed": 2,
+                "windDirection": 180,
+                "turbulence": 0,
+                "paperWeight": 80,
+                "trim": -2,
+                "seed": 42,
+                "maxTime": 60,
+                "dt": 0.0020833333333333333,
+                "airTemperature": 26,
+                "fieldElevation": 215,
+                "relativeHumidity": 46,
+                "seaLevelPressure": 1008.3
+              },
+              "duration": 3.78271588937777,
+              "distance": 8.54295082885582,
+              "maxHeight": 4.350417166291571,
+              "finalSpeed": 4.794393697754388,
+              "landed": true,
+              "truncated": false,
+              "stallEvents": 0,
+              "modelVersion": "2.1.0-moist-air",
+              "mass": 0.0049896,
+              "sampledAerodynamics": {
+                "airspeedMetersPerSecond": {
+                  "min": 2.1390763876554386,
+                  "max": 11.943074690026966
+                },
+                "densityKgPerCubicMeter": {
+                  "min": 1.137285191297255,
+                  "max": 1.137759397126312
+                },
+                "reynoldsNumber": {
+                  "min": 16371.618281196277,
+                  "max": 91425.0112267001
+                },
+                "angleOfAttackRadians": {
+                  "min": 0.021254954027091696,
+                  "max": 0.34596275484291156
+                },
+                "liftNewtons": {
+                  "min": 0.037466719188512146,
+                  "max": 0.3292143487766241
+                },
+                "dragNewtons": {
+                  "min": 0.009639788093398433,
+                  "max": 0.08008542584261165
+                }
+              }
+            }
+          },
+          {
+            "rank": 8,
             "designId": "needle",
             "name": "Needle",
             "flight": {
@@ -2942,7 +4026,7 @@
             }
           },
           {
-            "rank": 7,
+            "rank": 9,
             "designId": "classic-dart",
             "name": "Classic Dart",
             "flight": {
@@ -3002,7 +4086,7 @@
             }
           },
           {
-            "rank": 8,
+            "rank": 10,
             "designId": "swallow",
             "name": "Swallow",
             "flight": {
@@ -3060,6 +4144,66 @@
                 }
               }
             }
+          },
+          {
+            "rank": 11,
+            "designId": "krstic-dart",
+            "name": "Krstić Dart",
+            "flight": {
+              "designId": "krstic-dart",
+              "settings": {
+                "speed": 10,
+                "angle": 30,
+                "height": 1.8,
+                "windSpeed": 2,
+                "windDirection": 180,
+                "turbulence": 0,
+                "paperWeight": 80,
+                "trim": 2,
+                "seed": 42,
+                "maxTime": 60,
+                "dt": 0.0020833333333333333,
+                "airTemperature": 26,
+                "fieldElevation": 215,
+                "relativeHumidity": 46,
+                "seaLevelPressure": 1008.3
+              },
+              "duration": 2.506719925915214,
+              "distance": 10.918485597328196,
+              "maxHeight": 4.361271108861149,
+              "finalSpeed": 6.517479694485835,
+              "landed": true,
+              "truncated": false,
+              "stallEvents": 0,
+              "modelVersion": "2.1.0-moist-air",
+              "mass": 0.0049896,
+              "sampledAerodynamics": {
+                "airspeedMetersPerSecond": {
+                  "min": 5.48198629536464,
+                  "max": 11.774591973880774
+                },
+                "densityKgPerCubicMeter": {
+                  "min": 1.137283997154402,
+                  "max": 1.137759397126312
+                },
+                "reynoldsNumber": {
+                  "min": 35207.032894822936,
+                  "max": 75631.68154143941
+                },
+                "angleOfAttackRadians": {
+                  "min": 0.13759246338904121,
+                  "max": 0.3943050116335661
+                },
+                "liftNewtons": {
+                  "min": 0.024971954891993633,
+                  "max": 0.0503505728075245
+                },
+                "dragNewtons": {
+                  "min": 0.01231877273215994,
+                  "max": 0.022301502049606993
+                }
+              }
+            }
           }
         ]
       }
@@ -3068,7 +4212,7 @@
       {
         "requestedDt": 0.008333333333333333,
         "dt": 0.008333333333333333,
-        "trials": 840,
+        "trials": 1155,
         "ranking": [
           {
             "rank": 1,
@@ -3372,6 +4516,126 @@
           },
           {
             "rank": 6,
+            "designId": "sky-king",
+            "name": "Sky King",
+            "flight": {
+              "designId": "sky-king",
+              "settings": {
+                "speed": 10,
+                "angle": 30,
+                "height": 1.8,
+                "windSpeed": 2,
+                "windDirection": 180,
+                "turbulence": 0,
+                "paperWeight": 80,
+                "trim": 2,
+                "seed": 42,
+                "maxTime": 60,
+                "dt": 0.008333333333333333,
+                "airTemperature": 26,
+                "fieldElevation": 215,
+                "relativeHumidity": 46,
+                "seaLevelPressure": 1008.3
+              },
+              "duration": 3.9647669901380294,
+              "distance": 4.304606979314503,
+              "maxHeight": 5.541093948952166,
+              "finalSpeed": 2.6372762097899987,
+              "landed": true,
+              "truncated": false,
+              "stallEvents": 1,
+              "modelVersion": "2.1.0-moist-air",
+              "mass": 0.0049896,
+              "sampledAerodynamics": {
+                "airspeedMetersPerSecond": {
+                  "min": 0.6659323508689208,
+                  "max": 11.774591973880774
+                },
+                "densityKgPerCubicMeter": {
+                  "min": 1.1371554619848299,
+                  "max": 1.137759397126312
+                },
+                "reynoldsNumber": {
+                  "min": 4776.269192026329,
+                  "max": 84475.94577763726
+                },
+                "angleOfAttackRadians": {
+                  "min": 0.03559037165684575,
+                  "max": 2.0755496418423935
+                },
+                "liftNewtons": {
+                  "min": -0.016389252046107798,
+                  "max": 0.8423725665979052
+                },
+                "dragNewtons": {
+                  "min": 0.004412812599166291,
+                  "max": 0.23111104002649294
+                }
+              }
+            }
+          },
+          {
+            "rank": 7,
+            "designId": "suzanne",
+            "name": "Suzanne",
+            "flight": {
+              "designId": "suzanne",
+              "settings": {
+                "speed": 10,
+                "angle": 15,
+                "height": 1.8,
+                "windSpeed": 2,
+                "windDirection": 180,
+                "turbulence": 0,
+                "paperWeight": 80,
+                "trim": -2,
+                "seed": 42,
+                "maxTime": 60,
+                "dt": 0.008333333333333333,
+                "airTemperature": 26,
+                "fieldElevation": 215,
+                "relativeHumidity": 46,
+                "seaLevelPressure": 1008.3
+              },
+              "duration": 3.7827158948070068,
+              "distance": 8.542950835741712,
+              "maxHeight": 4.350409707606546,
+              "finalSpeed": 4.79439369648562,
+              "landed": true,
+              "truncated": false,
+              "stallEvents": 0,
+              "modelVersion": "2.1.0-moist-air",
+              "mass": 0.0049896,
+              "sampledAerodynamics": {
+                "airspeedMetersPerSecond": {
+                  "min": 2.1390763853729475,
+                  "max": 11.943074690026966
+                },
+                "densityKgPerCubicMeter": {
+                  "min": 1.137285191297401,
+                  "max": 1.137759397126312
+                },
+                "reynoldsNumber": {
+                  "min": 16371.618263725186,
+                  "max": 91425.0112267001
+                },
+                "angleOfAttackRadians": {
+                  "min": 0.021254954027091696,
+                  "max": 0.34596275244865426
+                },
+                "liftNewtons": {
+                  "min": 0.03746671979554961,
+                  "max": 0.3292143487766241
+                },
+                "dragNewtons": {
+                  "min": 0.009639788270616317,
+                  "max": 0.08008542584261165
+                }
+              }
+            }
+          },
+          {
+            "rank": 8,
             "designId": "needle",
             "name": "Needle",
             "flight": {
@@ -3431,7 +4695,7 @@
             }
           },
           {
-            "rank": 7,
+            "rank": 9,
             "designId": "classic-dart",
             "name": "Classic Dart",
             "flight": {
@@ -3491,7 +4755,7 @@
             }
           },
           {
-            "rank": 8,
+            "rank": 10,
             "designId": "swallow",
             "name": "Swallow",
             "flight": {
@@ -3549,12 +4813,72 @@
                 }
               }
             }
+          },
+          {
+            "rank": 11,
+            "designId": "krstic-dart",
+            "name": "Krstić Dart",
+            "flight": {
+              "designId": "krstic-dart",
+              "settings": {
+                "speed": 10,
+                "angle": 30,
+                "height": 1.8,
+                "windSpeed": 2,
+                "windDirection": 180,
+                "turbulence": 0,
+                "paperWeight": 80,
+                "trim": 2,
+                "seed": 42,
+                "maxTime": 60,
+                "dt": 0.008333333333333333,
+                "airTemperature": 26,
+                "fieldElevation": 215,
+                "relativeHumidity": 46,
+                "seaLevelPressure": 1008.3
+              },
+              "duration": 2.506719921734953,
+              "distance": 10.918485582328781,
+              "maxHeight": 4.36123762006257,
+              "finalSpeed": 6.517479685150753,
+              "landed": true,
+              "truncated": false,
+              "stallEvents": 0,
+              "modelVersion": "2.1.0-moist-air",
+              "mass": 0.0049896,
+              "sampledAerodynamics": {
+                "airspeedMetersPerSecond": {
+                  "min": 5.481986292249326,
+                  "max": 11.774591973880774
+                },
+                "densityKgPerCubicMeter": {
+                  "min": 1.1372839971560085,
+                  "max": 1.137759397126312
+                },
+                "reynoldsNumber": {
+                  "min": 35207.03287486727,
+                  "max": 75631.68154143941
+                },
+                "angleOfAttackRadians": {
+                  "min": 0.13759245262065467,
+                  "max": 0.3943050116203185
+                },
+                "liftNewtons": {
+                  "min": 0.02497195497320737,
+                  "max": 0.0503505728075245
+                },
+                "dragNewtons": {
+                  "min": 0.012318773232799634,
+                  "max": 0.022301502049606993
+                }
+              }
+            }
           }
         ],
         "performance": {
-          "elapsedMs": 2219.9326570000003,
-          "cpuMs": 2365.79,
-          "maxProgressIntervalMs": 46.06741699999998,
+          "elapsedMs": 3149.561788,
+          "cpuMs": 3203.059,
+          "maxProgressIntervalMs": 41.82316500000002,
           "maxTrialsBetweenCheckpoints": 12,
           "note": "Execution-machine measurements; browser timing depends on hardware and scheduling. Progress intervals include event-loop yields."
         }
@@ -3562,7 +4886,7 @@
       {
         "requestedDt": 0.004166666666666667,
         "dt": 0.004166666666666667,
-        "trials": 840,
+        "trials": 1155,
         "ranking": [
           {
             "rank": 1,
@@ -3866,6 +5190,126 @@
           },
           {
             "rank": 6,
+            "designId": "sky-king",
+            "name": "Sky King",
+            "flight": {
+              "designId": "sky-king",
+              "settings": {
+                "speed": 10,
+                "angle": 30,
+                "height": 1.8,
+                "windSpeed": 2,
+                "windDirection": 180,
+                "turbulence": 0,
+                "paperWeight": 80,
+                "trim": 2,
+                "seed": 42,
+                "maxTime": 60,
+                "dt": 0.004166666666666667,
+                "airTemperature": 26,
+                "fieldElevation": 215,
+                "relativeHumidity": 46,
+                "seaLevelPressure": 1008.3
+              },
+              "duration": 3.9647064333157642,
+              "distance": 4.304512396196774,
+              "maxHeight": 5.541093002611963,
+              "finalSpeed": 2.637387041107229,
+              "landed": true,
+              "truncated": false,
+              "stallEvents": 1,
+              "modelVersion": "2.1.0-moist-air",
+              "mass": 0.0049896,
+              "sampledAerodynamics": {
+                "airspeedMetersPerSecond": {
+                  "min": 0.6659689882297685,
+                  "max": 11.774591973880774
+                },
+                "densityKgPerCubicMeter": {
+                  "min": 1.1371554620947064,
+                  "max": 1.137759397126312
+                },
+                "reynoldsNumber": {
+                  "min": 4776.531966693122,
+                  "max": 84475.94577763726
+                },
+                "angleOfAttackRadians": {
+                  "min": 0.03559037165684575,
+                  "max": 2.075536709270122
+                },
+                "liftNewtons": {
+                  "min": -0.016389031298045757,
+                  "max": 0.8423725665979052
+                },
+                "dragNewtons": {
+                  "min": 0.004412812614132382,
+                  "max": 0.23111104002649294
+                }
+              }
+            }
+          },
+          {
+            "rank": 7,
+            "designId": "suzanne",
+            "name": "Suzanne",
+            "flight": {
+              "designId": "suzanne",
+              "settings": {
+                "speed": 10,
+                "angle": 15,
+                "height": 1.8,
+                "windSpeed": 2,
+                "windDirection": 180,
+                "turbulence": 0,
+                "paperWeight": 80,
+                "trim": -2,
+                "seed": 42,
+                "maxTime": 60,
+                "dt": 0.004166666666666667,
+                "airTemperature": 26,
+                "fieldElevation": 215,
+                "relativeHumidity": 46,
+                "seaLevelPressure": 1008.3
+              },
+              "duration": 3.782715888757346,
+              "distance": 8.542950827703788,
+              "maxHeight": 4.350414705375218,
+              "finalSpeed": 4.794393697996129,
+              "landed": true,
+              "truncated": false,
+              "stallEvents": 0,
+              "modelVersion": "2.1.0-moist-air",
+              "mass": 0.0049896,
+              "sampledAerodynamics": {
+                "airspeedMetersPerSecond": {
+                  "min": 2.1390763873346574,
+                  "max": 11.943074690026966
+                },
+                "densityKgPerCubicMeter": {
+                  "min": 1.1372851912972641,
+                  "max": 1.137759397126312
+                },
+                "reynoldsNumber": {
+                  "min": 16371.618278741456,
+                  "max": 91425.0112267001
+                },
+                "angleOfAttackRadians": {
+                  "min": 0.021254954027091696,
+                  "max": 0.3459627549028294
+                },
+                "liftNewtons": {
+                  "min": 0.03746671919488825,
+                  "max": 0.3292143487766241
+                },
+                "dragNewtons": {
+                  "min": 0.009639788109584555,
+                  "max": 0.08008542584261165
+                }
+              }
+            }
+          },
+          {
+            "rank": 8,
             "designId": "needle",
             "name": "Needle",
             "flight": {
@@ -3925,7 +5369,7 @@
             }
           },
           {
-            "rank": 7,
+            "rank": 9,
             "designId": "classic-dart",
             "name": "Classic Dart",
             "flight": {
@@ -3985,7 +5429,7 @@
             }
           },
           {
-            "rank": 8,
+            "rank": 10,
             "designId": "swallow",
             "name": "Swallow",
             "flight": {
@@ -4043,20 +5487,80 @@
                 }
               }
             }
+          },
+          {
+            "rank": 11,
+            "designId": "krstic-dart",
+            "name": "Krstić Dart",
+            "flight": {
+              "designId": "krstic-dart",
+              "settings": {
+                "speed": 10,
+                "angle": 30,
+                "height": 1.8,
+                "windSpeed": 2,
+                "windDirection": 180,
+                "turbulence": 0,
+                "paperWeight": 80,
+                "trim": 2,
+                "seed": 42,
+                "maxTime": 60,
+                "dt": 0.004166666666666667,
+                "airTemperature": 26,
+                "fieldElevation": 215,
+                "relativeHumidity": 46,
+                "seaLevelPressure": 1008.3
+              },
+              "duration": 2.506719925691142,
+              "distance": 10.918485596577097,
+              "maxHeight": 4.361271108076217,
+              "finalSpeed": 6.517479694029061,
+              "landed": true,
+              "truncated": false,
+              "stallEvents": 0,
+              "modelVersion": "2.1.0-moist-air",
+              "mass": 0.0049896,
+              "sampledAerodynamics": {
+                "airspeedMetersPerSecond": {
+                  "min": 5.481986295119699,
+                  "max": 11.774591973880774
+                },
+                "densityKgPerCubicMeter": {
+                  "min": 1.1372839971544881,
+                  "max": 1.137759397126312
+                },
+                "reynoldsNumber": {
+                  "min": 35207.0328932526,
+                  "max": 75631.68154143941
+                },
+                "angleOfAttackRadians": {
+                  "min": 0.13759246289774757,
+                  "max": 0.3943050116412582
+                },
+                "liftNewtons": {
+                  "min": 0.024971954896421237,
+                  "max": 0.0503505728075245
+                },
+                "dragNewtons": {
+                  "min": 0.012318772760019555,
+                  "max": 0.022301502049606993
+                }
+              }
+            }
           }
         ],
         "performance": {
-          "elapsedMs": 3373.882448,
-          "cpuMs": 3291.321,
-          "maxProgressIntervalMs": 33.93761699999959,
-          "maxTrialsBetweenCheckpoints": 9,
+          "elapsedMs": 3500.1844770000007,
+          "cpuMs": 3402.776,
+          "maxProgressIntervalMs": 49.065161000000444,
+          "maxTrialsBetweenCheckpoints": 12,
           "note": "Execution-machine measurements; browser timing depends on hardware and scheduling. Progress intervals include event-loop yields."
         }
       },
       {
         "requestedDt": 0.0020833333333333333,
         "dt": 0.0020833333333333333,
-        "trials": 840,
+        "trials": 1155,
         "ranking": [
           {
             "rank": 1,
@@ -4360,6 +5864,126 @@
           },
           {
             "rank": 6,
+            "designId": "sky-king",
+            "name": "Sky King",
+            "flight": {
+              "designId": "sky-king",
+              "settings": {
+                "speed": 10,
+                "angle": 30,
+                "height": 1.8,
+                "windSpeed": 2,
+                "windDirection": 180,
+                "turbulence": 0,
+                "paperWeight": 80,
+                "trim": 2,
+                "seed": 42,
+                "maxTime": 60,
+                "dt": 0.0020833333333333333,
+                "airTemperature": 26,
+                "fieldElevation": 215,
+                "relativeHumidity": 46,
+                "seaLevelPressure": 1008.3
+              },
+              "duration": 3.9647015814775055,
+              "distance": 4.304494517603868,
+              "maxHeight": 5.541111547727526,
+              "finalSpeed": 2.637399900903123,
+              "landed": true,
+              "truncated": false,
+              "stallEvents": 1,
+              "modelVersion": "2.1.0-moist-air",
+              "mass": 0.0049896,
+              "sampledAerodynamics": {
+                "airspeedMetersPerSecond": {
+                  "min": 0.6659661236909856,
+                  "max": 11.774591973880774
+                },
+                "densityKgPerCubicMeter": {
+                  "min": 1.1371554620815387,
+                  "max": 1.137759397126312
+                },
+                "reynoldsNumber": {
+                  "min": 4776.511421304802,
+                  "max": 84475.94577763726
+                },
+                "angleOfAttackRadians": {
+                  "min": 0.03559037165684575,
+                  "max": 2.0755375369183566
+                },
+                "liftNewtons": {
+                  "min": -0.016389042838825103,
+                  "max": 0.8423725665979052
+                },
+                "dragNewtons": {
+                  "min": 0.0044128125784573865,
+                  "max": 0.23111104002649294
+                }
+              }
+            }
+          },
+          {
+            "rank": 7,
+            "designId": "suzanne",
+            "name": "Suzanne",
+            "flight": {
+              "designId": "suzanne",
+              "settings": {
+                "speed": 10,
+                "angle": 15,
+                "height": 1.8,
+                "windSpeed": 2,
+                "windDirection": 180,
+                "turbulence": 0,
+                "paperWeight": 80,
+                "trim": -2,
+                "seed": 42,
+                "maxTime": 60,
+                "dt": 0.0020833333333333333,
+                "airTemperature": 26,
+                "fieldElevation": 215,
+                "relativeHumidity": 46,
+                "seaLevelPressure": 1008.3
+              },
+              "duration": 3.78271588937777,
+              "distance": 8.54295082885582,
+              "maxHeight": 4.350417166291571,
+              "finalSpeed": 4.794393697754388,
+              "landed": true,
+              "truncated": false,
+              "stallEvents": 0,
+              "modelVersion": "2.1.0-moist-air",
+              "mass": 0.0049896,
+              "sampledAerodynamics": {
+                "airspeedMetersPerSecond": {
+                  "min": 2.1390763876554386,
+                  "max": 11.943074690026966
+                },
+                "densityKgPerCubicMeter": {
+                  "min": 1.137285191297255,
+                  "max": 1.137759397126312
+                },
+                "reynoldsNumber": {
+                  "min": 16371.618281196277,
+                  "max": 91425.0112267001
+                },
+                "angleOfAttackRadians": {
+                  "min": 0.021254954027091696,
+                  "max": 0.34596275484291156
+                },
+                "liftNewtons": {
+                  "min": 0.037466719188512146,
+                  "max": 0.3292143487766241
+                },
+                "dragNewtons": {
+                  "min": 0.009639788093398433,
+                  "max": 0.08008542584261165
+                }
+              }
+            }
+          },
+          {
+            "rank": 8,
             "designId": "needle",
             "name": "Needle",
             "flight": {
@@ -4419,7 +6043,7 @@
             }
           },
           {
-            "rank": 7,
+            "rank": 9,
             "designId": "classic-dart",
             "name": "Classic Dart",
             "flight": {
@@ -4479,7 +6103,7 @@
             }
           },
           {
-            "rank": 8,
+            "rank": 10,
             "designId": "swallow",
             "name": "Swallow",
             "flight": {
@@ -4537,13 +6161,73 @@
                 }
               }
             }
+          },
+          {
+            "rank": 11,
+            "designId": "krstic-dart",
+            "name": "Krstić Dart",
+            "flight": {
+              "designId": "krstic-dart",
+              "settings": {
+                "speed": 10,
+                "angle": 30,
+                "height": 1.8,
+                "windSpeed": 2,
+                "windDirection": 180,
+                "turbulence": 0,
+                "paperWeight": 80,
+                "trim": 2,
+                "seed": 42,
+                "maxTime": 60,
+                "dt": 0.0020833333333333333,
+                "airTemperature": 26,
+                "fieldElevation": 215,
+                "relativeHumidity": 46,
+                "seaLevelPressure": 1008.3
+              },
+              "duration": 2.506719925915214,
+              "distance": 10.918485597328196,
+              "maxHeight": 4.361271108861149,
+              "finalSpeed": 6.517479694485835,
+              "landed": true,
+              "truncated": false,
+              "stallEvents": 0,
+              "modelVersion": "2.1.0-moist-air",
+              "mass": 0.0049896,
+              "sampledAerodynamics": {
+                "airspeedMetersPerSecond": {
+                  "min": 5.48198629536464,
+                  "max": 11.774591973880774
+                },
+                "densityKgPerCubicMeter": {
+                  "min": 1.137283997154402,
+                  "max": 1.137759397126312
+                },
+                "reynoldsNumber": {
+                  "min": 35207.032894822936,
+                  "max": 75631.68154143941
+                },
+                "angleOfAttackRadians": {
+                  "min": 0.13759246338904121,
+                  "max": 0.3943050116335661
+                },
+                "liftNewtons": {
+                  "min": 0.024971954891993633,
+                  "max": 0.0503505728075245
+                },
+                "dragNewtons": {
+                  "min": 0.01231877273215994,
+                  "max": 0.022301502049606993
+                }
+              }
+            }
           }
         ],
         "performance": {
-          "elapsedMs": 5887.743373,
-          "cpuMs": 5685.512,
-          "maxProgressIntervalMs": 33.05276799999956,
-          "maxTrialsBetweenCheckpoints": 5,
+          "elapsedMs": 6817.067142000001,
+          "cpuMs": 6645.074,
+          "maxProgressIntervalMs": 31.749454999999216,
+          "maxTrialsBetweenCheckpoints": 12,
           "note": "Execution-machine measurements; browser timing depends on hardware and scheduling. Progress intervals include event-loop yields."
         }
       }

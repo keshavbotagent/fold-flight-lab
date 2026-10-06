@@ -187,7 +187,7 @@ quaternionDerivative = 0.5 × quaternion × (bodyAngularVelocity, 0)
 
 The catalog's inertia tensors are positive and satisfy the principal-inertia
 triangle inequalities. Paper mass and inertia scale with paper weight; stiffness
-and folding geometry do not. All eight configurations begin with the same uncut
+and folding geometry do not. All eleven modeled configurations begin with the same uncut
 A4 sheet. See [airframes.md](airframes.md) for the actual coefficient estimates.
 
 This is rigid paper with lumped aerodynamic coefficients. It omits bending,

@@ -1,4 +1,19 @@
-export type PlaneShape = 'dart' | 'glider' | 'delta' | 'nakamura' | 'stunt' | 'canard' | 'wide' | 'needle';
+export type PlaneShape = 'dart' | 'glider' | 'delta' | 'nakamura' | 'stunt' | 'canard' | 'wide' | 'needle' | 'suzanne' | 'sky-king' | 'krstic';
+/** A documented real flight, kept separate from estimated simulator parameters. */
+export interface CompetitionAchievement {
+  organization: string;
+  title: string;
+  status: 'former-world-record' | 'world-final-winner';
+  metric: 'distance' | 'duration';
+  value: number;
+  unit: 'm' | 's';
+  date: string;
+  location?: string;
+  credit: string;
+  sourceUrl: string;
+  designSourceUrl: string;
+  designSourceLabel: string;
+}
 /** Estimated, dimensionless stability derivatives and mass-distribution factors. */
 export interface AirframeDynamics {
   centerOfGravity: number;
@@ -43,6 +58,9 @@ export interface PlaneDesign {
   stability: number;
   dihedral: number;
   dynamics?: AirframeDynamics;
+  achievement?: CompetitionAchievement;
+  /** How the standardized A4 model and guide differ from the original flight. */
+  modelNotes?: string;
   foldSteps: string[];
 }
 export interface LaunchSettings {

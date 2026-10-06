@@ -4,18 +4,22 @@ import { DESIGNS, getDesign } from './lib/designs';
 import { DEFAULT_SETTINGS, PHYSICS_VERSION, simulateFlight } from './lib/physics';
 import { getAtmosphere } from './lib/atmosphere';
 import { NEW_DELHI_ENVIRONMENT, isNewDelhiEnvironment } from './lib/environment';
-import { compareDesigns, optimizeDesigns } from './lib/experiments';
+import { compareDesigns, optimizeDesigns, OPTIMIZATION_RANGES } from './lib/experiments';
 import { FlightScene } from './lib/scene';
 import { useFlightTools } from './lib/webmcp';
 import type { FlightResult, LaunchSettings, RankedFlight } from './lib/types';
 import benchmark from './data/tested-results.json';
 import { FoldGuide } from './components/FoldGuide';
+import { CompetitionDetails } from './components/CompetitionDetails';
 
 type CameraMode = 'orbit' | 'follow' | 'top';
 type ModalMode = 'model' | 'folds' | null;
 const fmt = (n: number, digits = 1) => Number.isFinite(n) ? n.toFixed(digits) : '—';
 const TESTED_OPTIMIZED: RankedFlight[] = benchmark.optimization.ranking.map(row => ({ rank: row.rank, design: getDesign(row.designId), flight: simulateFlight(getDesign(row.designId), row.flight.settings) }));
 const FIRST_FLIGHT = TESTED_OPTIMIZED[0].flight;
+const SEARCH_TRIALS = DESIGNS.length * OPTIMIZATION_RANGES.angles.length * OPTIMIZATION_RANGES.speeds.length * OPTIMIZATION_RANGES.trims.length;
+// Keep the new documented champions visible in the compact airframe picker.
+const CATALOGUE = [...DESIGNS.filter(design => design.achievement), ...DESIGNS.filter(design => !design.achievement)];
 
 function RangeControl({ label, value, min, max, step = 1, unit = '', onChange }: { label: string; value: number; min: number; max: number; step?: number; unit?: string; onChange: (n: number) => void }) {
   const id = label.toLowerCase().replaceAll(' ', '-');
@@ -66,6 +70,7 @@ function Modal({ mode, designId, settings, onClose }: { mode: ModalMode; designI
             <div className="model-card"><CircleHelp size={21} /><h3>Accuracy needs flight data</h3><p>Paper flexibility, imperfect creases, surface roughness and thermals remain approximations or omitted. Measured geometry, mass distribution and flight or wind-tunnel data are needed to establish accuracy for a real fold.</p></div>
           </div>
           <h3>Selected airframe · {design.name}</h3>
+          <CompetitionDetails design={design} />
           <table className="coefficient-table"><tbody>
             <tr><th>Wing area</th><td>{fmt(design.wingArea * 10000, 0)} cm²</td><th>Span</th><td>{fmt(design.span * 100, 1)} cm</td></tr>
             <tr><th>Reference profile drag</th><td>{fmt(design.cd0, 3)}</td><th>Maximum lift coefficient</th><td>{fmt(design.maxCl, 2)}</td></tr>
@@ -182,7 +187,7 @@ export default function App() {
   };
   const optimize = async () => {
     const controller = new AbortController(); abort.current = controller;
-    setProgress({ done: 0, total: 840 });
+    setProgress({ done: 0, total: SEARCH_TRIALS });
     try {
       const result = await optimizeDesigns({ ...settings }, (done, total) => setProgress({ done, total }), controller.signal);
       setOptimized(result.ranking); setTrialCount(result.trials); setTab('optimized');
@@ -226,13 +231,13 @@ export default function App() {
       <div className="intro-row"><div><p className="eyebrow">THE ART OF STAYING AIRBORNE</p><h1 className="page-title">A little paper. A lot of possibility.</h1><p className="page-description">Fold it. Fly it. Find the design that stays up longest.</p></div><div className="environment-summary" aria-label="Environment details"><strong>{environmentName}</strong><small>{isNewDelhiEnvironment(settings) ? 'Representative annual preset' : 'Edited conditions'}</small><p>{fmt(settings.airTemperature, 0)}°C · {fmt(settings.relativeHumidity, 0)}% humidity · {fmt(settings.fieldElevation, 0)} m above sea level</p><span className="condition-pill"><Wind size={16} />{environment}<span>·</span>{fmt(settings.seaLevelPressure)} hPa at sea level</span></div></div>
       <div className="lab-layout">
         <aside className="control-panel" aria-label="Airframe and launch controls">
-          <section className="panel-section"><div className="section-heading"><h2>Choose your airframe</h2><span>01</span></div>
-            <div className="design-options">{DESIGNS.map(d => <button key={d.id} className={`design-option ${d.id === selectedId ? 'selected' : ''}`} aria-pressed={d.id === selectedId} onClick={() => selectDesign(d.id)}><Send className="design-icon" size={19} style={{ color: d.color, transform: `rotate(${d.shape === 'wide' || d.shape === 'glider' ? '-18' : '0'}deg)` }} strokeWidth={1.4} /><span><span className="design-option-name">{d.name}</span><span className="design-option-kind">{d.category}</span></span></button>)}</div>
-            <div className="selected-design"><div><span className="design-category">{design.subtitle}</span><button className="text-button" onClick={() => setModal('folds')}><Layers3 size={14} />Fold guide</button></div><p className="design-description" title={design.description}>{design.description}</p></div>
+          <section className="panel-section"><div className="section-heading"><h2>Choose airframe</h2><span>{DESIGNS.length} designs</span></div>
+            <div className="design-options" role="group" aria-label="Paper plane designs">{CATALOGUE.map(d => <button key={d.id} className={`design-option ${d.id === selectedId ? 'selected' : ''}`} aria-pressed={d.id === selectedId} onClick={() => selectDesign(d.id)}><Send className="design-icon" size={19} style={{ color: d.color, transform: `rotate(${d.shape === 'wide' || d.shape === 'glider' || d.shape === 'sky-king' ? '-18' : '0'}deg)` }} strokeWidth={1.4} /><span><span className="design-option-name">{d.name}</span><span className="design-option-kind">{d.category}</span></span>{d.achievement && <Trophy className="design-achievement-icon" size={11} aria-hidden="true" />}</button>)}</div>
+            <div className="selected-design"><div><span className="selected-plane-name">{design.name}</span><button className="text-button" onClick={() => setModal('folds')}><Layers3 size={14} />Fold guide</button></div><p className="design-description" title={design.description}>{design.description}</p>{design.achievement && <a className="design-record" href={design.achievement.sourceUrl} target="_blank" rel="noreferrer">{design.achievement.value} {design.achievement.unit} · {design.achievement.date.slice(0, 4)} {design.achievement.status === 'former-world-record' ? 'former record' : 'world-final win'}</a>}</div>
           </section>
           <section className="panel-section launch-section"><div className="section-heading"><h2>Set your launch</h2><span>02</span></div>
             <RangeControl label="Launch speed" value={settings.speed} min={2} max={12} step={0.5} unit=" m/s" onChange={value => updateSetting('speed', value)} />
-            <RangeControl label="Launch angle" value={settings.angle} min={-10} max={40} unit="°" onChange={value => updateSetting('angle', value)} />
+            <RangeControl label="Launch angle" value={settings.angle} min={-10} max={80} unit="°" onChange={value => updateSetting('angle', value)} />
             <RangeControl label="Release height" value={settings.height} min={0.5} max={5} step={0.1} unit=" m" onChange={value => updateSetting('height', value)} />
             <button className="advanced-toggle" aria-expanded={advanced} onClick={() => setAdvanced(!advanced)}><SlidersHorizontal size={15} />Paper, wind & altitude{advanced ? <ChevronUp size={15} /> : <ChevronDown size={15} />}</button>
             {advanced && <div className="advanced-controls">
@@ -256,7 +261,7 @@ export default function App() {
           <div className="scene-shell"><div ref={stage} className="scene-host" />
             <div className="scene-topbar"><div className="scene-label"><span className="scene-index">FLIGHT DECK 01</span><span className="live-pill"><span className={playing ? 'status-dot active' : 'status-dot'} />{status}</span></div><div className="scene-tools">{([{ id: 'orbit', label: 'Orbit camera', icon: Orbit }, { id: 'follow', label: 'Follow camera', icon: Crosshair }, { id: 'top', label: 'Top camera', icon: Map }] as const).map(c => <button key={c.id} className={`icon-button ${camera === c.id ? 'active' : ''}`} title={c.label} aria-label={c.label} aria-pressed={camera === c.id} onClick={() => setCamera(c.id)}><c.icon size={18} /></button>)}</div></div>
             {error && <div className="error-state" role="status"><CircleHelp size={24} /><p>{error}</p><button className="text-button" onClick={() => setError('')}>Dismiss</button></div>}
-            <div className="scene-bottom-overlay"><div className="scene-caption"><span>{comparison ? 'Eight airframes. One sky.' : design.name}</span><small>{comparison ? `Telemetry follows ${design.name}` : 'Drag to orbit · Scroll to zoom'}</small></div><div className="scene-scale"><span />METRES · Y UP</div></div>
+            <div className="scene-bottom-overlay"><div className="scene-caption"><span>{comparison ? `${DESIGNS.length} airframes. One sky.` : design.name}</span><small>{comparison ? `Telemetry follows ${design.name}` : 'Drag to orbit · Scroll to zoom'}</small></div><div className="scene-scale"><span />METRES · Y UP</div></div>
           </div>
           <div className="telemetry-row" aria-live="off">
             <div className="metric"><span className="metric-label">AIRTIME</span><span className="metric-value">{fmt(hasLaunched ? Math.min(time, flight.duration) : 0, 2)}<span className="metric-unit">s</span></span></div>

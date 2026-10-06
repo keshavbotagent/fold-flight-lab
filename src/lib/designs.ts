@@ -1,4 +1,5 @@
 import type { PlaneDesign } from './types';
+import { CHAMPION_DESIGNS } from './championDesigns';
 
 // Representative one-sheet configurations, not measurements of named designs.
 // Geometry is projected flying geometry; aerodynamic coefficients are estimates.
@@ -336,6 +337,7 @@ export const DESIGNS: PlaneDesign[] = [
       'Open the wings almost level. Start with straight trailing edges, then add tiny equal upward trim folds for a looping tendency.',
     ],
   },
+  ...CHAMPION_DESIGNS,
 ];
 
 export function getDesign(id: string): PlaneDesign {

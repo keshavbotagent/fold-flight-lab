@@ -258,14 +258,18 @@ test('stable airframes generate restoring pitch moments and angular damping', ()
   }
 });
 
-test('sideslip produces restoring yaw and dihedral roll with mirrored signs', () => {
+test('sideslip produces restoring yaw and signed dihedral roll with mirrored signs', () => {
   const settings = { ...DEFAULT_SETTINGS, windSpeed: 0, turbulence: 0, height: 0 };
   for (const design of DESIGNS) {
     const positive = evaluateAerodynamics(design, settings, aerodynamicState(radians(design.trimAngle), 7, 0, 0.7));
     const negative = evaluateAerodynamics(design, settings, aerodynamicState(radians(design.trimAngle), 7, 0, -0.7));
     assert.ok(positive.beta > 0 && negative.beta < 0, 'sideslip follows lateral airflow velocity');
     assert.ok(positive.moment.y * positive.beta < 0 && negative.moment.y * negative.beta < 0, `${design.name}: yaw torque aligns the nose with the air-relative velocity`);
-    assert.ok(positive.moment.x * positive.beta < 0 && negative.moment.x * negative.beta < 0, `${design.name}: dihedral raises the into-wind wing`);
+    if (design.dihedral === 0) {
+      near(positive.moment.x, 0, 1e-12, 'no dihedral roll for a flat wing');
+    } else {
+      assert.ok(positive.moment.x * positive.beta * design.dihedral < 0 && negative.moment.x * negative.beta * design.dihedral < 0, `${design.name}: roll response follows the signed wing dihedral`);
+    }
     near(positive.moment.y, -negative.moment.y, 1e-10, 'mirrored yaw moment');
     near(positive.moment.x, -negative.moment.x, 1e-10, 'mirrored dihedral roll moment');
   }

@@ -264,6 +264,7 @@ const sourceReferences = [...new Set([
   'https://www.grc.nasa.gov/www/k-12/airplane/atmosmet.html',
   'https://ocw.mit.edu/courses/16-333-aircraft-stability-and-control-fall-2004/pages/lecture-notes/',
   ...Array.from(modelDocumentation.matchAll(/https:\/\/[^\s)>\]]+/g), (match) => match[0]),
+  ...DESIGNS.flatMap(design => design.achievement ? [design.achievement.sourceUrl, design.achievement.designSourceUrl] : []),
 ])];
 type PriorReport = {
   modelVersion?: string;
@@ -419,6 +420,17 @@ const markdown = [
   '# Paper-plane flight experiment',
   '',
   modelFinding,
+  '',
+  '## Documented competition designs',
+  '',
+  'The catalogue includes three designs with documented international achievements and public folding methods. These are selected historical champions, not a current universal top-three ranking. Every simulated variant uses the same A4 paper and estimated geometry, inertia and coefficients; historical results are provenance only and never enter the flight equations or optimizer.',
+  '',
+  '| Design | Documented achievement | Historical result | Source |',
+  '| --- | --- | --- | --- |',
+  ...DESIGNS.filter(design => design.achievement).map(design => {
+    const achievement = design.achievement!;
+    return `| ${design.name} | ${achievement.title} | ${achievement.value} ${achievement.unit} · ${achievement.date} | [Official result](${achievement.sourceUrl}) · [Folding method](${achievement.designSourceUrl}) |`;
+  }),
   '',
   sensitivityFinding,
   '',

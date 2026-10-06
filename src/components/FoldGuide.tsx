@@ -4,6 +4,7 @@ import { RotateCcw } from 'lucide-react';
 import type { PlaneDesign } from '../lib/types';
 import type { FoldFrame } from '../lib/folds/schema';
 import { getFoldGuide } from '../lib/folds';
+import { CompetitionDetails } from './CompetitionDetails';
 
 function FoldDiagram({ frame, title, description, color }: {
   frame: FoldFrame; title: string; description: string; color: string;
@@ -30,10 +31,12 @@ export function FoldGuide({ design }: { design: PlaneDesign }) {
   const [current, setCurrent] = useState(0);
   const step = guide.steps[current];
   const last = current === guide.steps.length - 1;
+  const nextRequired = guide.steps.findIndex((candidate, index) => index > current && !candidate.optional);
   const hasMountainFolds = guide.steps.some(item => [item.before, item.after].some(frame => frame.lines?.some(line => line.kind === 'mountain')));
   const hasHiddenEdges = guide.steps.some(item => [item.before, item.after].some(frame => frame.lines?.some(line => line.kind === 'hidden')));
   return <div className="fold-guide" style={{ '--fold-accent': design.color } as CSSProperties}>
     <p className="fold-materials">One A4 sheet <span>·</span> 210 × 297 mm <span>·</span> {guide.orientation === 'portrait' ? 'Portrait' : 'Landscape'} to start</p>
+    {design.achievement && <p className="fold-source">Original schematic adaptation · <a href={design.achievement.designSourceUrl} target="_blank" rel="noreferrer">Published folding method</a></p>}
     <div className="fold-legend" aria-label="Folding diagram key">
       <span><svg viewBox="0 0 30 12" aria-hidden="true"><path d="M2 6 H28" className="fold-line fold-line-fold" /></svg>Fold toward you</span>
       {hasMountainFolds && <span><svg viewBox="0 0 30 12" aria-hidden="true"><path d="M2 6 H28" className="fold-line fold-line-mountain" /></svg>Fold away from you</span>}
@@ -49,6 +52,7 @@ export function FoldGuide({ design }: { design: PlaneDesign }) {
         <p className="fold-step-count">Step {current + 1} of {guide.steps.length}{last && <span>Ready to fly</span>}</p>
         <h3>{step.title}</h3>
         <p className="fold-instruction">{step.instruction}</p>
+        {nextRequired > current + 1 && <button type="button" className="text-button fold-skip" onClick={() => setCurrent(nextRequired)}>Skip optional preparation</button>}
       </div>
       <div className="fold-panels">
         <figure className="fold-panel"><figcaption><span>Fold here</span><small>{step.before.view ?? 'top'} view</small></figcaption><FoldDiagram frame={step.before} title={`${design.name}, step ${current + 1}: fold here`} description={step.instruction} color={design.color} /></figure>
@@ -61,6 +65,7 @@ export function FoldGuide({ design }: { design: PlaneDesign }) {
       <button className="secondary-button" type="button" onClick={() => setCurrent(value => value - 1)} disabled={current === 0}>Previous step</button>
       {last ? <button className="secondary-button" type="button" onClick={() => setCurrent(0)}><RotateCcw size={16} />Start again</button> : <button className="primary-button fold-next" type="button" onClick={() => setCurrent(value => value + 1)}>Next step</button>}
     </div>
+    <CompetitionDetails design={design} />
     <details className="fold-overview"><summary>All steps at a glance</summary><ol className="fold-list">
       {guide.steps.map((item, index) => <li key={item.title}><span>{String(index + 1).padStart(2, '0')}</span><div><button className="fold-overview-link" type="button" onClick={() => setCurrent(index)} aria-current={current === index ? 'step' : undefined}>{item.title}</button><p>{item.instruction}</p></div></li>)}
     </ol></details>

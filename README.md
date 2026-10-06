@@ -4,12 +4,33 @@ An interactive, browser-based paper-plane simulator built with **Three.js 0.186.
 (r186), React 19.3.0, and Vite 8.3.3**. Choose a folded airframe, adjust its release
 and environment, replay its 3D trajectory, and compare predicted flight duration.
 
-The eight representative configurations are Classic Dart, Nakamura Lock, Wide
-Glider, Delta Wing, Condor, Needle, Canard, and Swallow. Each has a distinct folded
-shape, estimated aerodynamic coefficients, and practical folding instructions.
+The eleven configurations include Classic Dart, Nakamura Lock, Wide Glider,
+Delta Wing, Condor, Needle, Canard, Swallow, **Suzanne**, **Sky King**, and
+**Krstić Dart**. Each has a distinct folded shape, estimated aerodynamic
+coefficients, and illustrated folding instructions.
 The v2 engine integrates six-degree-of-freedom rigid-body motion, including
 quaternion attitude, aerodynamic moments, mass distribution, altitude-dependent
 Earth gravity, and a variable atmosphere.
+
+Three entries have documented international achievements and public folding methods:
+
+- **Suzanne**: John Collins and Joe Ayoob’s former 2012 distance record, **69.14 m**.
+  [Official history](https://www.guinnessworldrecords.com/news/2026/5/evolution-of-the-paper-plane-flight-and-how-far-its-actually-possible-to-throw-one),
+  [designer’s folding tutorial](https://makezine.com/projects/worlds-best-paper-airplane/).
+- **Sky King**: Takuo Toda’s former 2009 airtime record, **27.9 s**.
+  [Guinness history](https://www.guinnessworldrecords.jp/news/2015/12/paperaircraft),
+  [Toda-supervised photographed guide](https://www.honda.co.jp/kids/jiyuu-kenkyu/challenge/c-13/skyking/).
+- **Krstić Dart**: Lazar Krstić’s 2022 Red Bull Paper Wings world-final distance
+  winner, **61.11 m**. The simulator uses a descriptive name for his published
+  championship plane. [Official result](https://www.guinnessworldrecords.com/world-records/729614-farthest-throw-at-the-red-bull-paper-plane-championship),
+  [published method and demonstration](https://www.mensjournal.com/entertainment/how-to-make-best-paper-airplane).
+
+These are selected historical champions, not a universal current top-three ranking.
+The guides contain original schematic adaptations with links to the original methods.
+The simulator standardizes all designs to the same A4 stock without added mass;
+Suzanne’s record aircraft used 100 gsm paper and tape, and Krstić’s published method
+recommends 100 gsm and an inverted throw. Record results are provenance and do not
+enter the solver or optimizer. See [airframe assumptions](docs/airframes.md).
 
 ## Run locally
 
@@ -39,6 +60,8 @@ production build.
 - Select an airframe and adjust launch speed, angle, and release height. Expand
   **Paper, wind & altitude** to change paper stock, wind, gust intensity, elevator
   trim, air temperature, relative humidity, sea-level pressure, and ground elevation.
+  Launch angles up to 80° allow steep airtime throws; the shared search retains
+  the documented 0–30° grid below.
 - Open **Fold guide** for illustrated instructions for the selected plane. Each
   step shows the fold line and motion arrows beside the resulting paper shape.
   Use **Next step**, **Previous step**, or the numbered steps to follow along;
@@ -47,11 +70,11 @@ production build.
   controls. The telemetry shows time, horizontal displacement, height above ground,
   altitude above sea level, and
   ground speed.
-- Use **Compare all designs** for eight flights with the same launch settings and
+- Use **Compare all designs** for eleven flights with the same launch settings and
   environment.
 - Use **Find best launches** to give every design the same search: seven angles
   `[0, 5, 10, 15, 20, 25, 30]°`, five speeds `[4, 5.5, 7, 8.5, 10] m/s`, and three
-  trim offsets `[-2, 0, 2]°`. This is **105 trials per design, 840 trials total**.
+  trim offsets `[-2, 0, 2]°`. This is **105 trials per design, 1,155 trials total**.
   Paper, release height, weather, temperature, field elevation, gust seed, and
   numerical settings remain shared.
 - Replay a leaderboard entry or export the current ranking as CSV.
@@ -138,7 +161,7 @@ which real paper airplane flies longest.
 Read [the flight model](docs/model.md) for forces, integration, units, and bounds,
 and [the airframe assumptions](docs/airframes.md) for catalog geometry and folding
 details, coefficient tables, sign conventions, and linked NASA/MIT equation
-references. Those sources support the physical framework; the eight airframes'
+references. Those sources support the physical framework; the eleven airframes'
 parameter values are representative estimates.
 
 ## Source map
@@ -146,7 +169,8 @@ parameter values are representative estimates.
 | File | Role |
 | --- | --- |
 | `src/App.tsx` | Controls, playback, comparisons, and CSV export. |
-| `src/lib/designs.ts` | Eight airframes, estimated dynamics, and folding instructions. |
+| `src/lib/designs.ts` | Eleven airframes, estimated dynamics, and folding instructions. |
+| `src/lib/championDesigns.ts` | Three sourced historical champions and independent model estimates. |
 | `src/lib/physics.ts` | Deterministic six-degree-of-freedom flight integration and defaults. |
 | `src/lib/atmosphere.ts` | Earth gravity, pressure, density, viscosity, and atmospheric settings. |
 | `src/lib/environment.ts` | New Delhi preset, reference location, and climate provenance. |

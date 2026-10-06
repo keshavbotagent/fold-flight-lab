@@ -4,6 +4,8 @@ import { resolve } from 'node:path';
 import { chromium } from '@playwright/test';
 
 const baseURL = process.env.QA_BASE_URL ?? 'http://127.0.0.1:5173';
+const DESIGN_COUNT = 11;
+const CHAMPIONS = ['Suzanne', 'Sky King', 'Krstić Dart'];
 const artifactPath = resolve('artifacts');
 await mkdir(artifactPath, { recursive: true });
 const browser = await chromium.launch({
@@ -65,13 +67,14 @@ async function verifyCSV(page, filename) {
   await download.saveAs(resolve(artifactPath, filename));
   const csv = await readFile(resolve(artifactPath, filename), 'utf8');
   const lines = csv.trim().split('\n');
-  assert.equal(lines.length, 9, 'CSV contains a header and all eight designs');
+  assert.equal(lines.length, DESIGN_COUNT + 1, 'CSV contains a header and every design');
   const header = lines[0].split(',');
   assert.ok(header.includes('seed') && header.includes('time_capped') && header.includes('trim_deg'));
   assert.ok(header.includes('air_temperature_c') && header.includes('field_elevation_m') && header.includes('model_version'), 'exports identify the atmosphere and physics model');
   assert.ok(header.includes('release_altitude_msl_m') && header.includes('peak_altitude_msl_m'), 'exports distinguish absolute altitude from height above ground');
   assert.ok(header.includes('relative_humidity_percent') && header.includes('sea_level_pressure_hpa'), 'exports preserve moist-air conditions');
   const rows = lines.slice(1).map(line => line.split(','));
+  for (const name of CHAMPIONS) assert.ok(rows.some(row => row[1] === name), `${name} is exported`);
   for (let i = 0; i < rows.length; i++) {
     assert.equal(Number(rows[i][0]), i + 1);
     assert.equal(rows[i].length, header.length);
@@ -130,7 +133,13 @@ async function verifyFoldGuide(page, name, exhaustive = true) {
   assert.equal(await dialog.getByRole('heading', { level: 2 }).innerText(), `Fold a ${name}`);
   const chooser = dialog.getByRole('list', { name: 'Folding steps', exact: true });
   const total = await chooser.getByRole('button').count();
-  assert.ok(total >= 6 && total <= 12, `${name} has a complete folding sequence`);
+  assert.ok(total >= 6 && total <= 40, `${name} has a complete folding sequence`);
+  if (CHAMPIONS.includes(name)) {
+    assert.equal(await dialog.locator('.competition-details').count(), 1);
+    assert.ok(await dialog.getByRole('link', { name: 'Official result', exact: true }).getAttribute('href'));
+    assert.equal(await dialog.getByRole('link', { name: 'Published folding method', exact: true }).count(), 1);
+    assert.match(await dialog.locator('.competition-model-note').innerText(), /schematic.*estimated aerodynamics/i);
+  }
   assert.equal(await dialog.getByRole('button', { name: 'Previous step', exact: true }).isDisabled(), true);
   assert.match(await dialog.locator('.fold-step-count').innerText(), new RegExp(`^Step 1 of ${total}`));
   await dialog.getByRole('button', { name: 'Close dialog', exact: true }).focus();
@@ -138,6 +147,12 @@ async function verifyFoldGuide(page, name, exhaustive = true) {
   assert.equal(await dialog.locator('.fold-overview > summary').evaluate(element => element === document.activeElement), true, 'focus wraps to the last visible control');
   await page.keyboard.press('Tab');
   assert.equal(await dialog.getByRole('button', { name: 'Close dialog', exact: true }).evaluate(element => element === document.activeElement), true, 'focus stays inside the modal and skips disabled/hidden controls');
+  if (name === 'Suzanne') {
+    await chooser.getByRole('button').nth(12).click();
+    await dialog.getByRole('button', { name: 'Skip optional preparation', exact: true }).click();
+    assert.match(await dialog.locator('.fold-step-count').innerText(), /^Step 22 of 22/);
+    await chooser.getByRole('button').first().click();
+  }
   const signatures = new Set();
   for (let index = 0; index < (exhaustive ? total : 2); index++) {
     if (index > 0) await dialog.getByRole('button', { name: 'Next step', exact: true }).click();
@@ -160,7 +175,7 @@ async function verifyFoldGuide(page, name, exhaustive = true) {
     for (const image of diagramData) {
       assert.equal(image.role, 'img');
       assert.ok(image.title?.includes(name) && image.description?.length > 15 && image.labelled, 'diagrams have unique linked titles and meaningful descriptions');
-      assert.ok(image.polygons > 0 && image.box.width > 20 && image.box.height > 10, 'diagram contains visible paper geometry');
+      assert.ok(image.polygons > 0 && image.box.width > 20 && image.box.height > 10, `${name} step ${index + 1} contains visible paper geometry: ${JSON.stringify(image.box)}`);
       assert.ok([image.box.x, image.box.y, image.box.width, image.box.height].every(Number.isFinite), 'diagram geometry is finite');
       assert.ok(image.box.x >= -2 && image.box.y >= -2 && image.box.x + image.box.width <= 242 && image.box.y + image.box.height <= 242, `${name} step ${index + 1} fits its viewBox: ${JSON.stringify(image.box)}`);
     }
@@ -207,8 +222,9 @@ try {
   watch(page);
   await page.goto(baseURL, { waitUntil: 'networkidle' });
   assert.equal(await page.locator('h1').count(), 1);
-  assert.equal(await page.locator('.design-option').count(), 8);
-  assert.equal(await page.locator('.leaderboard tbody tr').count(), 8);
+  assert.equal(await page.locator('.design-option').count(), DESIGN_COUNT);
+  assert.equal(await page.locator('.leaderboard tbody tr').count(), DESIGN_COUNT);
+  assert.deepEqual(await page.locator('.design-option-name').allTextContents().then(names => names.slice(0, 3)), CHAMPIONS);
   assert.match(await page.getByLabel('Environment details', { exact: true }).innerText(), /New Delhi, India/);
   assert.match(await page.getByLabel('Environment details', { exact: true }).innerText(), /26°C.*46% humidity.*215 m above sea level/);
   const renderer = await verifyRenderer(page);
@@ -221,7 +237,13 @@ try {
   ));
   assert.ok(layoutBoxes['.launch-button'].bottom <= 900, 'the desktop launch button fits in the initial 900px viewport');
   await writeFile(resolve(artifactPath, 'desktop-layout.json'), JSON.stringify(layoutBoxes, null, 2));
-  record('desktop renders eight designs, leaderboard and WebGL2', renderer.version);
+  record('desktop renders eleven designs, sourced champions, leaderboard and WebGL2', renderer.version);
+  for (const name of CHAMPIONS) {
+    await page.locator('.design-option').filter({ hasText: name }).click();
+    assert.match(await page.locator('.design-record').innerText(), /former record|world-final win/);
+    const launch = await page.locator('.launch-section > .launch-button').boundingBox();
+    assert.ok(launch.y + launch.height <= 900, `${name} keeps the launch control visible`);
+  }
   await verifyQuaternionRendering(page);
   record('rendered attitude uses normalized shortest-arc quaternion interpolation');
 
@@ -309,21 +331,21 @@ try {
   record('launch, pause, play, replay, timeline, playback rate and all cameras work');
 
   await page.getByRole('button', { name: 'Compare all designs', exact: true }).click();
-  assert.equal(await page.locator('.leaderboard tbody tr').count(), 8);
+  assert.equal(await page.locator('.leaderboard tbody tr').count(), DESIGN_COUNT);
   await page.getByRole('button', { name: 'Pause flight', exact: true }).click();
   await page.getByRole('button', { name: 'Top camera', exact: true }).click();
   await screenshot(page, 'desktop-comparison.png');
-  assert.equal(await verifyCSV(page, 'matched-ui.csv'), 8);
+  assert.equal(await verifyCSV(page, 'matched-ui.csv'), DESIGN_COUNT);
   record('matched comparison and complete CSV download work');
 
   await page.getByRole('button', { name: 'Find best launches', exact: true }).click();
-  await page.waitForFunction(() => document.querySelector('.results-description')?.textContent?.includes('840 launches') && !document.querySelector('.progress-status'), null, { timeout: 60_000 });
+  await page.waitForFunction(() => document.querySelector('.results-description')?.textContent?.replaceAll(',', '').includes('1155 launches') && !document.querySelector('.progress-status'), null, { timeout: 60_000 });
   assert.equal(await page.getByRole('tab', { name: /Best launch search/ }).getAttribute('aria-selected'), 'true');
-  assert.equal(await page.locator('.leaderboard tbody tr').count(), 8);
+  assert.equal(await page.locator('.leaderboard tbody tr').count(), DESIGN_COUNT);
   if (await page.getByRole('button', { name: 'Pause flight', exact: true }).count()) await page.getByRole('button', { name: 'Pause flight', exact: true }).click();
   await screenshot(page, 'desktop-optimized.png');
   await verifyCSV(page, 'optimized-ui.csv');
-  record('equal-budget 840-launch search completes and exports eight results');
+  record('equal-budget 1155-launch search completes and exports eleven results');
 
   await page.getByRole('button', { name: 'Replay Wide Glider', exact: true }).click();
   assert.equal(await page.locator('.design-option.selected .design-option-name').innerText(), 'Wide Glider');
@@ -339,6 +361,10 @@ try {
     await page.locator('.design-option').filter({ hasText: name }).click();
     await page.getByRole('button', { name: 'Fold guide', exact: true }).click();
     await verifyFoldGuide(page, name);
+    if (name === 'Krstić Dart') {
+      await page.getByRole('dialog').getByRole('list', { name: 'Folding steps', exact: true }).getByRole('button').nth(24).click();
+      await screenshot(page, 'desktop-champion-detail.png');
+    }
     await page.keyboard.press('Escape');
   }
   await page.locator('.design-option').filter({ hasText: 'Wide Glider' }).click();
@@ -352,7 +378,7 @@ try {
   assert.ok(/estimat|uncalibrat/i.test(modelText), 'model distinguishes numerical validation from calibration');
   await screenshot(page, 'desktop-model.png');
   await page.getByRole('button', { name: 'Close dialog', exact: true }).click();
-  record('row replay, illustrated folding steps for all eight planes, and accessible dialogs work');
+  record('row replay, sourced illustrated folding steps for all eleven planes, and accessible dialogs work');
   await page.waitForFunction(() => window.__qaFlightTools?.length === 2);
   const toolContract = await page.evaluate(() => {
     const tools = window.__qaFlightTools;
@@ -371,7 +397,8 @@ try {
     };
   });
   assert.equal(toolContract.before.selectedId, 'wide-glider');
-  assert.equal(toolContract.before.designs.length, 8);
+  assert.equal(toolContract.before.designs.length, DESIGN_COUNT);
+  assert.equal(toolContract.before.designs.filter(design => design.documentedAchievement).length, 3);
   assert.ok(toolContract.rejected.every(Boolean), 'additional tool arguments are rejected');
   for (const tool of toolContract.tools) {
     assert.equal(tool.inputSchema.type, 'object');
@@ -379,7 +406,7 @@ try {
     assert.equal(tool.inputSchema.additionalProperties, false);
     assert.equal(tool.annotations.readOnlyHint, tool.name === 'read_flight_lab');
   }
-  assert.equal(toolContract.comparison.results.length, 8);
+  assert.equal(toolContract.comparison.results.length, DESIGN_COUNT);
   assert.equal(toolContract.after.comparisonMethod, 'matched');
   assert.deepEqual(toolContract.after.results, toolContract.comparison.results, 'tool result and immediately refreshed UI state agree');
   assert.equal(toolContract.after.playing, true);
@@ -406,6 +433,18 @@ try {
   assert.ok(foldSizing.content <= foldSizing.width + 1, `fold guide has no horizontal overflow: ${JSON.stringify(foldSizing)}`);
   await screenshot(mobile, 'mobile-fold-guide.png');
   await mobile.getByRole('button', { name: 'Close dialog', exact: true }).click();
+  for (const name of CHAMPIONS) {
+    await mobile.locator('.design-option').filter({ has: mobile.locator('.design-option-name').filter({ hasText: new RegExp(`^${name}$`) }) }).click();
+    await mobile.getByRole('button', { name: 'Fold guide', exact: true }).click();
+    await verifyFoldGuide(mobile, name, false);
+    const championSizing = await mobile.getByRole('dialog').evaluate(element => ({ width: element.clientWidth, content: element.scrollWidth }));
+    assert.ok(championSizing.content <= championSizing.width + 1, `${name} guide fits the mobile viewport: ${JSON.stringify(championSizing)}`);
+    if (name === 'Krstić Dart') {
+      await mobile.getByRole('dialog').getByRole('list', { name: 'Folding steps', exact: true }).getByRole('button').nth(24).click();
+      await screenshot(mobile, 'mobile-champion-guide.png');
+    }
+    await mobile.getByRole('button', { name: 'Close dialog', exact: true }).click();
+  }
   await mobile.getByRole('button', { name: 'How it works', exact: true }).click();
   assert.ok(await mobile.getByRole('dialog').isVisible());
   await screenshot(mobile, 'mobile-model.png');
